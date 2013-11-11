@@ -30,6 +30,8 @@ public class Engine extends Thread
 
   private IGameRuntime runtime = null;
   private Graphics graphics = null;
+  private float rotation = 0.0f;
+  private boolean tapped = false;
 
   private RunState run_state;
 
@@ -57,7 +59,8 @@ public class Engine extends Thread
       }
 
       long current_milliseconds = System.currentTimeMillis();
-      runtime.update(current_milliseconds - previous_milliseconds);
+      runtime.update(current_milliseconds - previous_milliseconds, rotation,
+                     tapped);
       graphics.finishDraw();
 
       previous_milliseconds = current_milliseconds;
@@ -80,6 +83,16 @@ public class Engine extends Thread
 
     while (run_state != RunState.SHUTDOWN)
       waitOrNot();
+  }
+
+  public void setTapped(boolean tapped)
+  {
+    this.tapped = tapped;
+  }
+
+  public void setRotation(float rotation)
+  {
+    this.rotation = rotation;
   }
 
   public Graphics getGraphics()

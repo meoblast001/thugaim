@@ -30,6 +30,7 @@ public class ThugaimRuntime implements IGameRuntime
 
   private Bitmap player;
   private float rotate = 0.0f;
+  private float x = 100, y = 100;
 
   public void init(Engine engine)
   {
@@ -40,9 +41,14 @@ public class ThugaimRuntime implements IGameRuntime
     player = BitmapFactory.decodeResource(resources, R.drawable.player);
   }
 
-  public void update(long millisecond_delta)
+  public void update(long millisecond_delta, float rotation, boolean tapped)
   {
-    rotate += (0.1f * (float) millisecond_delta);
-    engine.getGraphics().draw(player, 100, 100, rotate);
+    rotate += ((float) rotation) * 1.0f;
+    if (tapped)
+    {
+      x += Math.sin(rotate) * 10.0f;
+      y += Math.cos(rotate) * 10.0f;
+    }
+    engine.getGraphics().draw(player, Math.round(x), Math.round(y), rotate);
   }
 }

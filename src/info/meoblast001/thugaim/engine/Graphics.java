@@ -20,6 +20,7 @@ package info.meoblast001.thugaim.engine;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
@@ -88,6 +89,7 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
       return;
 
     Canvas canvas = holder.lockCanvas();
+    canvas.drawColor(Color.BLACK);
 
     canvas.translate((float) -focus_x, (float) -focus_y);
     canvas.rotate(-focus_angle);
