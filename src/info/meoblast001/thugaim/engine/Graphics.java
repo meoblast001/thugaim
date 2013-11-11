@@ -101,7 +101,9 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
       canvas.save();
       canvas.translate((float) operation.x, (float) operation.y);
       canvas.rotate(operation.angle);
-      canvas.drawBitmap(operation.bitmap, 0, 0, null);
+      canvas.drawBitmap(operation.bitmap,
+                        (int) (-operation.bitmap.getWidth() / 2),
+                        (int) (-operation.bitmap.getHeight() / 2), null);
       canvas.restore();
     }
     canvas.restore();
