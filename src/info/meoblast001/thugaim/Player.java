@@ -17,29 +17,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
-import info.meoblast001.thugaim.engine.*;
+import info.meoblast001.thugaim.engine.Engine;
+import info.meoblast001.thugaim.R;
 
-public class ThugaimRuntime implements IGameRuntime
+public class Player extends Vehicle
 {
-  private Engine engine;
-  private Context context;
-
-  private Player player;
-
-  public void init(Engine engine)
+  public Player(Engine engine)
   {
-    this.engine = engine;
-    context = engine.getGraphics().getContext();
-
-    player = new Player(engine);
+    super(engine, R.drawable.player, 0.0f, 0.0f, 0.0f);
+    setSpeed(1.0f);
   }
 
-  public void update(long millisecond_delta, float rotation, boolean tapped)
+  @Override
+  public void update(long millisecond_delta, float rotation)
   {
-    player.update(millisecond_delta, rotation);
+    super.update(millisecond_delta, rotation);
   }
 }

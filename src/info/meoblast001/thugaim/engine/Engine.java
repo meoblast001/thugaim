@@ -48,7 +48,7 @@ public class Engine extends Thread
   {
     run_state = RunState.RUNNING;
 
-    long previous_milliseconds = 0;
+    long previous_milliseconds = System.currentTimeMillis();
     while (run_state != RunState.PERFORMING_SHUTDOWN)
     {
       if (run_state == RunState.PAUSING)
@@ -64,6 +64,15 @@ public class Engine extends Thread
       graphics.finishDraw();
 
       previous_milliseconds = current_milliseconds;
+
+      try
+      {
+        Thread.sleep(10);
+      }
+      catch (InterruptedException e)
+      {
+        //Can't do much.
+      }
     }
 
     run_state = RunState.SHUTDOWN;
