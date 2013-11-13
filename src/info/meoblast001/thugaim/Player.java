@@ -29,8 +29,8 @@ public class Player extends Vehicle
   }
 
   @Override
-  public void update(long millisecond_delta, float rotation)
+  public void update(long millisecond_delta, float rotation, boolean tapped)
   {
-    super.update(millisecond_delta, rotation);
+    super.update(millisecond_delta, rotation, tapped);
   }
 }

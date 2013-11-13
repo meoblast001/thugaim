@@ -22,12 +22,11 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 
 import info.meoblast001.thugaim.engine.Engine;
+import info.meoblast001.thugaim.engine.Actor;
 
-public abstract class Vehicle
+public abstract class Vehicle extends Actor
 {
   private Engine engine = null;
-  private float x, y;
-  private float rotation;
   private Bitmap bitmap = null;
   private float speed = 1.0f;
 
@@ -35,9 +34,8 @@ public abstract class Vehicle
                  float rotation)
   {
     this.engine = engine;
-    this.x = x;
-    this.y = y;
-    this.rotation = rotation;
+    move(x, y);
+    rotate(rotation);
     bitmap = BitmapFactory.decodeResource(
       engine.getGraphics().getContext().getResources(), bitmap_resource);
   }
@@ -47,20 +45,15 @@ public abstract class Vehicle
     this.speed = speed;
   }
 
-  public PointF getPosition()
+  @Override
+  public void update(long millisecond_delta, float rotation_delta,
+                     boolean tapped)
   {
-    return new PointF(x, y);
-  }
+    rotate(rotation_delta * 0.015f * (float) millisecond_delta);
+    moveLocal(0, speed * 0.12f * (float) millisecond_delta);
 
-  public void update(long millisecond_delta, float rotation_delta)
-  {
-    rotation += rotation_delta * 0.015f * (float) millisecond_delta;
-
-    x += Math.sin(rotation * (Math.PI / 180)) * speed * 0.12f *
-         (float) millisecond_delta;
-    y += -Math.cos(rotation * (Math.PI / 180)) * speed * 0.12f *
-         (float) millisecond_delta;
-
-    engine.getGraphics().draw(bitmap, Math.round(x), Math.round(y), rotation);
+    PointF position = getPosition();
+    engine.getGraphics().draw(bitmap, Math.round(position.x),
+                              Math.round(position.y), getRotation());
   }
 }
