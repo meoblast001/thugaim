@@ -41,6 +41,8 @@ public class ThugaimRuntime implements IGameRuntime
     player = new Player(engine);
     world.insertActor(player);
     world.focusOnActor("player");
+
+    world.insertActor(new Station(engine, 200.0f, 200.0f));
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
