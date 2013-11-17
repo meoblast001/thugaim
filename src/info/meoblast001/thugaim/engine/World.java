@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.meoblast001.thugaim.engine;
 
 import android.graphics.PointF;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class World
@@ -40,7 +41,7 @@ public class World
     return true;
   }
 
-  public void insertActor(String actor_id)
+  public void removeActor(String actor_id)
   {
     actors.remove(actor_id);
   }
@@ -61,9 +62,13 @@ public class World
     engine.getGraphics().focusOn((int) focus_position.x,
                                  (int) focus_position.y);
 
-    for (String actor_id : actors.keySet())
+    ArrayList<String> actor_ids = new ArrayList<String>(actors.keySet());
+    for (String actor_id : actor_ids)
     {
       Actor actor = actors.get(actor_id);
+      if (actor == null)
+        continue;
+
       actor.update(millisecond_delta, rotation, tapped);
     }
   }

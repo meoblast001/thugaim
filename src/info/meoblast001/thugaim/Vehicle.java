@@ -17,8 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim;
 
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
 import android.graphics.PointF;
 
 import info.meoblast001.thugaim.engine.Engine;
@@ -27,23 +25,31 @@ import info.meoblast001.thugaim.engine.Actor;
 public abstract class Vehicle extends Actor
 {
   private Engine engine = null;
-  private Bitmap bitmap = null;
   private float speed = 1.0f;
+  private long last_fired_millis = 0;
 
   public Vehicle(Engine engine, String id, int bitmap_resource, float x,
                  float y, float rotation)
   {
-    super(id);
+    super(id, engine, bitmap_resource);
     this.engine = engine;
     move(x, y);
     rotate(rotation);
-    bitmap = BitmapFactory.decodeResource(
-      engine.getGraphics().getContext().getResources(), bitmap_resource);
   }
 
   public void setSpeed(float speed)
   {
     this.speed = speed;
+  }
+
+  protected void fire()
+  {
+    long cur_millis = System.currentTimeMillis();
+    if (cur_millis > last_fired_millis + 100)
+    {
+      getWorld().insertActor(new Projectile(engine, this));
+      last_fired_millis = cur_millis;
+    }
   }
 
   @Override
@@ -52,9 +58,6 @@ public abstract class Vehicle extends Actor
   {
     rotate(rotation_delta * 0.015f * (float) millisecond_delta);
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
-
-    PointF position = getPosition();
-    engine.getGraphics().draw(bitmap, Math.round(position.x),
-                              Math.round(position.y), getRotation());
+    draw();
   }
 }

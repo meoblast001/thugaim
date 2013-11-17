@@ -17,18 +17,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.engine;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.graphics.PointF;
 
 public abstract class Actor
 {
   private String id;
+  private Engine engine;
+  private Bitmap bitmap = null;
   private World world = null;
   private float x = 0.0f, y = 0.0f;
   private float rotation = 0.0f;
 
-  public Actor(String id)
+  public Actor(String id, Engine engine, int bitmap_resource)
   {
     this.id = id;
+    this.engine = engine;
+    bitmap = BitmapFactory.decodeResource(
+      engine.getGraphics().getContext().getResources(), bitmap_resource);
   }
 
   public String getId()
@@ -78,4 +85,9 @@ public abstract class Actor
 
   public abstract void update(long millisecond_delta, float rotation,
                               boolean tapped);
+
+  public void draw()
+  {
+    engine.getGraphics().draw(bitmap, Math.round(x), Math.round(y), rotation);
+  }
 }

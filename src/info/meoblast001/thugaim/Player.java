@@ -31,6 +31,9 @@ public class Player extends Vehicle
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    if (tapped)
+      fire();
+
     super.update(millisecond_delta, rotation, tapped);
   }
 }
