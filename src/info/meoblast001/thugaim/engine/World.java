@@ -17,13 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.engine;
 
+import android.graphics.PointF;
 import java.util.HashMap;
 
 public class World
 {
   private Engine engine;
   private HashMap<String, Actor> actors = new HashMap<String, Actor>();
-  private String actor_focus_id = null;
+  private Actor actor_focus = null;
 
   public World(Engine engine)
   {
@@ -51,11 +52,15 @@ public class World
 
   public void focusOnActor(String actor_id)
   {
-    actor_focus_id = actor_id;
+    actor_focus = actors.get(actor_id);
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    PointF focus_position = actor_focus.getPosition();
+    engine.getGraphics().focusOn((int) focus_position.x,
+                                 (int) focus_position.y);
+
     for (String actor_id : actors.keySet())
     {
       Actor actor = actors.get(actor_id);

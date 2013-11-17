@@ -38,7 +38,6 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
 
   private Context context = null;
   private int focus_x = 0, focus_y = 0;
-  private float focus_angle = 0.0f;
   private LinkedBlockingQueue<BitmapRenderOperation> render_operations =
     new LinkedBlockingQueue<BitmapRenderOperation>();
 
@@ -74,11 +73,10 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     render_operations.add(operation);
   }
 
-  public void focusOn(int x, int y, float angle)
+  public void focusOn(int x, int y)
   {
     focus_x = x;
     focus_y = y;
-    focus_angle = angle;
   }
 
   public void finishDraw()
@@ -91,8 +89,8 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     Canvas canvas = holder.lockCanvas();
     canvas.drawColor(Color.BLACK);
 
-    canvas.translate((float) -focus_x, (float) -focus_y);
-    canvas.rotate(-focus_angle);
+    canvas.translate((float) (-focus_x + canvas.getWidth() / 2),
+                     (float) (-focus_y + canvas.getHeight() / 2));
     canvas.save();
     while (render_operations.size() > 0)
     {
