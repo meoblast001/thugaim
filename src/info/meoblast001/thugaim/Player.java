@@ -24,7 +24,7 @@ public class Player extends Vehicle
 {
   public Player(Engine engine)
   {
-    super(engine, R.drawable.player, 0.0f, 0.0f, 0.0f);
+    super(engine, "player", R.drawable.player, 0.0f, 0.0f, 0.0f);
     setSpeed(1.0f);
   }
 

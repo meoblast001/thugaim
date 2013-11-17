@@ -21,8 +21,30 @@ import android.graphics.PointF;
 
 public abstract class Actor
 {
+  private String id;
+  private World world = null;
   private float x = 0.0f, y = 0.0f;
   private float rotation = 0.0f;
+
+  public Actor(String id)
+  {
+    this.id = id;
+  }
+
+  public String getId()
+  {
+    return id;
+  }
+
+  public World getWorld()
+  {
+    return world;
+  }
+
+  public void setWorld(World world)
+  {
+    this.world = world;
+  }
 
   public PointF getPosition()
   {

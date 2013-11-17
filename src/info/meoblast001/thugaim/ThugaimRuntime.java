@@ -28,6 +28,7 @@ public class ThugaimRuntime implements IGameRuntime
   private Engine engine;
   private Context context;
 
+  private World world;
   private Player player;
 
   public void init(Engine engine)
@@ -35,11 +36,14 @@ public class ThugaimRuntime implements IGameRuntime
     this.engine = engine;
     context = engine.getGraphics().getContext();
 
+    world = new World(engine);
+
     player = new Player(engine);
+    world.insertActor(player);
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
-    player.update(millisecond_delta, rotation);
+    world.update(millisecond_delta, rotation, tapped);
   }
 }

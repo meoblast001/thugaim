@@ -30,9 +30,10 @@ public abstract class Vehicle extends Actor
   private Bitmap bitmap = null;
   private float speed = 1.0f;
 
-  public Vehicle(Engine engine, int bitmap_resource, float x, float y,
-                 float rotation)
+  public Vehicle(Engine engine, String id, int bitmap_resource, float x,
+                 float y, float rotation)
   {
+    super(id);
     this.engine = engine;
     move(x, y);
     rotate(rotation);
