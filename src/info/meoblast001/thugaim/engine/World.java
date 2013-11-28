@@ -51,6 +51,11 @@ public class World
     return actors.get(actor_id);
   }
 
+  public Actor[] getActors()
+  {
+    return actors.values().toArray(new Actor[0]);
+  }
+
   public void focusOnActor(String actor_id)
   {
     actor_focus = actors.get(actor_id);

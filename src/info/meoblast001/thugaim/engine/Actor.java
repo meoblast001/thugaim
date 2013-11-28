@@ -19,7 +19,11 @@ package info.meoblast001.thugaim.engine;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.PointF;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Actor
 {
@@ -29,6 +33,12 @@ public abstract class Actor
   private World world = null;
   private float x = 0.0f, y = 0.0f;
   private float rotation = 0.0f;
+  private HashSet<Actor> collisions = new HashSet<Actor>();
+
+  private HashSet<Actor> possible_collision_actors = new HashSet<Actor>();
+  private final int FRAMES_UNTIL_PCA_RECALCULATE = 20;
+  private final float PCA_DISTANCE = 50;
+  private int frames_since_pca_recalculate = FRAMES_UNTIL_PCA_RECALCULATE;
 
   public Actor(String id, Engine engine, int bitmap_resource)
   {
@@ -63,6 +73,11 @@ public abstract class Actor
     return rotation;
   }
 
+  public Point getSize()
+  {
+    return new Point(bitmap.getWidth(), bitmap.getHeight());
+  }
+
   public void rotate(float rotation)
   {
     this.rotation += rotation;
@@ -72,6 +87,8 @@ public abstract class Actor
   {
     this.x += x;
     this.y += y;
+
+    updateCollisions();
   }
 
   public void moveLocal(float x, float y)
@@ -81,6 +98,8 @@ public abstract class Actor
 
     this.x += -Math.cos(rotation * (Math.PI / 180)) * x;
     this.y += Math.sin(rotation * (Math.PI / 180)) * x;
+
+    updateCollisions();
   }
 
   public abstract void update(long millisecond_delta, float rotation,
@@ -89,5 +108,58 @@ public abstract class Actor
   public void draw()
   {
     engine.getGraphics().draw(bitmap, Math.round(x), Math.round(y), rotation);
+  }
+
+  public float distance(Actor other)
+  {
+    PointF this_pos = getPosition();
+    PointF other_pos = other.getPosition();
+    return (float) Math.sqrt(Math.pow(other_pos.y - this_pos.y, 2) +
+                             Math.pow(other_pos.x - this_pos.x, 2));
+  }
+
+  public Set<Actor> getCollisions()
+  {
+    return collisions;
+  }
+
+  private void updateCollisions()
+  {
+    if (world == null)
+      return;
+
+    if (frames_since_pca_recalculate >= FRAMES_UNTIL_PCA_RECALCULATE)
+      recalculatePossibleCollisionActors();
+    ++frames_since_pca_recalculate;
+
+    collisions = new HashSet<Actor>();
+    for (Actor actor : possible_collision_actors)
+    {
+      if (actor == this)
+        continue;
+
+      Point this_size = getSize();
+      float this_avg_size = ((float) this_size.x + (float) this_size.y) / 2.0f;
+
+      Point other_size = actor.getSize();
+      float other_avg_size = ((float) other_size.x + (float) other_size.y) /
+                             2.0f;
+
+      float max_collide_distance = (this_avg_size + other_avg_size) / 2;
+
+      if (distance(actor) < max_collide_distance)
+        collisions.add(actor);
+    }
+  }
+
+  private void recalculatePossibleCollisionActors()
+  {
+    possible_collision_actors = new HashSet<Actor>();
+
+    for (Actor actor : world.getActors())
+      if (distance(actor) < PCA_DISTANCE)
+        possible_collision_actors.add(actor);
+
+    frames_since_pca_recalculate = 0;
   }
 }
