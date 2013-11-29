@@ -40,6 +40,9 @@ public abstract class Actor
   private final float PCA_DISTANCE = 50;
   private int frames_since_pca_recalculate = FRAMES_UNTIL_PCA_RECALCULATE;
 
+  private long idle_milliseconds = 0;
+  private int idle_frames = (int) (Math.random() * 20);
+
   public Actor(String id, Engine engine, int bitmap_resource)
   {
     this.id = id;
@@ -104,6 +107,18 @@ public abstract class Actor
 
   public abstract void update(long millisecond_delta, float rotation,
                               boolean tapped);
+
+  public void idleUpdate(long millisecond_delta, float rotation, boolean tapped)
+  {
+    idle_milliseconds += millisecond_delta;
+    ++idle_frames;
+    if (idle_frames == 20)
+    {
+      update(idle_milliseconds, rotation, tapped);
+      idle_milliseconds = 0;
+      idle_frames = 0;
+    }
+  }
 
   public void draw()
   {

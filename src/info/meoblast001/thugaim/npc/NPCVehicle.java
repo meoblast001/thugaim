@@ -33,6 +33,14 @@ public abstract class NPCVehicle extends Vehicle
           rotation);
   }
 
+  @Override
+  protected void rotate(float rotation, long millisecond_delta)
+  {
+    if (rotation >= 4.0f)
+      rotation = 4.0f;
+    super.rotate(rotation, millisecond_delta);
+  }
+
   protected void seek(PointF target, long millisecond_delta)
   {
     rotate(

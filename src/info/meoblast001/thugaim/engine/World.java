@@ -63,9 +63,10 @@ public class World
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    Graphics graphics = engine.getGraphics();
+
     PointF focus_position = actor_focus.getPosition();
-    engine.getGraphics().focusOn((int) focus_position.x,
-                                 (int) focus_position.y);
+    graphics.focusOn((int) focus_position.x, (int) focus_position.y);
 
     ArrayList<String> actor_ids = new ArrayList<String>(actors.keySet());
     for (String actor_id : actor_ids)
@@ -74,7 +75,11 @@ public class World
       if (actor == null)
         continue;
 
-      actor.update(millisecond_delta, rotation, tapped);
+      if (actor_focus.distance(actor) < Math.max(graphics.getWidth(),
+                                                 graphics.getHeight()))
+        actor.update(millisecond_delta, rotation, tapped);
+      else
+        actor.idleUpdate(millisecond_delta, rotation, tapped);
     }
   }
 }
