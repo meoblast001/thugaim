@@ -21,7 +21,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+
 import info.meoblast001.thugaim.engine.*;
+import info.meoblast001.thugaim.npc.*;
 
 public class ThugaimRuntime implements IGameRuntime
 {
@@ -43,6 +45,7 @@ public class ThugaimRuntime implements IGameRuntime
     world.focusOnActor("player");
 
     world.insertActor(new Station(engine, 200.0f, 200.0f));
+    world.insertActor(new HydrogenFighter(engine, 0.0f, 50.0f, 0.0f));
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)

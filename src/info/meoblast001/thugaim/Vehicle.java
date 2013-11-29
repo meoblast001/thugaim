@@ -42,6 +42,13 @@ public abstract class Vehicle extends Actor
     this.speed = speed;
   }
 
+  protected void rotate(float rotation, long millisecond_delta)
+  {
+    if (rotation >= 8.0f)
+      rotation = 8.0f;
+    rotate(rotation * 0.015f * (float) millisecond_delta);
+  }
+
   protected void fire()
   {
     long cur_millis = System.currentTimeMillis();
@@ -56,7 +63,6 @@ public abstract class Vehicle extends Actor
   public void update(long millisecond_delta, float rotation_delta,
                      boolean tapped)
   {
-    rotate(rotation_delta * 0.015f * (float) millisecond_delta);
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
     draw();
   }

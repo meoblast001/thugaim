@@ -15,26 +15,29 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.meoblast001.thugaim;
+package info.meoblast001.thugaim.npc;
 
+import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.R;
 
-public class Player extends Vehicle
+public class HydrogenFighter extends NPCVehicle
 {
-  public Player(Engine engine)
+  public HydrogenFighter(Engine engine, float x, float y, float rotation)
   {
-    super(engine, "player", R.drawable.player, 0.0f, 0.0f, 0.0f);
-    setSpeed(1.0f);
+    super(engine, R.drawable.hydrogen, x, y, rotation);
+    setSpeed(0.8f);
   }
 
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
-    if (tapped)
-      fire();
+    if (getWorld() == null)
+      return;
 
-    rotate(rotation, millisecond_delta);
+    Actor player = getWorld().getActor("player");
+    seek(player.getPosition(), millisecond_delta);
+
     super.update(millisecond_delta, rotation, tapped);
   }
 }
