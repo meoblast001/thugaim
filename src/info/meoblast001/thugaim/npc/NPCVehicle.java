@@ -35,34 +35,33 @@ public abstract class NPCVehicle extends Vehicle
 
   protected void seek(PointF target, long millisecond_delta)
   {
-    float radian_rotation = (float) (getRotation() * (Math.PI / 180.0f));
-    PointF current = new PointF((float) Math.sin(radian_rotation),
-                                (float) -Math.cos(radian_rotation));
-
-    PointF position = getPosition();
-    target = new PointF(target.x - position.x, target.y - position.y);
-    float target_magn = (float) Math.sqrt(Math.pow(target.x, 2.0f) +
-                                          Math.pow(target.y, 2.0f));
-    target = new PointF(target.x / target_magn, target.y / target_magn);
-
-    float cross_product = current.x * target.y - current.y * target.x;
-
-    rotate(cross_product * 8.0f, millisecond_delta);
+    rotate(
+      crossProduct(getRotationUnitVector(),
+                   getUnitVectorToTarget(getPosition(), target)) * 8.0f,
+      millisecond_delta);
   }
 
-  protected void pursue(PointF target, long millisecond_delta)
+  protected void pursue(PointF target, float rotation, long millisecond_delta)
   {
+    float radian_rotation = (float) (rotation * (Math.PI / 180.0f));
+    target = new PointF(target.x + (float) Math.sin(rotation),
+                        target.y + (float) -Math.cos(rotation));
+    seek(target, millisecond_delta);
   }
 
   protected void flee(PointF target, long millisecond_delta)
   {
+    rotate(
+      crossProduct(getRotationUnitVector(),
+                   getUnitVectorToTarget(target, getPosition())) * 8.0f,
+      millisecond_delta);
   }
 
-  protected void evade(PointF target, long millisecond_delta)
+  protected void evade(PointF target, float rotation, long millisecond_delta)
   {
-  }
-
-  protected void wander(PointF target, long millisecond_delta)
-  {
+    float radian_rotation = (float) (rotation * (Math.PI / 180.0f));
+    target = new PointF(target.x + (float) Math.sin(rotation),
+                        target.y + (float) -Math.cos(rotation));
+    flee(target, millisecond_delta);
   }
 }

@@ -162,4 +162,24 @@ public abstract class Actor
 
     frames_since_pca_recalculate = 0;
   }
+
+  public PointF getRotationUnitVector()
+  {
+    float radian_rotation = (float) (getRotation() * (Math.PI / 180.0f));
+    return new PointF((float) Math.sin(radian_rotation),
+                      (float) -Math.cos(radian_rotation));
+  }
+
+  protected PointF getUnitVectorToTarget(PointF from, PointF to)
+  {
+    to = new PointF(to.x - from.x, to.y - from.y);
+    float to_magn = (float) Math.sqrt(Math.pow(to.x, 2.0f) +
+                                      Math.pow(to.y, 2.0f));
+    return new PointF(to.x / to_magn, to.y / to_magn);
+  }
+
+  protected float crossProduct(PointF lhs, PointF rhs)
+  {
+    return lhs.x * rhs.y - lhs.y * rhs.x;
+  }
 }

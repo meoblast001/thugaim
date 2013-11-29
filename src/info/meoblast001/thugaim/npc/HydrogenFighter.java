@@ -36,7 +36,14 @@ public class HydrogenFighter extends NPCVehicle
       return;
 
     Actor player = getWorld().getActor("player");
-    seek(player.getPosition(), millisecond_delta);
+    Actor station = getWorld().getActor("station_0");
+
+    if (distance(station) < 175.0f)
+      flee(station.getPosition(), millisecond_delta);
+    else if (distance(player) < 400.0f)
+      pursue(player.getPosition(), player.getRotation(), millisecond_delta);
+    else
+      seek(station.getPosition(), millisecond_delta);
 
     super.update(millisecond_delta, rotation, tapped);
   }
