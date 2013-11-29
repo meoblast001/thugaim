@@ -21,16 +21,21 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 
 import info.meoblast001.thugaim.engine.*;
 import info.meoblast001.thugaim.npc.*;
 
 public class ThugaimRuntime implements IGameRuntime
 {
+  public static final float PLAY_SIZE = 2000.0f;
+  private final int NUM_HYDROGEN_FIGHTERS = 10;
+
   private Engine engine;
   private Context context;
 
   private World world;
+  private StationGraph station_graph;
   private Player player;
 
   public void init(Engine engine)
@@ -39,13 +44,21 @@ public class ThugaimRuntime implements IGameRuntime
     context = engine.getGraphics().getContext();
 
     world = new World(engine);
+    station_graph = new StationGraph(engine, world);
 
     player = new Player(engine);
     world.insertActor(player);
     world.focusOnActor("player");
 
-    world.insertActor(new Station(engine, 200.0f, 200.0f));
-    world.insertActor(new HydrogenFighter(engine, 0.0f, 50.0f, 0.0f));
+    for (int i = 0; i < NUM_HYDROGEN_FIGHTERS; ++i)
+    {
+      Station[] stations = station_graph.getStations();
+      Station use_station = stations[
+        (int) Math.floor(Math.random() * stations.length)];
+      PointF position = use_station.getPosition();
+      world.insertActor(new HydrogenFighter(engine, position.x, position.y,
+                                            0.0f));
+    }
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
