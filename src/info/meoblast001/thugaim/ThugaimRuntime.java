@@ -46,7 +46,7 @@ public class ThugaimRuntime implements IGameRuntime
     world = new World(engine);
     station_graph = new StationGraph(engine, world);
 
-    player = new Player(engine);
+    player = new Player(engine, station_graph);
     world.insertActor(player);
     world.focusOnActor("player");
 
@@ -57,12 +57,13 @@ public class ThugaimRuntime implements IGameRuntime
         (int) Math.floor(Math.random() * stations.length)];
       PointF position = use_station.getPosition();
       world.insertActor(new HydrogenFighter(engine, position.x, position.y,
-                                            0.0f));
+                                            0.0f, station_graph));
     }
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    station_graph.update();
     world.update(millisecond_delta, rotation, tapped);
   }
 }

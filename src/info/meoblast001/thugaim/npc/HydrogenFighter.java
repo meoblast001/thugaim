@@ -17,33 +17,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.npc;
 
+import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.R;
 
 public class HydrogenFighter extends NPCVehicle
 {
-  public HydrogenFighter(Engine engine, float x, float y, float rotation)
+  public HydrogenFighter(Engine engine, float x, float y, float rotation,
+                         StationGraph station_graph)
   {
-    super(engine, R.drawable.hydrogen, x, y, rotation);
+    super(engine, R.drawable.hydrogen, x, y, rotation, station_graph);
     setSpeed(0.8f);
   }
 
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
-    if (getWorld() == null)
+    if (getWorld() == null || getClosestStation() == null)
       return;
 
     Actor player = getWorld().getActor("player");
     Actor station = getWorld().getActor("station_0");
 
-    if (distance(station) < 175.0f)
-      flee(station.getPosition(), millisecond_delta);
-    else if (distance(player) < 400.0f)
+    if (distance(player) < 225.0f)
       pursue(player.getPosition(), player.getRotation(), millisecond_delta);
     else
-      seek(station.getPosition(), millisecond_delta);
+      seek(getClosestStation().getPosition(), millisecond_delta);
 
     super.update(millisecond_delta, rotation, tapped);
   }

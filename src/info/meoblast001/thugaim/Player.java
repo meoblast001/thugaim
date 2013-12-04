@@ -22,9 +22,9 @@ import info.meoblast001.thugaim.R;
 
 public class Player extends Vehicle
 {
-  public Player(Engine engine)
+  public Player(Engine engine, StationGraph station_graph)
   {
-    super(engine, "player", R.drawable.player, 0.0f, 0.0f, 0.0f);
+    super(engine, "player", R.drawable.player, 0.0f, 0.0f, 0.0f, station_graph);
     setSpeed(1.0f);
   }
 

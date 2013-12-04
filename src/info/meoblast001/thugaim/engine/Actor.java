@@ -190,7 +190,10 @@ public abstract class Actor
     to = new PointF(to.x - from.x, to.y - from.y);
     float to_magn = (float) Math.sqrt(Math.pow(to.x, 2.0f) +
                                       Math.pow(to.y, 2.0f));
-    return new PointF(to.x / to_magn, to.y / to_magn);
+    if (to_magn < Float.MIN_VALUE && to_magn > -Float.MIN_VALUE)
+      return new PointF(0.0f, 0.0f);
+    else
+      return new PointF(to.x / to_magn, to.y / to_magn);
   }
 
   protected float crossProduct(PointF lhs, PointF rhs)

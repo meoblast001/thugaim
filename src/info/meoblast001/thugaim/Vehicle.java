@@ -27,12 +27,15 @@ public abstract class Vehicle extends Actor
   private Engine engine = null;
   private float speed = 1.0f;
   private long last_fired_millis = 0;
+  private StationGraph station_graph = null;
+  private Station closest_station = null;
 
   public Vehicle(Engine engine, String id, int bitmap_resource, float x,
-                 float y, float rotation)
+                 float y, float rotation, StationGraph station_graph)
   {
     super(id, engine, bitmap_resource);
     this.engine = engine;
+    this.station_graph = station_graph;
     move(x, y);
     rotate(rotation);
   }
@@ -65,5 +68,15 @@ public abstract class Vehicle extends Actor
   {
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
     draw();
+  }
+
+  public Station getClosestStation()
+  {
+    return closest_station;
+  }
+
+  public void setClosestStation(Station station)
+  {
+    closest_station = station;
   }
 }
