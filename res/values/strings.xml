@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Thugaim</string>
+  <string name="instructions">
+    Welcome! It appears that your work with the Space Minerals Transport Agency
+    is being disrupted by space pirates. They\'ve set up stations which they\'re
+    using to capture your team\'s cargo! Your new job is to destroy these
+    stations, but that won\'t happen without a fight.
+
+    \n\nTilt your device to steer your ship, and tap the screen to fire
+    projectiles. Good luck!
+  </string>
+  <string name="continue_t">Continue</string>
 </resources>

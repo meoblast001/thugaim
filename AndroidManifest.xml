@@ -4,14 +4,17 @@
           android:versionCode="1"
           android:versionName="1.0">
   <application android:label="@string/app_name" >
+    <activity android:name="Instructions"
+              android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
     <activity android:name="Thugaim"
               android:label="@string/app_name"
               android:screenOrientation="landscape"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-      <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
+              android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
   </application>
 </manifest> 
