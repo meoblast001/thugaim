@@ -17,24 +17,52 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.engine;
 
+/**
+Controls the game's runtime.
+*/
 public class Engine extends Thread
 {
+  /**
+  Specifies whether the game is running, not, or in a transitional or temporary
+  state.
+  */
   private enum RunState
   {
+    /**
+    Currently running with no plans to stop.
+    */
     RUNNING,
+    /**
+    Transitioning to PAUSED state, but not yet achieved.
+    */
     PAUSING,
+    /**
+    Paused but can be resumed.
+    */
     PAUSED,
+    /**
+    Transitioning to SHUTDOWN state, but not yet achieved.
+    */
     PERFORMING_SHUTDOWN,
-    SHUTDOWN
+    /**
+    Finished and cannot be resumed.
+    */
+    SHUTDOWN,
   }
 
   private IGameRuntime runtime = null;
   private Graphics graphics = null;
-  private float rotation = 0.0f;
+  private float rotation = 0.0f; //In degrees.
   private boolean tapped = false;
 
   private RunState run_state;
 
+  /**
+  Construct engine but do not start.
+  @param graphics Graphics instance to which the game will be drawn.
+  @param runtime Instance of IGameRuntime which will be initialised and contains
+    game-specific code.
+  */
   public Engine(Graphics graphics, IGameRuntime runtime)
   {
     super();
@@ -43,14 +71,21 @@ public class Engine extends Thread
     runtime.init(this);
   }
 
+  /**
+  Run by calling the start() method on an Engine instance. Contains the entire
+  game loop from start to shutdown.
+  */
   @Override
   public void run()
   {
     run_state = RunState.RUNNING;
 
     long previous_milliseconds = System.currentTimeMillis();
+    //Game loop. Continue until the engine begins to shutdown.
     while (run_state != RunState.PERFORMING_SHUTDOWN)
     {
+      //If pausing, pause and wait until unpaused. Will be unpaused on other
+      //thread.
       if (run_state == RunState.PAUSING)
       {
         run_state = RunState.PAUSED;
@@ -59,8 +94,11 @@ public class Engine extends Thread
       }
 
       long current_milliseconds = System.currentTimeMillis();
+      //Update runtime with difference between last frame and this frame as the
+      //delta.
       runtime.update(current_milliseconds - previous_milliseconds, rotation,
                      tapped);
+      //Draw frame.
       graphics.finishDraw();
 
       previous_milliseconds = current_milliseconds;
@@ -78,6 +116,9 @@ public class Engine extends Thread
     run_state = RunState.SHUTDOWN;
   }
 
+  /**
+  Pause the game state.
+  */
   public void pause()
   {
     run_state = RunState.PAUSING;
@@ -86,6 +127,9 @@ public class Engine extends Thread
       waitOrNot();
   }
 
+  /**
+  Shutdown the game engine, terminating the game.
+  */
   public void shutdown()
   {
     run_state = RunState.PERFORMING_SHUTDOWN;
@@ -94,21 +138,36 @@ public class Engine extends Thread
       waitOrNot();
   }
 
+  /**
+  Called if screen is tapped or untapped.
+  @param tapped True if tapped, false if untapped.
+  */
   public void setTapped(boolean tapped)
   {
     this.tapped = tapped;
   }
 
+  /**
+  Called if the device's rotation is changed.
+  @param rotation Rotation in degrees on the axis through the screen.
+  */
   public void setRotation(float rotation)
   {
     this.rotation = rotation;
   }
 
+  /**
+  Get a reference to the Graphics instance this Engine is using.
+  @return Graphics reference.
+  */
   public Graphics getGraphics()
   {
     return graphics;
   }
 
+  /**
+  Should wait, but if an exception occurs, ignore it.
+  */
   private void waitOrNot()
   {
     try

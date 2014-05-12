@@ -28,6 +28,10 @@ import android.view.View;
 
 import info.meoblast001.thugaim.engine.*;
 
+/**
+Play activity. During initialisation, starts the Engine, which runs on its own
+thread. After initialisation, forwards events to Engine.
+*/
 public class Thugaim extends Activity implements View.OnTouchListener,
                                                  SensorEventListener
 {

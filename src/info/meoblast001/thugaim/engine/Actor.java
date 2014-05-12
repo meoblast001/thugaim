@@ -25,6 +25,10 @@ import android.graphics.PointF;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+Object in the game world. Abstract and must be extended to build classes of game
+objects to be instantiated.
+*/
 public abstract class Actor
 {
   private String id;
@@ -66,26 +70,48 @@ public abstract class Actor
     this.world = world;
   }
 
+  /**
+  Get position of actor in world.
+  @return X and Y position as PointF.
+  */
   public PointF getPosition()
   {
     return new PointF(x, y);
   }
 
+  /**
+  Get rotation, where positive is clockwise and negative is counter-clockwise.
+  @return Rotation as float.
+  */
   public float getRotation()
   {
     return rotation;
   }
 
+  /**
+  Get width and height.
+  @return Point where X is width and Y is height.
+  */
   public Point getSize()
   {
     return new Point(bitmap.getWidth(), bitmap.getHeight());
   }
 
+  /**
+  Rotates.
+  @param rotation Degree of rotation, where positive is clockwise and negative
+    is counter-clockwise.
+  */
   public void rotate(float rotation)
   {
     this.rotation += rotation;
   }
 
+  /**
+  Translates in the world coordinate space.
+  @param x X-axis translation.
+  @param y Y-axis translation.
+  */
   public void move(float x, float y)
   {
     this.x += x;
@@ -94,6 +120,11 @@ public abstract class Actor
     updateCollisions();
   }
 
+  /**
+  Translates in the local coordinate space of the actor.
+  @param x X-axis translation.
+  @param y Y-axis translation.
+  */
   public void moveLocal(float x, float y)
   {
     this.x += Math.sin(rotation * (Math.PI / 180)) * y;
@@ -105,9 +136,23 @@ public abstract class Actor
     updateCollisions();
   }
 
+  /**
+  Implements logic executed per frame for each class of actors.
+  @param millisecond_delta Amount of milliseconds that elapsed between the last
+    call to this method and the current call.
+  @param rotation The current rotation of the device. NOT necessarily the amount
+    the actor should be rotated.
+  @param tapped True if screen tapped, false if not.
+  */
   public abstract void update(long millisecond_delta, float rotation,
                               boolean tapped);
 
+  /**
+  To increase performance, called instead of update() for instances which are
+  outside of the relevant play area. The actual update() call occurs less
+  frequently but with a millisecond_delta accumulating all missed frames.
+  Parameters match those of {@link #update(long, float, boolean) update()}.
+  */
   public void idleUpdate(long millisecond_delta, float rotation, boolean tapped)
   {
     idle_milliseconds += millisecond_delta;
@@ -120,11 +165,18 @@ public abstract class Actor
     }
   }
 
+  /**
+  Draws the actor the Graphics instance.
+  */
   public void draw()
   {
     engine.getGraphics().draw(bitmap, Math.round(x), Math.round(y), rotation);
   }
 
+  /**
+  Determines the distance between this actor and another actor.
+  @return Distance in world units.
+  */
   public float distance(Actor other)
   {
     PointF this_pos = getPosition();
@@ -133,26 +185,39 @@ public abstract class Actor
                              Math.pow(other_pos.x - this_pos.x, 2));
   }
 
+  /**
+  Get all actors with which this actor collided.
+  @return Set of Actors.
+  */
   public Set<Actor> getCollisions()
   {
     return collisions;
   }
 
+  /**
+  Update the list of actors with which this actor is colliding. Call after
+  movements.
+  */
   private void updateCollisions()
   {
     if (world == null)
       return;
 
+    //Periorically update the list of actors with which this actor may collide.
     if (frames_since_pca_recalculate >= FRAMES_UNTIL_PCA_RECALCULATE)
       recalculatePossibleCollisionActors();
     ++frames_since_pca_recalculate;
 
+    //Iterate through actors this actor may collide with and check for
+    //radial collisions.
     collisions = new HashSet<Actor>();
     for (Actor actor : possible_collision_actors)
     {
+      //This actor doesn't collide with itself.
       if (actor == this)
         continue;
 
+      //Use the average size of each actor using X and Y sizes.
       Point this_size = getSize();
       float this_avg_size = ((float) this_size.x + (float) this_size.y) / 2.0f;
 
@@ -160,6 +225,8 @@ public abstract class Actor
       float other_avg_size = ((float) other_size.x + (float) other_size.y) /
                              2.0f;
 
+      //Sum the average size of both actors and halve the sum. If closer, a
+      //radial collision occurred.
       float max_collide_distance = (this_avg_size + other_avg_size) / 2;
 
       if (distance(actor) < max_collide_distance)
@@ -167,6 +234,11 @@ public abstract class Actor
     }
   }
 
+  /**
+  To simplify the calculation of collisions, periodically do a full scan of
+  which actors this actor may collide with.
+  #{@link #updateCollisions() updateCollisions()} will only check those actors.
+  */
   private void recalculatePossibleCollisionActors()
   {
     possible_collision_actors = new HashSet<Actor>();
@@ -178,6 +250,10 @@ public abstract class Actor
     frames_since_pca_recalculate = 0;
   }
 
+  /**
+  Get a unit vector representing the rotation of this actor.
+  @return Unit vector as PointF from (0, 0) to the point.
+  */
   public PointF getRotationUnitVector()
   {
     float radian_rotation = (float) (getRotation() * (Math.PI / 180.0f));
@@ -185,6 +261,12 @@ public abstract class Actor
                       (float) -Math.cos(radian_rotation));
   }
 
+  /**
+  Produced a unit vector from one point to another.
+  @param from Point from which the unit vector will start.
+  @param to Point to which the unit vector points.
+  @return Unit vector as PointF from (0, 0) to the point.
+  */
   protected PointF getUnitVectorToTarget(PointF from, PointF to)
   {
     to = new PointF(to.x - from.x, to.y - from.y);
@@ -196,6 +278,9 @@ public abstract class Actor
       return new PointF(to.x / to_magn, to.y / to_magn);
   }
 
+  /**
+  Determines the cross product of two 2D points.
+  */
   protected float crossProduct(PointF lhs, PointF rhs)
   {
     return lhs.x * rhs.y - lhs.y * rhs.x;
