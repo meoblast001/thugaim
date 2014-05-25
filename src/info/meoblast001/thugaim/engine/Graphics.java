@@ -27,8 +27,16 @@ import android.view.SurfaceHolder;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+SurfaceView extension which handles graphics on the play screen.
+*/
 public class Graphics extends SurfaceView implements SurfaceHolder.Callback
 {
+  /**
+  Most graphics operations are NOT handled until #{@link #finishDraw()
+  finishDraw()} is called. Objects of this class represent one operation and are
+  queued for completion when finishDraw() is called.
+  */
   private class BitmapRenderOperation
   {
     public Bitmap bitmap;
@@ -63,6 +71,13 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   {
   }
 
+  /**
+  Draw a rotated bitmap to the canvas.
+  @param bitmap The bitmap to be drawn.
+  @param x The X position in the world at which to draw the bitmap's centre.
+  @param y The Y position in the world at which to draw the bitmap's centre.
+  @param angle Degrees of rotation (0.0f for no rotation).
+  */
   public void draw(Bitmap bitmap, int x, int y, float angle)
   {
     BitmapRenderOperation operation = new BitmapRenderOperation();
@@ -73,25 +88,38 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     render_operations.add(operation);
   }
 
+  /**
+  Specify the world X and Y coordinates at which to focus the centre of the
+  screen.
+  @param x World X coordinate at which to focus.
+  @param y World Y coordinate at which to focus.
+  */
   public void focusOn(int x, int y)
   {
     focus_x = x;
     focus_y = y;
   }
 
+  /**
+  Called by the engine to commit all graphical operations for the current frame.
+  */
   public void finishDraw()
   {
     SurfaceHolder holder = getHolder();
 
+    //Don't draw if the surface isn't valid.
     if (!holder.getSurface().isValid())
       return;
-
     Canvas canvas = holder.lockCanvas();
+
+    //Background is black.
     canvas.drawColor(Color.BLACK);
 
+    //Focus the centre of the screen to the coordinates set by focusOn().
     canvas.translate((float) (-focus_x + canvas.getWidth() / 2),
                      (float) (-focus_y + canvas.getHeight() / 2));
     canvas.save();
+    //Perform each BitmapRenderOperation.
     while (render_operations.size() > 0)
     {
       BitmapRenderOperation operation = render_operations.poll();
@@ -99,6 +127,9 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
       canvas.save();
       canvas.translate((float) operation.x, (float) operation.y);
       canvas.rotate(operation.angle);
+      //Subtract half of the width and height from the draw position so that the
+      //centre of the bitmap (instead of the top-left) is drawn at the specified
+      //position.
       canvas.drawBitmap(operation.bitmap,
                         (int) (-operation.bitmap.getWidth() / 2),
                         (int) (-operation.bitmap.getHeight() / 2), null);

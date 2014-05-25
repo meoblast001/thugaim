@@ -21,6 +21,9 @@ import android.graphics.PointF;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+Represents the game world and manages its contents.
+*/
 public class World
 {
   private Engine engine;
@@ -32,6 +35,12 @@ public class World
     this.engine = engine;
   }
 
+  /**
+  Inserts an actor into the world if it is not already in a world. Also signals
+  the actor of the world change.
+  @param actor Actor to be inserted.
+  @return True if inserted, false if the actor is already in a world.
+  */
   public boolean insertActor(Actor actor)
   {
     if (actor.getWorld() != null)
@@ -41,26 +50,56 @@ public class World
     return true;
   }
 
+  /**
+  Removes an actor from the world if it is already in the world. Signals the
+  actor that it has been removed from the world.
+  @param actor_id ID string of the actor to remove.
+  */
   public void removeActor(String actor_id)
   {
-    actors.remove(actor_id);
+    Actor removed = actors.remove(actor_id);
+    if (removed != null)
+      removed.setWorld(null);
   }
 
+  /**
+  Get an actor by its ID string.
+  @param actor_id ID string of actor.
+  @return Actor if found or null if not found.
+  */
   public Actor getActor(String actor_id)
   {
     return actors.get(actor_id);
   }
 
+  /**
+  Get an array of all actors in world in no particular order.
+  @return Array of actors.
+  */
   public Actor[] getActors()
   {
     return actors.values().toArray(new Actor[0]);
   }
 
+  /**
+  Specify the actor which the world (and therefore the play screen) will focus
+  on.
+  @param actor_id The unique ID string of the actor.
+  */
   public void focusOnActor(String actor_id)
   {
     actor_focus = actors.get(actor_id);
   }
 
+  /**
+  Updates all actors. If an actor is outside the relevant play area, an idle
+  update occurs, which performs actual updates less frequently to improve
+  performance.
+  @param millisecond_delta Milliseconds elapsed since last call.
+  @param rotation Rotation of the device, where positive values are clockwise
+    and negative values are counter-clockwise.
+  @param tapped Signifies whether the screen is being tapped.
+  */
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     Graphics graphics = engine.getGraphics();

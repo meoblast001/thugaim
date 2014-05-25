@@ -49,6 +49,9 @@ public class Projectile extends Actor
   {
     super.setWorld(world);
 
+    if (world == null)
+      return;
+
     cur_projectiles.add(this);
     if (cur_projectiles.size() > 50)
     {

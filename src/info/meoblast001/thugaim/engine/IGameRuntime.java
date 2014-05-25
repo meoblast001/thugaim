@@ -17,8 +17,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.engine;
 
+/**
+Extend this class to define game functionality.
+*/
 public interface IGameRuntime
 {
+  /**
+  Called after engine initialisation. Initialises the game.
+  @param engine An instance of the Engine.
+  */
   public void init(Engine engine);
+  /**
+  Called once per frame. Allows the game to respond to user input, perform game
+  logic, and draw actors.
+  @param millisecond_delta Milliseconds elapsed since last call.
+  @param rotation Rotation of the device, where positive values are clockwise
+    and negative values are counter-clockwise.
+  @param tapped Signifies whether the screen is being tapped.
+  */
   public void update(long millisecond_delta, float rotation, boolean tapped);
 }
