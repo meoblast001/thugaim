@@ -23,6 +23,10 @@ import info.meoblast001.thugaim.engine.World;
 
 import java.util.Vector;
 
+/**
+Invisible entity linking stations as a directed graph. Stations are placed at
+random locations. Edges between stations are built randomly.
+*/
 public class StationGraph
 {
   private Engine engine;
@@ -40,6 +44,8 @@ public class StationGraph
     this.engine = engine;
     this.world = world;
 
+    //Place NUM_STATIONS amount of stations at random locations in the play
+    //area.
     final float play_size = ThugaimRuntime.PLAY_SIZE;
     for (int i = 0; i < stations.length; ++i)
     {
@@ -49,22 +55,33 @@ public class StationGraph
       world.insertActor(stations[i]);
     }
 
+    //Randomly form edges between stations (80% chance of edge). Do not built
+    //edge to self.
     for (int i = 0; i < edges.length; ++i)
       for (int j = 0; j < edges[i].length; ++j)
         edges[i][j] = i == j ? false : Math.random() > 0.2;
   }
 
+  /**
+  Get all stations in graph.
+  @return Array of stations.
+  */
   public Station[] getStations()
   {
     return stations;
   }
 
+  /**
+  Updates graph: finds closest station to each actor in world. Does not occur at
+  every frame.
+  */
   public void update()
   {
     if (frames_since_update++ < UPDATE_AFTER_FRAMES)
       return;
     frames_since_update = 0;
 
+    //For each vehicle in the world, determine which station is the closest.
     Actor[] actors = world.getActors();
     for (Actor actor: actors)
     {
@@ -72,6 +89,7 @@ public class StationGraph
         continue;
       Vehicle vehicle = (Vehicle) actor;
 
+      //Iterate over each station until the closest one is found.
       Station closest_station = null;
       float closest_station_distance = Float.MAX_VALUE;
       for (Station station : stations)

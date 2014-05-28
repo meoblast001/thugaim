@@ -22,6 +22,10 @@ import android.graphics.PointF;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.engine.Actor;
 
+/**
+Abstract actor class for vehicles. Each class of vehicles must define specific
+behaviour.
+*/
 public abstract class Vehicle extends Actor
 {
   private Engine engine = null;
@@ -40,18 +44,38 @@ public abstract class Vehicle extends Actor
     rotate(rotation);
   }
 
+  /**
+  Changes speed of vehicle. Default is 1.0f.
+  @param speed New speed with no particular units. Higher values are faster.
+    If negative, speed will be set to 0.0f.
+  */
   public void setSpeed(float speed)
   {
+    if (speed < 0.0f)
+      speed = 0.0f;
     this.speed = speed;
   }
 
+  /**
+  Rotates the vehicle.
+  @param rotation Amount to rotation in no particular units. Positive values are
+    clockwise and negative values are counter-clockwise. Values clipped to
+    (-8.0f, 8.0f).
+  @param millisecond_delta Amount of milliseconds that elapsed between the
+    previous frame and this frame.
+  */
   protected void rotate(float rotation, long millisecond_delta)
   {
     if (rotation >= 8.0f)
       rotation = 8.0f;
+    if (rotation <= -8.0f)
+      rotation = -8.0f;
     rotate(rotation * 0.015f * (float) millisecond_delta);
   }
 
+  /**
+  Fires a projectile from this vehicle.
+  */
   protected void fire()
   {
     long cur_millis = System.currentTimeMillis();
@@ -70,11 +94,20 @@ public abstract class Vehicle extends Actor
     draw();
   }
 
+  /**
+  Gets the closest station to this vehicle.
+  @return Reference to Station.
+  */
   public Station getClosestStation()
   {
     return closest_station;
   }
 
+  /**
+  Sets the closest station to this vehicle. Should only be called by
+  StationGraph.
+  @param station New closest station.
+  */
   public void setClosestStation(Station station)
   {
     closest_station = station;

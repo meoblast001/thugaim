@@ -21,6 +21,10 @@ import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.R;
 
+/**
+Station actor. Primary goal of the player is to destroy these actors. They are
+protected by NPCs and belong to a graph of other stations.
+*/
 public class Station extends Actor
 {
   private static int cur_station_id = 0;

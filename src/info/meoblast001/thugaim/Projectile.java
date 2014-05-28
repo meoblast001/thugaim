@@ -26,10 +26,15 @@ import info.meoblast001.thugaim.R;
 
 import java.util.LinkedList;
 
+/**
+Ammunition fired by the player and NPCs. Moves continuously in the direction its
+origin was traveling when fired.
+*/
 public class Projectile extends Actor
 {
   private Actor origin;
   private static short current_projectile_id = 0;
+  //Static list of all projectiles in the world.
   private static LinkedList<Projectile> cur_projectiles =
     new LinkedList<Projectile>();
 
@@ -52,6 +57,7 @@ public class Projectile extends Actor
     if (world == null)
       return;
 
+    //Do not keep more than 50 projectiles in play at one time for performance.
     cur_projectiles.add(this);
     if (cur_projectiles.size() > 50)
     {
