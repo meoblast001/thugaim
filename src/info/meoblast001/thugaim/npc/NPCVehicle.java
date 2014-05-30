@@ -23,6 +23,10 @@ import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.Vehicle;
 import info.meoblast001.thugaim.engine.Engine;
 
+/**
+Base vehicle class for all NPCs. Includes common functionality all NPCs have and
+provides helper methods.
+*/
 public abstract class NPCVehicle extends Vehicle
 {
   private static short current_fighter_id = 0;
@@ -42,6 +46,11 @@ public abstract class NPCVehicle extends Vehicle
     super.rotate(rotation, millisecond_delta);
   }
 
+  /**
+  Rotate to reach a particular target.
+  @param target The location of the target.
+  @param millisecond_delta Milliseconds elapsed since last frame.
+  */
   protected void seek(PointF target, long millisecond_delta)
   {
     rotate(
@@ -50,6 +59,12 @@ public abstract class NPCVehicle extends Vehicle
       millisecond_delta);
   }
 
+  /**
+  Rotate to reach the location to which a particular target is going.
+  @param target The location of the target (current location).
+  @param rotation The rotation of the target.
+  @param millisecond_delta Milliseconds elapsed since last frame.
+  */
   protected void pursue(PointF target, float rotation, long millisecond_delta)
   {
     float radian_rotation = (float) (rotation * (Math.PI / 180.0f));
@@ -58,6 +73,11 @@ public abstract class NPCVehicle extends Vehicle
     seek(target, millisecond_delta);
   }
 
+  /**
+  Rotate to go in the opposite direction of the target. Flees from the target.
+  @param target The location of the target.
+  @param millisecond_delta Milliseconds elapsed since last frame.
+  */
   protected void flee(PointF target, long millisecond_delta)
   {
     rotate(
@@ -66,6 +86,13 @@ public abstract class NPCVehicle extends Vehicle
       millisecond_delta);
   }
 
+  /**
+  Rotate in the opposite direction of that which would reach the location to
+  which the target is going.
+  @param target The location of the target (current location).
+  @param rotatioin The rotation of the target.
+  @param millisecond_delta Milliseconds elapsed since last frame.
+  */
   protected void evade(PointF target, float rotation, long millisecond_delta)
   {
     float radian_rotation = (float) (rotation * (Math.PI / 180.0f));

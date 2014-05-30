@@ -26,6 +26,10 @@ import android.graphics.PointF;
 import info.meoblast001.thugaim.engine.*;
 import info.meoblast001.thugaim.npc.*;
 
+/**
+Top level of game code. Manages all gameplay elements either directly or
+indirectly.
+*/
 public class ThugaimRuntime implements IGameRuntime
 {
   public static final float PLAY_SIZE = 2000.0f;
@@ -50,6 +54,7 @@ public class ThugaimRuntime implements IGameRuntime
     world.insertActor(player);
     world.focusOnActor("player");
 
+    //Instantiate HydrogenFighters at random stations.
     for (int i = 0; i < NUM_HYDROGEN_FIGHTERS; ++i)
     {
       Station[] stations = station_graph.getStations();

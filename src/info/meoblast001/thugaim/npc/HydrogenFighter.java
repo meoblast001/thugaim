@@ -22,6 +22,11 @@ import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.R;
 
+/**
+Simple NPC which travels randomly through the StationGraph unless near the
+player, in which case it follows the player, or at an adjacent station to the
+player's station, in which case it moves to that station.
+*/
 public class HydrogenFighter extends NPCVehicle
 {
   public HydrogenFighter(Engine engine, float x, float y, float rotation,

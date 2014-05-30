@@ -20,6 +20,9 @@ package info.meoblast001.thugaim;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.R;
 
+/**
+Player character which responds to player input. Only one exists per world.
+*/
 public class Player extends Vehicle
 {
   public Player(Engine engine, StationGraph station_graph)
