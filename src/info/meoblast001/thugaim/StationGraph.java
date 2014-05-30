@@ -21,6 +21,7 @@ import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.engine.World;
 
+import java.util.LinkedList;
 import java.util.Vector;
 
 /**
@@ -69,6 +70,41 @@ public class StationGraph
   public Station[] getStations()
   {
     return stations;
+  }
+
+  /**
+  Get all stations to which a particular station in the graph has an edge
+  (adjacent stations).
+  @param station Station from which edges extend.
+  @return Array of stations to which edges from the parameter station extend.
+    Null if the parameter station is not in the graph.
+  */
+  public Station[] getAdjacentStations(Station station)
+  {
+    //Locate the station's index in the list of stations.
+    int station_index = -1;
+    for (int i = 0; i < stations.length; ++i)
+    {
+      if (station == stations[i])
+      {
+        station_index = i;
+        break;
+      }
+    }
+    //If nothing found, return null. This station does not exist in the graph.
+    if (station_index == -1)
+      return null;
+
+    //Iterate over the row in the matrix containing edges from this station.
+    //Extract all stations to which edges extend.
+    LinkedList<Station> adjacent_stations = new LinkedList<Station>();
+    for (int i = 0; i < edges[station_index].length; ++i)
+    {
+      if (edges[station_index][i])
+        adjacent_stations.add(stations[i]);
+    }
+
+    return adjacent_stations.toArray(new Station[0]);
   }
 
   /**

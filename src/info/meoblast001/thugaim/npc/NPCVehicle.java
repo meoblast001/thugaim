@@ -90,7 +90,7 @@ public abstract class NPCVehicle extends Vehicle
   Rotate in the opposite direction of that which would reach the location to
   which the target is going.
   @param target The location of the target (current location).
-  @param rotatioin The rotation of the target.
+  @param rotation The rotation of the target.
   @param millisecond_delta Milliseconds elapsed since last frame.
   */
   protected void evade(PointF target, float rotation, long millisecond_delta)

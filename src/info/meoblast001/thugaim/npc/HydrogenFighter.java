@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.npc;
 
+import info.meoblast001.thugaim.Station;
 import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
@@ -29,10 +30,14 @@ player's station, in which case it moves to that station.
 */
 public class HydrogenFighter extends NPCVehicle
 {
+  private StationGraph station_graph = null;
+  private Station target_station = null;
+
   public HydrogenFighter(Engine engine, float x, float y, float rotation,
                          StationGraph station_graph)
   {
     super(engine, R.drawable.hydrogen, x, y, rotation, station_graph);
+    this.station_graph = station_graph;
     setSpeed(0.8f);
   }
 
@@ -43,12 +48,24 @@ public class HydrogenFighter extends NPCVehicle
       return;
 
     Actor player = getWorld().getActor("player");
-    Actor station = getWorld().getActor("station_0");
+
+    //Set initial target station.
+    if (target_station == null)
+      target_station = getClosestStation();
+
+    //If close to target station, change target to a random adjacent station.
+    if (distance(target_station) < 50.0f)
+    {
+      Station[] adjacent_stations = station_graph.getAdjacentStations(
+        target_station);
+      target_station = adjacent_stations[(int) Math.floor(Math.random() *
+                                         adjacent_stations.length)];
+    }
 
     if (distance(player) < 225.0f)
       pursue(player.getPosition(), player.getRotation(), millisecond_delta);
     else
-      seek(getClosestStation().getPosition(), millisecond_delta);
+      seek(target_station.getPosition(), millisecond_delta);
 
     super.update(millisecond_delta, rotation, tapped);
   }
