@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.engine;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
 Controls the game's runtime.
 */
@@ -57,6 +59,9 @@ public class Engine extends Thread
 
   private RunState run_state;
 
+  private CountDownLatch pause_countdown;
+  private CountDownLatch shutdown_countdown;
+
   /**
   Construct engine but do not start.
   @param graphics Graphics instance to which the game will be drawn.
@@ -89,6 +94,7 @@ public class Engine extends Thread
       if (run_state == RunState.PAUSING)
       {
         run_state = RunState.PAUSED;
+        pause_countdown.countDown(); //Free other thread waiting at pause().
         while (run_state == RunState.PAUSED)
           waitOrNot();
       }
@@ -114,6 +120,7 @@ public class Engine extends Thread
     }
 
     run_state = RunState.SHUTDOWN;
+    shutdown_countdown.countDown(); //Free other thread waiting at shutdown().
   }
 
   /**
@@ -122,9 +129,16 @@ public class Engine extends Thread
   public void pause()
   {
     run_state = RunState.PAUSING;
-
-    while (run_state != RunState.PAUSED)
-      waitOrNot();
+    //Wait until other thread finishes pausing at run().
+    pause_countdown = new CountDownLatch(1);
+    try
+    {
+      pause_countdown.await();
+    }
+    catch (InterruptedException e)
+    {
+      //Do nothing if fails.
+    }
   }
 
   /**
@@ -133,9 +147,16 @@ public class Engine extends Thread
   public void shutdown()
   {
     run_state = RunState.PERFORMING_SHUTDOWN;
-
-    while (run_state != RunState.SHUTDOWN)
-      waitOrNot();
+    //Wait until other thread finishes shutting down at run().
+    shutdown_countdown = new CountDownLatch(1);
+    try
+    {
+      shutdown_countdown.await();
+    }
+    catch (InterruptedException e)
+    {
+      //Do nothing if fails.
+    }
   }
 
   /**
