@@ -30,13 +30,16 @@ player's station, in which case it moves to that station.
 */
 public class HydrogenFighter extends NPCVehicle
 {
+  private static int MAX_HEALTH = 5;
+
   private StationGraph station_graph = null;
   private Station target_station = null;
 
   public HydrogenFighter(Engine engine, float x, float y, float rotation,
                          StationGraph station_graph)
   {
-    super(engine, R.drawable.hydrogen, x, y, rotation, station_graph);
+    super(engine, R.drawable.hydrogen, x, y, rotation, MAX_HEALTH,
+          station_graph);
     this.station_graph = station_graph;
     setSpeed(0.8f);
   }

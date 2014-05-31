@@ -67,6 +67,15 @@ public class Projectile extends Actor
     }
   }
 
+  /**
+  Get the actor from which this projectile was fired.
+  @return Origin Actor.
+  */
+  public Actor getOrigin()
+  {
+    return origin;
+  }
+
   @Override
   public void update(long millisecond_delta, float rotation_delta,
                      boolean tapped)

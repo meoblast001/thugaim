@@ -25,9 +25,12 @@ Player character which responds to player input. Only one exists per world.
 */
 public class Player extends Vehicle
 {
+  private static int MAX_HEALTH = 50;
+
   public Player(Engine engine, StationGraph station_graph)
   {
-    super(engine, "player", R.drawable.player, 0.0f, 0.0f, 0.0f, station_graph);
+    super(engine, "player", R.drawable.player, 0.0f, 0.0f, 0.0f, MAX_HEALTH,
+          station_graph);
     setSpeed(1.0f);
   }
 

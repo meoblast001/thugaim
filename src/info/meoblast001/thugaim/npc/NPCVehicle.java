@@ -32,10 +32,10 @@ public abstract class NPCVehicle extends Vehicle
   private static short current_fighter_id = 0;
 
   public NPCVehicle(Engine engine, int bitmap_resource, float x, float y,
-                    float rotation, StationGraph station_graph)
+                    float rotation, int health, StationGraph station_graph)
   {
     super(engine, "npc_" + current_fighter_id++, bitmap_resource, x, y,
-          rotation, station_graph);
+          rotation, health, station_graph);
   }
 
   @Override

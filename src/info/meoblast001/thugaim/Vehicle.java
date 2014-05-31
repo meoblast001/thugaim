@@ -30,15 +30,18 @@ public abstract class Vehicle extends Actor
 {
   private Engine engine = null;
   private float speed = 1.0f;
+  private int health = 1;
   private long last_fired_millis = 0;
   private StationGraph station_graph = null;
   private Station closest_station = null;
 
   public Vehicle(Engine engine, String id, int bitmap_resource, float x,
-                 float y, float rotation, StationGraph station_graph)
+                 float y, float rotation, int health,
+                 StationGraph station_graph)
   {
     super(id, engine, bitmap_resource);
     this.engine = engine;
+    this.health = health;
     this.station_graph = station_graph;
     move(x, y);
     rotate(rotation);
@@ -86,11 +89,33 @@ public abstract class Vehicle extends Actor
     }
   }
 
+  /**
+  Reduces health by 1. If health reaches zero, actor is removed from the world.
+  */
+  protected void reduceHealth()
+  {
+    --health;
+    if (health == 0)
+      getWorld().removeActor(getId());
+  }
+
   @Override
   public void update(long millisecond_delta, float rotation_delta,
                      boolean tapped)
   {
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
+
+    //If collides with a foreign projectile, take damage.
+    for (Actor actor : getCollisions().toArray(new Actor[0]))
+    {
+      if (actor instanceof Projectile && ((Projectile) actor).getOrigin() !=
+          this)
+      {
+        getWorld().removeActor(actor.getId());
+        reduceHealth(); //May be removed from world (getWorld() == null).
+      }
+    }
+
     draw();
   }
 
