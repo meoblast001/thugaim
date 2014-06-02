@@ -43,6 +43,10 @@ public class Engine extends Thread
     */
     PAUSED,
     /**
+    Transitioning to RUNNING state from PAUSED state, but not yet achieved.
+    */
+    RESUMING,
+    /**
     Transitioning to SHUTDOWN state, but not yet achieved.
     */
     PERFORMING_SHUTDOWN,
@@ -59,7 +63,7 @@ public class Engine extends Thread
 
   private RunState run_state;
 
-  private CountDownLatch pause_countdown;
+  private CountDownLatch resume_countdown;
   private CountDownLatch shutdown_countdown;
 
   /**
@@ -94,9 +98,17 @@ public class Engine extends Thread
       if (run_state == RunState.PAUSING)
       {
         run_state = RunState.PAUSED;
-        pause_countdown.countDown(); //Free other thread waiting at pause().
-        while (run_state == RunState.PAUSED)
-          waitOrNot();
+
+        //Wait until unpaused.
+        resume_countdown = new CountDownLatch(1);
+        forceAwait(resume_countdown);
+
+        //Unpause game.
+        run_state = RunState.RUNNING;
+        resume_countdown = null;
+        //If previous_milliseconds is not updated, the entire paused time period
+        //will occur in one frame as if unpaused during that time.
+        previous_milliseconds = System.currentTimeMillis();
       }
 
       long current_milliseconds = System.currentTimeMillis();
@@ -129,15 +141,17 @@ public class Engine extends Thread
   public void pause()
   {
     run_state = RunState.PAUSING;
-    //Wait until other thread finishes pausing at run().
-    pause_countdown = new CountDownLatch(1);
-    try
+  }
+
+  /**
+  If paused, resume. Else do nothing.
+  */
+  public void unpause()
+  {
+    if (resume_countdown != null)
     {
-      pause_countdown.await();
-    }
-    catch (InterruptedException e)
-    {
-      //Do nothing if fails.
+      run_state = RunState.RESUMING;
+      resume_countdown.countDown();
     }
   }
 
@@ -149,14 +163,7 @@ public class Engine extends Thread
     run_state = RunState.PERFORMING_SHUTDOWN;
     //Wait until other thread finishes shutting down at run().
     shutdown_countdown = new CountDownLatch(1);
-    try
-    {
-      shutdown_countdown.await();
-    }
-    catch (InterruptedException e)
-    {
-      //Do nothing if fails.
-    }
+    forceAwait(shutdown_countdown);
   }
 
   /**
@@ -187,17 +194,18 @@ public class Engine extends Thread
   }
 
   /**
-  Should wait, but if an exception occurs, ignore it.
+  Calls await on a CountDownLatch. If fails, tries again until successful.
+  @param latch CountDownLatch on which to await.
   */
-  private void waitOrNot()
+  private void forceAwait(CountDownLatch latch)
   {
     try
     {
-      wait();
+      latch.await();
     }
     catch (InterruptedException e)
     {
-      //Do nothing if fails.
+      forceAwait(latch);
     }
   }
 }

@@ -79,6 +79,20 @@ public class Thugaim extends Activity implements View.OnTouchListener,
   }
 
   @Override
+  public void onResume()
+  {
+    super.onResume();
+    engine.unpause();
+  }
+
+  @Override
+  public void onRestart()
+  {
+    super.onRestart();
+    engine.unpause();
+  }
+
+  @Override
   public void onDestroy()
   {
     super.onDestroy();
