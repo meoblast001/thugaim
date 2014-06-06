@@ -65,6 +65,8 @@ public class HydrogenFighter extends NPCVehicle
                                          adjacent_stations.length)];
     }
 
+    boolean will_fire = false;
+
     //The amount the fighter would need to rotate to face the player.
     float rotation_to_player = crossProduct(getRotationUnitVector(),
       getUnitVectorToTarget(getPosition(), player.getPosition()));
@@ -73,6 +75,29 @@ public class HydrogenFighter extends NPCVehicle
     if (rotation_to_player > -FIRE_ANGLE_RADIANS &&
         rotation_to_player < FIRE_ANGLE_RADIANS &&
         distance(player) < 200.0f)
+      will_fire = true;
+
+    //If another NPC is within firing angle and is nearer than the player,
+    //cancel fire.
+    //TODO: Make this more efficient. Only iterate over a subset of nearby
+    //  actors.
+    if (will_fire)
+    {
+      for (Actor npc : getWorld().getActors())
+      {
+        if (!(npc instanceof NPCVehicle) || npc == this)
+          continue;
+
+        float rotation_to_npc = crossProduct(getRotationUnitVector(),
+          getUnitVectorToTarget(getPosition(), npc.getPosition()));
+        if (rotation_to_npc > -FIRE_ANGLE_RADIANS &&
+            rotation_to_npc < FIRE_ANGLE_RADIANS &&
+            distance(npc) < distance(player))
+          will_fire = false;
+      }
+    }
+
+    if (will_fire)
       fire();
 
     if (distance(player) < 225.0f)
