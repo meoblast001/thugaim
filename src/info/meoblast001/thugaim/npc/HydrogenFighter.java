@@ -65,6 +65,16 @@ public class HydrogenFighter extends NPCVehicle
                                          adjacent_stations.length)];
     }
 
+    //The amount the fighter would need to rotate to face the player.
+    float rotation_to_player = crossProduct(getRotationUnitVector(),
+      getUnitVectorToTarget(getPosition(), player.getPosition()));
+    final float FIRE_ANGLE_RADIANS = (float) (30.0f * Math.PI / 180.0f);
+    //If target is within firing angle and is near, fire.
+    if (rotation_to_player > -FIRE_ANGLE_RADIANS &&
+        rotation_to_player < FIRE_ANGLE_RADIANS &&
+        distance(player) < 200.0f)
+      fire();
+
     if (distance(player) < 225.0f)
       pursue(player.getPosition(), player.getRotation(), millisecond_delta);
     else
