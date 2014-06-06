@@ -67,7 +67,6 @@ public abstract class NPCVehicle extends Vehicle
   */
   protected void pursue(PointF target, float rotation, long millisecond_delta)
   {
-    float radian_rotation = (float) (rotation * (Math.PI / 180.0f));
     target = new PointF(target.x + (float) Math.sin(rotation),
                         target.y + (float) -Math.cos(rotation));
     seek(target, millisecond_delta);
@@ -95,7 +94,6 @@ public abstract class NPCVehicle extends Vehicle
   */
   protected void evade(PointF target, float rotation, long millisecond_delta)
   {
-    float radian_rotation = (float) (rotation * (Math.PI / 180.0f));
     target = new PointF(target.x + (float) Math.sin(rotation),
                         target.y + (float) -Math.cos(rotation));
     flee(target, millisecond_delta);

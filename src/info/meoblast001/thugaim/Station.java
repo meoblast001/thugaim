@@ -36,8 +36,7 @@ public class Station extends Actor
   }
 
   @Override
-  public void update(long millisecond_delta, float rotation_delta,
-                     boolean tapped)
+  public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     draw();
   }

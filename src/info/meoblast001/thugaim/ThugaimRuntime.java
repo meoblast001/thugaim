@@ -32,7 +32,7 @@ indirectly.
 */
 public class ThugaimRuntime implements IGameRuntime
 {
-  public static final float PLAY_SIZE = 2000.0f;
+  public static final float PLAY_SIZE = 10000.0f;
   private final int NUM_HYDROGEN_FIGHTERS = 10;
 
   private Engine engine;

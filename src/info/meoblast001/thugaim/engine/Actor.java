@@ -81,7 +81,7 @@ public abstract class Actor
 
   /**
   Get rotation, where positive is clockwise and negative is counter-clockwise.
-  @return Rotation as float.
+  @return Rotation in radians as float.
   */
   public float getRotation()
   {
@@ -99,7 +99,7 @@ public abstract class Actor
 
   /**
   Rotates.
-  @param rotation Degree of rotation, where positive is clockwise and negative
+  @param rotation Radians of rotation, where positive is clockwise and negative
     is counter-clockwise.
   */
   public void rotate(float rotation)
@@ -127,11 +127,11 @@ public abstract class Actor
   */
   public void moveLocal(float x, float y)
   {
-    this.x += Math.sin(rotation * (Math.PI / 180)) * y;
-    this.y += -Math.cos(rotation * (Math.PI / 180)) * y;
+    this.x += Math.sin(rotation) * y;
+    this.y += -Math.cos(rotation) * y;
 
-    this.x += -Math.cos(rotation * (Math.PI / 180)) * x;
-    this.y += Math.sin(rotation * (Math.PI / 180)) * x;
+    this.x += -Math.cos(rotation) * x;
+    this.y += Math.sin(rotation) * x;
 
     updateCollisions();
   }
@@ -256,9 +256,9 @@ public abstract class Actor
   */
   public PointF getRotationUnitVector()
   {
-    float radian_rotation = (float) (getRotation() * (Math.PI / 180.0f));
-    return new PointF((float) Math.sin(radian_rotation),
-                      (float) -Math.cos(radian_rotation));
+    float rotation = getRotation();
+    return new PointF((float) Math.sin(rotation),
+                      (float) -Math.cos(rotation));
   }
 
   /**

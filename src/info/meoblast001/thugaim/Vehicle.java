@@ -61,7 +61,7 @@ public abstract class Vehicle extends Actor
 
   /**
   Rotates the vehicle.
-  @param rotation Amount to rotation in no particular units. Positive values are
+  @param rotation Amount to rotate in no particular units. Positive values are
     clockwise and negative values are counter-clockwise. Values clipped to
     (-8.0f, 8.0f).
   @param millisecond_delta Amount of milliseconds that elapsed between the
@@ -73,7 +73,7 @@ public abstract class Vehicle extends Actor
       rotation = 8.0f;
     if (rotation <= -8.0f)
       rotation = -8.0f;
-    rotate(rotation * 0.015f * (float) millisecond_delta);
+    rotate(rotation * 0.00026f * (float) millisecond_delta);
   }
 
   /**
@@ -100,8 +100,7 @@ public abstract class Vehicle extends Actor
   }
 
   @Override
-  public void update(long millisecond_delta, float rotation_delta,
-                     boolean tapped)
+  public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
 

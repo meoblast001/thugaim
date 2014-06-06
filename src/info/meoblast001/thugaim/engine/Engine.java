@@ -58,7 +58,7 @@ public class Engine extends Thread
 
   private IGameRuntime runtime = null;
   private Graphics graphics = null;
-  private float rotation = 0.0f; //In degrees.
+  private float rotation = 0.0f;
   private boolean tapped = false;
 
   private RunState run_state;
@@ -177,7 +177,8 @@ public class Engine extends Thread
 
   /**
   Called if the device's rotation is changed.
-  @param rotation Rotation in degrees on the axis through the screen.
+  @param rotation Rotation determined from accelerometer pull on Y-axis. Values
+    between negative and positive SensorManager.STANDARD_GRAVITY.
   */
   public void setRotation(float rotation)
   {

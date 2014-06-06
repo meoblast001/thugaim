@@ -77,8 +77,7 @@ public class Projectile extends Actor
   }
 
   @Override
-  public void update(long millisecond_delta, float rotation_delta,
-                     boolean tapped)
+  public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     moveLocal(0.0f, millisecond_delta * 0.5f);
     draw();

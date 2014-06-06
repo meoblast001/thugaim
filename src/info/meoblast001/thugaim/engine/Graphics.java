@@ -76,7 +76,7 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   @param bitmap The bitmap to be drawn.
   @param x The X position in the world at which to draw the bitmap's centre.
   @param y The Y position in the world at which to draw the bitmap's centre.
-  @param angle Degrees of rotation (0.0f for no rotation).
+  @param angle Radians of rotation (0.0f for no rotation).
   */
   public void draw(Bitmap bitmap, int x, int y, float angle)
   {
@@ -126,7 +126,7 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
 
       canvas.save();
       canvas.translate((float) operation.x, (float) operation.y);
-      canvas.rotate(operation.angle);
+      canvas.rotate((float) (operation.angle * (180.0f / Math.PI)));
       //Subtract half of the width and height from the draw position so that the
       //centre of the bitmap (instead of the top-left) is drawn at the specified
       //position.
