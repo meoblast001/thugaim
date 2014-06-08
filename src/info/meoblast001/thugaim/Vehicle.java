@@ -90,6 +90,15 @@ public abstract class Vehicle extends Actor
   }
 
   /**
+  Gets health.
+  @return Health.
+  */
+  public int getHealth()
+  {
+    return health;
+  }
+
+  /**
   Reduces health by 1. If health reaches zero, actor is removed from the world.
   */
   protected void reduceHealth()

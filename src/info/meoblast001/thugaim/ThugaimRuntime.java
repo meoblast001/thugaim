@@ -41,6 +41,7 @@ public class ThugaimRuntime implements IGameRuntime
   private World world;
   private StationGraph station_graph;
   private Player player;
+  private HealthBar health_bar;
 
   public void init(Engine engine)
   {
@@ -64,11 +65,14 @@ public class ThugaimRuntime implements IGameRuntime
       world.insertActor(new HydrogenFighter(engine, position.x, position.y,
                                             0.0f, station_graph));
     }
+
+    health_bar = new HealthBar(engine.getGraphics(), player);
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     station_graph.update();
     world.update(millisecond_delta, rotation, tapped);
+    health_bar.update();
   }
 }

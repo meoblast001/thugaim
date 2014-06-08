@@ -21,6 +21,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
@@ -44,10 +46,39 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     public float angle;
   }
 
+  public enum Shape
+  {
+    RECTANGLE,
+    OVAL
+  }
+
+  public enum PaintType
+  {
+    STROKE,
+    FILL
+  }
+
+  private class ShapeRenderOperation
+  {
+    public Shape shape;
+    public Paint colour;
+    public int x, y;
+    public int width, height;
+  }
+
   private Context context = null;
   private int focus_x = 0, focus_y = 0;
-  private LinkedBlockingQueue<BitmapRenderOperation> render_operations =
+  //Bitmaps.
+  private LinkedBlockingQueue<BitmapRenderOperation> bm_render_operations =
     new LinkedBlockingQueue<BitmapRenderOperation>();
+  private LinkedBlockingQueue<BitmapRenderOperation> hud_bm_render_operations =
+    new LinkedBlockingQueue<BitmapRenderOperation>();
+  //Shapes.
+  private LinkedBlockingQueue<ShapeRenderOperation> shape_render_operations =
+    new LinkedBlockingQueue<ShapeRenderOperation>();
+  private LinkedBlockingQueue<ShapeRenderOperation>
+    hud_shape_render_operations =
+    new LinkedBlockingQueue<ShapeRenderOperation>();
 
   public Graphics(Context context, AttributeSet attr)
   {
@@ -72,7 +103,7 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   }
 
   /**
-  Draw a rotated bitmap to the canvas.
+  Draw a rotated bitmap to the canvas in world space.
   @param bitmap The bitmap to be drawn.
   @param x The X position in the world at which to draw the bitmap's centre.
   @param y The Y position in the world at which to draw the bitmap's centre.
@@ -80,12 +111,90 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   */
   public void draw(Bitmap bitmap, int x, int y, float angle)
   {
+    draw(bitmap, x, y, angle, false);
+  }
+
+  /**
+  Draw a rotated bitmap to the canvas in screen space. Parameters same as
+  #{@link #draw(bitmap, x, y, angle) draw()}.
+  */
+  public void drawHud(Bitmap bitmap, int x, int y, float angle)
+  {
+    draw(bitmap, x, y, angle, true);
+  }
+
+  /**
+  Generalised backend method for draw and drawHud.
+  */
+  private void draw(Bitmap bitmap, int x, int y, float angle, boolean to_hud)
+  {
     BitmapRenderOperation operation = new BitmapRenderOperation();
     operation.bitmap = bitmap;
     operation.x = x;
     operation.y = y;
     operation.angle = angle;
-    render_operations.add(operation);
+    if (to_hud)
+      hud_bm_render_operations.add(operation);
+    else
+      bm_render_operations.add(operation);
+  }
+
+  /**
+  Draw a shape to the canvas in world space.
+  @param shape The type of shape to draw.
+  @param paint_type How to paint the shape.
+  @param x The X position in the world at which to draw the top-left corner of
+    the shape.
+  @param y The Y position in the world at which to draw the top-left corner of
+    the shape.
+  @param width The width of the shape at its widest point.
+  @param height The height of the shape at its highest point.
+  @param colour The colour with which to draw the shape.
+  */
+  public void drawShape(Shape shape, PaintType paint_type, int x, int y,
+                        int width, int height, Paint colour)
+  {
+    drawShape(shape, paint_type, x, y, width, height, colour, false);
+  }
+
+  /**
+  Draw a shape to the canvas in screen space. Parameters same as
+  #{@link #drawShape(Shape, PaintType, x, y, width, height, colour)
+  drawShape()}.
+  */
+  public void drawShapeHud(Shape shape, PaintType paint_type, int x, int y,
+                           int width, int height, Paint colour)
+  {
+    drawShape(shape, paint_type, x, y, width, height, colour, true);
+  }
+
+  /**
+  Generalised backend method for drawShape and drawShapeHud.
+  */
+  private void drawShape(Shape shape, PaintType paint_type, int x, int y,
+                         int width, int height, Paint colour, boolean to_hud)
+  {
+    switch (paint_type)
+    {
+      case STROKE:
+        colour.setStyle(Paint.Style.STROKE);
+        break;
+      case FILL:
+        colour.setStyle(Paint.Style.FILL);
+        break;
+    }
+
+    ShapeRenderOperation operation = new ShapeRenderOperation();
+    operation.shape = Shape.RECTANGLE;
+    operation.colour = colour;
+    operation.x = x;
+    operation.y = y;
+    operation.width = width;
+    operation.height = height;
+    if (to_hud)
+      hud_shape_render_operations.add(operation);
+    else
+      shape_render_operations.add(operation);
   }
 
   /**
@@ -115,28 +224,66 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     //Background is black.
     canvas.drawColor(Color.BLACK);
 
+    //Operations in world space.
+    canvas.save();
     //Focus the centre of the screen to the coordinates set by focusOn().
     canvas.translate((float) (-focus_x + canvas.getWidth() / 2),
                      (float) (-focus_y + canvas.getHeight() / 2));
+
     canvas.save();
     //Perform each BitmapRenderOperation.
-    while (render_operations.size() > 0)
-    {
-      BitmapRenderOperation operation = render_operations.poll();
-
-      canvas.save();
-      canvas.translate((float) operation.x, (float) operation.y);
-      canvas.rotate((float) (operation.angle * (180.0f / Math.PI)));
-      //Subtract half of the width and height from the draw position so that the
-      //centre of the bitmap (instead of the top-left) is drawn at the specified
-      //position.
-      canvas.drawBitmap(operation.bitmap,
-                        (int) (-operation.bitmap.getWidth() / 2),
-                        (int) (-operation.bitmap.getHeight() / 2), null);
-      canvas.restore();
-    }
+    while (bm_render_operations.size() > 0)
+      doBitmapRenderOperation(canvas, bm_render_operations.poll());
+    //Perform each ShapeRenderOperation.
+    while (shape_render_operations.size() > 0)
+      doShapeRenderOperation(canvas, shape_render_operations.poll());
     canvas.restore();
 
+    //Leave world space. Draw in screen space.
+    canvas.restore();
+    //Perform each HUD BitmapRenderOperation.
+    while (hud_bm_render_operations.size() > 0)
+      doBitmapRenderOperation(canvas, hud_bm_render_operations.poll());
+    //Perform each HUD ShapeRenderOperation.
+    while (hud_shape_render_operations.size() > 0)
+      doShapeRenderOperation(canvas, hud_shape_render_operations.poll());
+
     holder.unlockCanvasAndPost(canvas);
+  }
+
+  private void doBitmapRenderOperation(Canvas canvas,
+                                       BitmapRenderOperation operation)
+  {
+    canvas.save();
+    canvas.translate((float) operation.x, (float) operation.y);
+    canvas.rotate((float) (operation.angle * (180.0f / Math.PI)));
+    //Subtract half of the width and height from the draw position so that the
+    //centre of the bitmap (instead of the top-left) is drawn at the specified
+    //position.
+    canvas.drawBitmap(operation.bitmap,
+                      (int) (-operation.bitmap.getWidth() / 2),
+                      (int) (-operation.bitmap.getHeight() / 2), null);
+    canvas.restore();
+  }
+
+  private void doShapeRenderOperation(Canvas canvas,
+                                      ShapeRenderOperation operation)
+  {
+    canvas.save();
+    canvas.translate((float) operation.x, (float) operation.y);
+    switch (operation.shape)
+    {
+      case RECTANGLE:
+        canvas.drawRect(operation.x, operation.y,
+          operation.x + operation.width, operation.y + operation.height,
+          operation.colour);
+        break;
+      case OVAL:
+        canvas.drawOval(new RectF(operation.x, operation.y,
+          operation.x + operation.width, operation.y + operation.height),
+          operation.colour);
+        break;
+    }
+    canvas.restore();
   }
 }

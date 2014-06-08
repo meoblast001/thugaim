@@ -25,7 +25,7 @@ Player character which responds to player input. Only one exists per world.
 */
 public class Player extends Vehicle
 {
-  private static int MAX_HEALTH = 50;
+  public static final int MAX_HEALTH = 50;
 
   public Player(Engine engine, StationGraph station_graph)
   {
