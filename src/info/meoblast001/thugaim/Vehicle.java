@@ -116,6 +116,11 @@ public abstract class Vehicle extends Actor
     //If collides with a foreign projectile, take damage.
     for (Actor actor : getCollisions().toArray(new Actor[0]))
     {
+      //Don't continue processing collisions if getWorld() returns null. If it
+      //does, the vehicle has already been removed from the world.
+      if (getWorld() == null)
+        break;
+
       if (actor instanceof Projectile && ((Projectile) actor).getOrigin() !=
           this)
       {

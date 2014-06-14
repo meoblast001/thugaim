@@ -130,6 +130,32 @@ public class StationGraph
   }
 
   /**
+  Finds the closest station to an actor.
+  @param actor Actor to which to search for the closest station.
+  @return Closest station. Null if no stations remaining.
+  */
+  public Station getClosestStation(Actor actor)
+  {
+    Station with_lowest_distance = null;
+    float lowest_distance = Float.MAX_VALUE;
+
+    for (Station station : stations)
+    {
+      if (station == null)
+        continue;
+
+      float distance = station.distance(actor);
+      if (distance < lowest_distance)
+      {
+        with_lowest_distance = station;
+        lowest_distance = distance;
+      }
+    }
+
+    return with_lowest_distance;
+  }
+
+  /**
   Updates graph: finds closest station to each actor in world. Does not occur at
   every frame.
   */

@@ -61,8 +61,12 @@ public class HydrogenFighter extends NPCVehicle
     {
       Station[] adjacent_stations = station_graph.getAdjacentStations(
         target_station);
-      target_station = adjacent_stations[(int) Math.floor(Math.random() *
-                                         adjacent_stations.length)];
+      if (adjacent_stations != null)
+        target_station = adjacent_stations[(int) Math.floor(Math.random() *
+                                           adjacent_stations.length)];
+      else
+        //Target station removed from graph.
+        target_station = station_graph.getClosestStation(this);
     }
 
     boolean will_fire = false;
