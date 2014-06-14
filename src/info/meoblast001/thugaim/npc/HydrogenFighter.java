@@ -30,7 +30,7 @@ player's station, in which case it moves to that station.
 */
 public class HydrogenFighter extends NPCVehicle
 {
-  private static int MAX_HEALTH = 5;
+  private static final int MAX_HEALTH = 5;
 
   private StationGraph station_graph = null;
   private Station target_station = null;

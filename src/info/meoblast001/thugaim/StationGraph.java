@@ -50,7 +50,7 @@ public class StationGraph
     final float play_size = ThugaimRuntime.PLAY_SIZE;
     for (int i = 0; i < stations.length; ++i)
     {
-      stations[i] = new Station(engine,
+      stations[i] = new Station(engine, this,
         (float) Math.random() * play_size - (play_size / 2),
         (float) Math.random() * play_size - (play_size / 2));
       world.insertActor(stations[i]);
@@ -69,7 +69,29 @@ public class StationGraph
   */
   public Station[] getStations()
   {
-    return stations;
+    Vector<Station> ret_stations = new Vector<Station>();
+    for (Station station : stations)
+      if (station != null)
+        ret_stations.add(station);
+    return ret_stations.toArray(new Station[0]);
+  }
+
+  /**
+  Remove a station from the graph if it exists.
+  @param station Station to remove.
+  */
+  public void remove(Station station)
+  {
+    world.removeActor(station.getId());
+
+    for (int i = 0; i < stations.length; ++i)
+    {
+      if (station == stations[i])
+      {
+        stations[i] = null;
+        break;
+      }
+    }
   }
 
   /**
@@ -100,7 +122,7 @@ public class StationGraph
     LinkedList<Station> adjacent_stations = new LinkedList<Station>();
     for (int i = 0; i < edges[station_index].length; ++i)
     {
-      if (edges[station_index][i])
+      if (edges[station_index][i] && stations[i] != null)
         adjacent_stations.add(stations[i]);
     }
 
@@ -130,6 +152,9 @@ public class StationGraph
       float closest_station_distance = Float.MAX_VALUE;
       for (Station station : stations)
       {
+        if (station == null)
+          continue;
+
         float new_distance = vehicle.distance(station);
         if (new_distance < closest_station_distance)
         {

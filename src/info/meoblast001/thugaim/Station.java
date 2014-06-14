@@ -27,17 +27,51 @@ protected by NPCs and belong to a graph of other stations.
 */
 public class Station extends Actor
 {
+  private static final int MAX_HEALTH = 75;
+
   private static int cur_station_id = 0;
 
-  public Station(Engine engine, float x, float y)
+  private StationGraph station_graph;
+  private int health = MAX_HEALTH;
+
+  public Station(Engine engine, StationGraph station_graph, float x, float y)
   {
     super("station_" + (cur_station_id++), engine, R.drawable.station);
+    this.station_graph = station_graph;
     move(x, y);
+  }
+
+  /**
+  Reduces health by 1. If health reaches zero, actor is removed from the world.
+  */
+  protected void reduceHealth()
+  {
+    --health;
+    if (health == 0)
+      station_graph.remove(this);
   }
 
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    //No movement, therefore collision detection is not performed automatically.
+    updateCollisions();
+
+    //If collides with a projectile, take damage.
+    for (Actor actor : getCollisions().toArray(new Actor[0]))
+    {
+      //Don't continue processing collisions if getWorld() returns null. If it
+      //does, the station has already been removed from the world.
+      if (getWorld() == null)
+        break;
+
+      if (actor instanceof Projectile)
+      {
+        getWorld().removeActor(actor.getId());
+        reduceHealth(); //May be removed from world (getWorld() == null).
+      }
+    }
+
     draw();
   }
 }

@@ -198,7 +198,7 @@ public abstract class Actor
   Update the list of actors with which this actor is colliding. Call after
   movements.
   */
-  private void updateCollisions()
+  protected void updateCollisions()
   {
     if (world == null)
       return;
