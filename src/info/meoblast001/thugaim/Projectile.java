@@ -67,6 +67,12 @@ public class Projectile extends Actor
     }
   }
 
+  @Override
+  protected boolean isCollisionDetectionOn()
+  {
+    return false;
+  }
+
   /**
   Get the actor from which this projectile was fired.
   @return Origin Actor.

@@ -117,7 +117,8 @@ public abstract class Actor
     this.x += x;
     this.y += y;
 
-    updateCollisions();
+    if (isCollisionDetectionOn())
+      updateCollisions();
   }
 
   /**
@@ -133,7 +134,8 @@ public abstract class Actor
     this.x += -Math.cos(rotation) * x;
     this.y += Math.sin(rotation) * x;
 
-    updateCollisions();
+    if (isCollisionDetectionOn())
+      updateCollisions();
   }
 
   /**
@@ -183,6 +185,16 @@ public abstract class Actor
     PointF other_pos = other.getPosition();
     return (float) Math.sqrt(Math.pow(other_pos.y - this_pos.y, 2) +
                              Math.pow(other_pos.x - this_pos.x, 2));
+  }
+
+  /**
+  Should this actor detect collisions? By default, yes. This does not affect the
+  ability of other actors to detect collisions with this actor.
+  @return True if detects collisions, else false.
+  */
+  protected boolean isCollisionDetectionOn()
+  {
+    return true;
   }
 
   /**
