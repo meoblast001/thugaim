@@ -12,4 +12,13 @@
   </string>
   <string name="continue_t">Continue</string>
   <string name="menu_quit">Quit</string>
+  <string name="game_over_win">
+    You did it! Your cargo shouldn\'t have any problems reaching its destination
+    now. Thanks for the good work.
+  </string>
+  <string name="game_over_lose">
+    Ouch! I told you it wouldn\'t be easy.
+  </string>
+  <string name="restart_t">Restart</string>
+  <string name="quit_t">Quit</string>
 </resources>

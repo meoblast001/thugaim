@@ -75,4 +75,15 @@ public class ThugaimRuntime implements IGameRuntime
     world.update(millisecond_delta, rotation, tapped);
     health_bar.update();
   }
+
+  public boolean isRunning()
+  {
+    return player.getWorld() != null && station_graph.getStations().length > 0;
+  }
+
+  public boolean didPlayerWin()
+  {
+    //Player won if there are no stations remaining.
+    return station_graph.getStations().length == 0;
+  }
 }

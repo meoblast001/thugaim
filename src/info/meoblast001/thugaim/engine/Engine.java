@@ -58,6 +58,7 @@ public class Engine extends Thread
 
   private IGameRuntime runtime = null;
   private Graphics graphics = null;
+  private ShutdownHandlingActivity shutdown_handler = null;
   private float rotation = 0.0f;
   private boolean tapped = false;
 
@@ -72,11 +73,13 @@ public class Engine extends Thread
   @param runtime Instance of IGameRuntime which will be initialised and contains
     game-specific code.
   */
-  public Engine(Graphics graphics, IGameRuntime runtime)
+  public Engine(Graphics graphics, IGameRuntime runtime,
+                ShutdownHandlingActivity shutdown_handler)
   {
     super();
     this.graphics = graphics;
     this.runtime = runtime;
+    this.shutdown_handler = shutdown_handler;
     runtime.init(this);
   }
 
@@ -119,6 +122,19 @@ public class Engine extends Thread
       //Draw frame.
       graphics.finishDraw();
 
+      //Shutdown game if the game runtime is over.
+      if (!runtime.isRunning())
+      {
+        shutdown_handler.runOnUiThread(new Runnable()
+          {
+            public void run()
+            {
+              shutdown_handler.onShutdown(runtime.didPlayerWin());
+            }
+          });
+        break;
+      }
+
       previous_milliseconds = current_milliseconds;
 
       try
@@ -132,7 +148,9 @@ public class Engine extends Thread
     }
 
     run_state = RunState.SHUTDOWN;
-    shutdown_countdown.countDown(); //Free other thread waiting at shutdown().
+    if (shutdown_countdown != null)
+      //Free other thread waiting at shutdown().
+      shutdown_countdown.countDown();
   }
 
   /**
@@ -160,6 +178,10 @@ public class Engine extends Thread
   */
   public void shutdown()
   {
+    //Return if already shutdown or transitioning states.
+    if (run_state != RunState.RUNNING && run_state != RunState.PAUSED)
+      return;
+
     run_state = RunState.PERFORMING_SHUTDOWN;
     //Wait until other thread finishes shutting down at run().
     shutdown_countdown = new CountDownLatch(1);

@@ -51,6 +51,8 @@ public class HydrogenFighter extends NPCVehicle
       return;
 
     Actor player = getWorld().getActor("player");
+    if (player == null)
+      return;
 
     //Set initial target station.
     if (target_station == null)

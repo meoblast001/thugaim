@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.meoblast001.thugaim;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -35,8 +36,8 @@ import info.meoblast001.thugaim.engine.*;
 Play activity. During initialisation, starts the Engine, which runs on its own
 thread. After initialisation, forwards events to Engine.
 */
-public class Thugaim extends Activity implements View.OnTouchListener,
-                                                 SensorEventListener
+public class Thugaim extends ShutdownHandlingActivity
+  implements View.OnTouchListener, SensorEventListener
 {
   private Sensor accelerometer = null;
   private Engine engine = null;
@@ -60,7 +61,7 @@ public class Thugaim extends Activity implements View.OnTouchListener,
     graphics = (Graphics) findViewById(R.id.graphics);
     graphics.setOnTouchListener(this);
 
-    engine = new Engine(graphics, new ThugaimRuntime());
+    engine = new Engine(graphics, new ThugaimRuntime(), this);
     engine.start();
   }
 
@@ -97,6 +98,12 @@ public class Thugaim extends Activity implements View.OnTouchListener,
   {
     super.onDestroy();
     engine.shutdown();
+  }
+
+  @Override
+  public void onBackPressed()
+  {
+    moveTaskToBack(true);
   }
 
   @Override
@@ -144,5 +151,13 @@ public class Thugaim extends Activity implements View.OnTouchListener,
       return true;
     }
     return false;
+  }
+
+  public void onShutdown(boolean winner)
+  {
+    Intent intent = new Intent(this, GameOver.class);
+    intent.putExtra("player_won", winner);
+    startActivity(intent);
+    finish();
   }
 }

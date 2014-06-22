@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,11 +21,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 /**
-Activity giving the user instructions before the game begins.
+Activity which appears when the game ends either by the player winning or
+losing.
 */
-public class Instructions extends Activity
+public class GameOver extends Activity
 {
   /**
   Called when the activity is first created.
@@ -34,7 +36,19 @@ public class Instructions extends Activity
   public void onCreate(Bundle saved_instance_state)
   {
     super.onCreate(saved_instance_state);
-    setContentView(R.layout.instructions);
+    setContentView(R.layout.game_over);
+
+    //Change text to show whether player won or lost.
+    Bundle extras = getIntent().getExtras();
+    if (extras != null)
+    {
+      TextView notice = (TextView) findViewById(R.id.game_over_notice);
+
+      if (extras.getBoolean("player_won"))
+        notice.setText(R.string.game_over_win);
+      else
+        notice.setText(R.string.game_over_lose);
+    }
   }
 
   @Override
@@ -43,10 +57,15 @@ public class Instructions extends Activity
     moveTaskToBack(true);
   }
 
-  public void goToGame(View view)
+  public void restart(View view)
   {
-    Intent intent = new Intent(this, Thugaim.class);
+    Intent intent = new Intent(view.getContext(), Thugaim.class);
     startActivity(intent);
     finish();
+  }
+
+  public void quit(View view)
+  {
+    System.exit(0);
   }
 }

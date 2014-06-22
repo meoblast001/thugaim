@@ -37,6 +37,9 @@ public class Player extends Vehicle
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    if (getWorld() == null)
+      return;
+
     if (tapped)
       fire();
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,38 +15,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.meoblast001.thugaim;
+package info.meoblast001.thugaim.engine;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 /**
-Activity giving the user instructions before the game begins.
+Handles engine shutdown.
 */
-public class Instructions extends Activity
+public abstract class ShutdownHandlingActivity extends Activity
 {
   /**
-  Called when the activity is first created.
+  Called by the engine after it shuts down internally (i.e. calls to
+  Engine.shutdown do not result in this method being called).
+  @param winner If true, player won, if false, player lost.
   */
-  @Override
-  public void onCreate(Bundle saved_instance_state)
-  {
-    super.onCreate(saved_instance_state);
-    setContentView(R.layout.instructions);
-  }
-
-  @Override
-  public void onBackPressed()
-  {
-    moveTaskToBack(true);
-  }
-
-  public void goToGame(View view)
-  {
-    Intent intent = new Intent(this, Thugaim.class);
-    startActivity(intent);
-    finish();
-  }
+  public abstract void onShutdown(boolean winner);
 }
