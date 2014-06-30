@@ -1,0 +1,7 @@
+<levels>
+  <level
+      stations="5"
+      hydrogen_fighters="5"
+      play_size="800"
+    />
+</levels>

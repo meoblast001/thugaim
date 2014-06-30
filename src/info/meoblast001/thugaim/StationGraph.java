@@ -33,21 +33,23 @@ public class StationGraph
   private Engine engine;
   private World world;
 
-  private final int NUM_STATIONS = 8;
-  private Station[] stations = new Station[NUM_STATIONS];
-  private boolean[][] edges = new boolean[NUM_STATIONS][NUM_STATIONS];
+  private Station[] stations;
+  private boolean[][] edges;
 
   private final int UPDATE_AFTER_FRAMES = 5;
   private int frames_since_update = UPDATE_AFTER_FRAMES;
 
-  public StationGraph(Engine engine, World world)
+  public StationGraph(Engine engine, World world, int num_stations,
+                      int play_size)
   {
     this.engine = engine;
     this.world = world;
 
-    //Place NUM_STATIONS amount of stations at random locations in the play
+    stations = new Station[num_stations];
+    edges = new boolean[num_stations][num_stations];
+
+    //Place num_stations amount of stations at random locations in the play
     //area.
-    final float play_size = ThugaimRuntime.PLAY_SIZE;
     for (int i = 0; i < stations.length; ++i)
     {
       stations[i] = new Station(engine, this,

@@ -37,9 +37,6 @@ indirectly.
 */
 public class ThugaimRuntime implements IGameRuntime
 {
-  public static final float PLAY_SIZE = 10000.0f;
-  private final int NUM_HYDROGEN_FIGHTERS = 10;
-
   private Engine engine;
   private Context context;
 
@@ -60,14 +57,14 @@ public class ThugaimRuntime implements IGameRuntime
     context = engine.getGraphics().getContext();
 
     world = new World(engine);
-    station_graph = new StationGraph(engine, world);
+    station_graph = new StationGraph(engine, world, stations, play_size);
 
     player = new Player(engine, station_graph);
     world.insertActor(player);
     world.focusOnActor("player");
 
     //Instantiate HydrogenFighters at random stations.
-    for (int i = 0; i < NUM_HYDROGEN_FIGHTERS; ++i)
+    for (int i = 0; i < hydrogen_fighters; ++i)
     {
       Station[] stations = station_graph.getStations();
       Station use_station = stations[
@@ -140,11 +137,6 @@ public class ThugaimRuntime implements IGameRuntime
         }
         event_type = xml_parser.next();
       }
-
-      //TODO: Instead of displaying, do something with these values.
-      System.out.println("stations = " + stations + "\n" +
-                         "hydrogen_fighters = " + hydrogen_fighters + "\n" +
-                         "play_size = " + play_size + "\n");
     }
     //Currently there's no way to recover from exceptions here.
     //TODO: Raise something that could be handled to display a nice error screen

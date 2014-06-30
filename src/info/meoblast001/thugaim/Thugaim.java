@@ -67,7 +67,7 @@ public class Thugaim extends ShutdownHandlingActivity
     if (extras != null)
       runtime.setLevel(extras.getInt("current_level"), getResources());
 
-    engine = new Engine(graphics, new ThugaimRuntime(), this);
+    engine = new Engine(graphics, runtime, this);
     engine.start();
   }
 
