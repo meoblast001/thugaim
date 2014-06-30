@@ -46,6 +46,7 @@ public class Instructions extends Activity
   public void goToGame(View view)
   {
     Intent intent = new Intent(this, Thugaim.class);
+    intent.putExtra("current_level", 0);
     startActivity(intent);
     finish();
   }

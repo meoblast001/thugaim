@@ -42,6 +42,7 @@ public class Thugaim extends ShutdownHandlingActivity
   private Sensor accelerometer = null;
   private Engine engine = null;
   private Graphics graphics = null;
+  private int current_level = 0;
 
   /**
   Called when the activity is first created.
@@ -60,6 +61,11 @@ public class Thugaim extends ShutdownHandlingActivity
     setContentView(R.layout.main);
     graphics = (Graphics) findViewById(R.id.graphics);
     graphics.setOnTouchListener(this);
+
+    ThugaimRuntime runtime = new ThugaimRuntime();
+    Bundle extras = getIntent().getExtras();
+    if (extras != null)
+      runtime.setLevel(extras.getInt("current_level"), getResources());
 
     engine = new Engine(graphics, new ThugaimRuntime(), this);
     engine.start();
