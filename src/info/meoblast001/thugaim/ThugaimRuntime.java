@@ -116,23 +116,24 @@ public class ThugaimRuntime implements IGameRuntime
           ++processing_level;
           if (processing_level > current_level)
             has_next_level = true;
-          if (processing_level != current_level)
-            continue;
 
-          for (int i = 0; i < xml_parser.getAttributeCount(); ++i)
+          if (processing_level == current_level)
           {
-            String attr_name = xml_parser.getAttributeName(i);
-            String attr_value = xml_parser.getAttributeValue(i);
+            for (int i = 0; i < xml_parser.getAttributeCount(); ++i)
+            {
+              String attr_name = xml_parser.getAttributeName(i);
+              String attr_value = xml_parser.getAttributeValue(i);
 
-            if (attr_name.equals("stations"))
-              stations = Integer.parseInt(attr_value);
-            else if (attr_name.equals("hydrogen_fighters"))
-              hydrogen_fighters = Integer.parseInt(attr_value);
-            else if (attr_name.equals("play_size"))
-              play_size = Integer.parseInt(attr_value);
-            //Else ignore this attribute.
+              if (attr_name.equals("stations"))
+                stations = Integer.parseInt(attr_value);
+              else if (attr_name.equals("hydrogen_fighters"))
+                hydrogen_fighters = Integer.parseInt(attr_value);
+              else if (attr_name.equals("play_size"))
+                play_size = Integer.parseInt(attr_value);
+              //Else ignore this attribute.
 
-            successfully_loaded_cur_level = true;
+              successfully_loaded_cur_level = true;
+            }
           }
         }
         event_type = xml_parser.next();
@@ -153,5 +154,14 @@ public class ThugaimRuntime implements IGameRuntime
     {
       throw new RuntimeException(e.getMessage());
     }
+  }
+
+  /**
+  Does a level proceed the current level?
+  @return True if yes, false if no.
+  */
+  public boolean hasNextLevel()
+  {
+    return has_next_level;
   }
 }

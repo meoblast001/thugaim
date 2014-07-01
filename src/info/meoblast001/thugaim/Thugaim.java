@@ -39,6 +39,7 @@ thread. After initialisation, forwards events to Engine.
 public class Thugaim extends ShutdownHandlingActivity
   implements View.OnTouchListener, SensorEventListener
 {
+  private ThugaimRuntime runtime = null;
   private Sensor accelerometer = null;
   private Engine engine = null;
   private Graphics graphics = null;
@@ -62,10 +63,13 @@ public class Thugaim extends ShutdownHandlingActivity
     graphics = (Graphics) findViewById(R.id.graphics);
     graphics.setOnTouchListener(this);
 
-    ThugaimRuntime runtime = new ThugaimRuntime();
+    runtime = new ThugaimRuntime();
     Bundle extras = getIntent().getExtras();
     if (extras != null)
-      runtime.setLevel(extras.getInt("current_level"), getResources());
+    {
+      current_level = extras.getInt("current_level");
+      runtime.setLevel(current_level, getResources());
+    }
 
     engine = new Engine(graphics, runtime, this);
     engine.start();
@@ -161,9 +165,21 @@ public class Thugaim extends ShutdownHandlingActivity
 
   public void onShutdown(boolean winner)
   {
-    Intent intent = new Intent(this, GameOver.class);
-    intent.putExtra("player_won", winner);
-    startActivity(intent);
-    finish();
+    if (winner == true && runtime.hasNextLevel())
+    {
+      //Go to next level.
+      Intent intent = new Intent(this, Thugaim.class);
+      intent.putExtra("current_level", current_level + 1);
+      startActivity(intent);
+      finish();
+    }
+    else
+    {
+      //Game finished.
+      Intent intent = new Intent(this, GameOver.class);
+      intent.putExtra("player_won", winner);
+      startActivity(intent);
+      finish();
+    }
   }
 }
