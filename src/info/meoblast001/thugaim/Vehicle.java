@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2013 - 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -99,12 +99,21 @@ public abstract class Vehicle extends Actor
   }
 
   /**
-  Reduces health by 1. If health reaches zero, actor is removed from the world.
+  Reduces health by 1 via {@link #reduceHealth(int) reduceHealth()}.
   */
   protected void reduceHealth()
   {
-    --health;
-    if (health == 0)
+    reduceHealth(1);
+  }
+
+  /**
+  Reduces health. If health reaches zero, actor is removed from the world.
+  @param amount Amount by which to reduce health.
+  */
+  protected void reduceHealth(int amount)
+  {
+    health -= amount;
+    if (health <= 0)
       getWorld().removeActor(getId());
   }
 

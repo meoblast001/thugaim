@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2013 - 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,6 +39,13 @@ public class Player extends Vehicle
   {
     if (getWorld() == null)
       return;
+
+    //Destroy player if it goes outside of the play area.
+    if (!getWorld().isInsidePlayArea(this))
+    {
+      reduceHealth(MAX_HEALTH); //Destroy player.
+      return;
+    }
 
     if (tapped)
       fire();

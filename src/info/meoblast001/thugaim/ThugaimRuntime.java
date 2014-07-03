@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2013 - 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public class ThugaimRuntime implements IGameRuntime
     this.engine = engine;
     context = engine.getGraphics().getContext();
 
-    world = new World(engine);
+    world = new World(engine, play_size);
     station_graph = new StationGraph(engine, world, stations, play_size);
 
     player = new Player(engine, station_graph);

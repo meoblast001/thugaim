@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2013 - 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,12 +27,14 @@ Represents the game world and manages its contents.
 public class World
 {
   private Engine engine;
+  private int play_size;
   private HashMap<String, Actor> actors = new HashMap<String, Actor>();
   private Actor actor_focus = null;
 
-  public World(Engine engine)
+  public World(Engine engine, int play_size)
   {
     this.engine = engine;
+    this.play_size = play_size;
   }
 
   /**
@@ -120,5 +122,18 @@ public class World
       else
         actor.idleUpdate(millisecond_delta, rotation, tapped);
     }
+  }
+
+  /**
+  Is an actor within the play area?
+  @param actor Actor to check.
+  @return True if in the play area, false if not.
+  */
+  public boolean isInsidePlayArea(Actor actor)
+  {
+    PointF position = actor.getPosition();
+    int halved_play_size = play_size / 2;
+    return Math.abs(position.x) < halved_play_size &&
+           Math.abs(position.y) < halved_play_size;
   }
 }
