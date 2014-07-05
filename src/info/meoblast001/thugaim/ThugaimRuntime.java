@@ -56,6 +56,11 @@ public class ThugaimRuntime implements IGameRuntime
     this.engine = engine;
     context = engine.getGraphics().getContext();
 
+    //Only show what's in the play area.
+    int half_play_size = play_size / 2;
+    engine.getGraphics().enableClip(-half_play_size, half_play_size,
+                                    half_play_size, -half_play_size);
+
     world = new World(engine, play_size);
     station_graph = new StationGraph(engine, world, stations, play_size);
 
@@ -75,6 +80,7 @@ public class ThugaimRuntime implements IGameRuntime
     }
 
     health_bar = new HealthBar(engine.getGraphics(), player);
+    PlayAreaShield.generateAll(engine, world, play_size);
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)

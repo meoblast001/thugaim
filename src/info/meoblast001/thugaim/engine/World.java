@@ -131,9 +131,21 @@ public class World
   */
   public boolean isInsidePlayArea(Actor actor)
   {
+    return isInsidePlayArea(actor, 0);
+  }
+
+  /**
+  Is an actor within the play area?
+  @param actor Actor to check.
+  @param extra_space How many pixels outside of the play area allowed before
+    this method returns false.
+  @return True if in the play area, false if not.
+  */
+  public boolean isInsidePlayArea(Actor actor, int extra_space)
+  {
     PointF position = actor.getPosition();
     int halved_play_size = play_size / 2;
-    return Math.abs(position.x) < halved_play_size &&
-           Math.abs(position.y) < halved_play_size;
+    return Math.abs(position.x) < halved_play_size + extra_space &&
+           Math.abs(position.y) < halved_play_size + extra_space;
   }
 }

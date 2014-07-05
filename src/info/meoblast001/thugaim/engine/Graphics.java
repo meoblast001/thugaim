@@ -23,6 +23,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
@@ -68,6 +69,7 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
 
   private Context context = null;
   private int focus_x = 0, focus_y = 0;
+  private RectF clip_area = null;
   //Bitmaps.
   private LinkedBlockingQueue<BitmapRenderOperation> bm_render_operations =
     new LinkedBlockingQueue<BitmapRenderOperation>();
@@ -209,6 +211,16 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     focus_y = y;
   }
 
+  public void enableClip(float left, float top, float right, float bottom)
+  {
+    clip_area = new RectF(left, top, right, bottom);
+  }
+
+  public void disableClip()
+  {
+    clip_area = null;
+  }
+
   /**
   Called by the engine to commit all graphical operations for the current frame.
   */
@@ -229,6 +241,10 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     //Focus the centre of the screen to the coordinates set by focusOn().
     canvas.translate((float) (-focus_x + canvas.getWidth() / 2),
                      (float) (-focus_y + canvas.getHeight() / 2));
+
+    //Clip if enabled.
+    if (clip_area != null)
+      canvas.clipRect(clip_area, Region.Op.REPLACE);
 
     canvas.save();
     //Perform each BitmapRenderOperation.

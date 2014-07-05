@@ -80,6 +80,15 @@ public abstract class Actor
   }
 
   /**
+  Set position of actor in world. Do not update collisions.
+  */
+  public void setPosition(float x, float y)
+  {
+    this.x = x;
+    this.y = y;
+  }
+
+  /**
   Get rotation, where positive is clockwise and negative is counter-clockwise.
   @return Rotation in radians as float.
   */
@@ -177,12 +186,22 @@ public abstract class Actor
 
   /**
   Determines the distance between this actor and another actor.
+  @param other Actor to which the distance is being found.
   @return Distance in world units.
   */
   public float distance(Actor other)
   {
+    return distance(other.getPosition());
+  }
+
+  /**
+  Determines the distance between this actor and a point.
+  @param other_pos Point to which the distance is being found.
+  @return Distance in world units.
+  */
+  public float distance(PointF other_pos)
+  {
     PointF this_pos = getPosition();
-    PointF other_pos = other.getPosition();
     return (float) Math.sqrt(Math.pow(other_pos.y - this_pos.y, 2) +
                              Math.pow(other_pos.x - this_pos.x, 2));
   }
