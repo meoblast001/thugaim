@@ -22,6 +22,8 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 
 import info.meoblast001.thugaim.engine.*;
@@ -44,6 +46,9 @@ public class ThugaimRuntime implements IGameRuntime
   private StationGraph station_graph;
   private Player player;
   private HealthBar health_bar;
+  private boolean player_won = false, player_lost = false;
+  private long started_level_complete_millis = Long.MAX_VALUE;
+  private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
 
   //Level information.
   public boolean has_next_level = false;
@@ -88,17 +93,29 @@ public class ThugaimRuntime implements IGameRuntime
     station_graph.update();
     world.update(millisecond_delta, rotation, tapped);
     health_bar.update();
+
+    //Player won if there are no stations remaining and the player didn't
+    //already lose.
+    if (station_graph.getStations().length == 0 && !player_lost)
+      player_won = true;
+    //Player lost if it's no longer in the world and has not already won.
+    if (player.getWorld() == null && !player_won)
+      player_lost = true;
+
+    if (player_won)
+      displayLevelComplete();
   }
 
   public boolean isRunning()
   {
-    return player.getWorld() != null && station_graph.getStations().length > 0;
+    return !((player_won && System.currentTimeMillis() -
+      started_level_complete_millis > SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS) ||
+      player_lost);
   }
 
   public boolean didPlayerWin()
   {
-    //Player won if there are no stations remaining.
-    return station_graph.getStations().length == 0;
+    return player_won;
   }
 
   /**
@@ -169,5 +186,24 @@ public class ThugaimRuntime implements IGameRuntime
   public boolean hasNextLevel()
   {
     return has_next_level;
+  }
+
+  /**
+  Displays the level complete screen. If called first time, sets the timer to
+  end the game.
+  */
+  private void displayLevelComplete()
+  {
+    if (started_level_complete_millis == Long.MAX_VALUE)
+      started_level_complete_millis = System.currentTimeMillis();
+
+    Paint fill = new Paint();
+    fill.setARGB(255, 0, 100, 0);
+    Paint stroke = new Paint();
+    stroke.setColor(Color.WHITE);
+    Graphics graphics = engine.getGraphics();
+    graphics.drawTextHud(context.getString(R.string.level_complete),
+                         graphics.getWidth() / 2, graphics.getHeight() / 2,
+                         30.0f, Paint.Align.CENTER, fill, stroke);
   }
 }

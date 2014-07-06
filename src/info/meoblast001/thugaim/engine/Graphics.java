@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Braden Walters
+Copyright (C) 2013 - 2014 Braden Walters
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -67,6 +67,13 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     public int width, height;
   }
 
+  private class TextRenderOperation
+  {
+    public String text;
+    public Paint fill_colour, stroke_colour;
+    public int x, y;
+  }
+
   private Context context = null;
   private int focus_x = 0, focus_y = 0;
   private RectF clip_area = null;
@@ -81,6 +88,9 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   private LinkedBlockingQueue<ShapeRenderOperation>
     hud_shape_render_operations =
     new LinkedBlockingQueue<ShapeRenderOperation>();
+  //Texts.
+  private LinkedBlockingQueue<TextRenderOperation> hud_text_render_operations =
+    new LinkedBlockingQueue<TextRenderOperation>();
 
   public Graphics(Context context, AttributeSet attr)
   {
@@ -200,6 +210,41 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   }
 
   /**
+  Draw text to the canvas in screen space.
+  @param text Text to draw.
+  @param x The X position on the screen at which to draw the base of the text.
+  @param y The Y position on the screen at which to draw the base of the text.
+  @param text_size Text size to use with Paints.
+  @param align Alignment of the base to the text.
+  @param fill_colour Colour with which to fill the text.
+  @param stroke_colour Colour with which to outline the text. If null, no
+    outline.
+  */
+  public void drawTextHud(String text, int x, int y, float text_size,
+                          Paint.Align align, Paint fill_colour,
+                          Paint stroke_colour)
+  {
+    if (stroke_colour != null)
+    {
+      stroke_colour.setStyle(Paint.Style.STROKE);
+      stroke_colour.setStrokeWidth(1);
+      stroke_colour.setTextSize(text_size);
+      stroke_colour.setTextAlign(align);
+    }
+
+    fill_colour.setTextSize(text_size);
+    fill_colour.setTextAlign(align);
+
+    TextRenderOperation operation = new TextRenderOperation();
+    operation.text = text;
+    operation.fill_colour = fill_colour;
+    operation.stroke_colour = stroke_colour;
+    operation.x = x;
+    operation.y = y;
+    hud_text_render_operations.add(operation);
+  }
+
+  /**
   Specify the world X and Y coordinates at which to focus the centre of the
   screen.
   @param x World X coordinate at which to focus.
@@ -263,6 +308,9 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
     //Perform each HUD ShapeRenderOperation.
     while (hud_shape_render_operations.size() > 0)
       doShapeRenderOperation(canvas, hud_shape_render_operations.poll());
+    //Perform each HUD TextRenderOperation.
+    while (hud_text_render_operations.size() > 0)
+      doTextRenderOperation(canvas, hud_text_render_operations.poll());
 
     holder.unlockCanvasAndPost(canvas);
   }
@@ -301,5 +349,17 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
         break;
     }
     canvas.restore();
+  }
+
+  private void doTextRenderOperation(Canvas canvas,
+                                     TextRenderOperation operation)
+  {
+    canvas.drawText(operation.text, operation.x, operation.y,
+                    operation.fill_colour);
+    if (operation.stroke_colour != null)
+    {
+      canvas.drawText(operation.text, operation.x, operation.y,
+                      operation.stroke_colour);
+    }
   }
 }
