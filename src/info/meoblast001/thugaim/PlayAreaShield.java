@@ -38,47 +38,29 @@ public class PlayAreaShield extends Actor
     LEFT, TOP, RIGHT, BOTTOM
   }
 
-  private static final int SHIELD_DISTANCE = 240;
+  private static final int SHIELD_DISTANCE = 200;
   private static final float SHIELD_PART_DISTANCE = 8.0f;
+  private static final int MIN_MILLIS_FOR_STEP = 200;
   private static final int INDICATOR_DISTANCE_FROM_EDGE = 2;
 
   private static int current_play_area_shield_id = 0;
 
   private Side side = null;
-  private Point starting_position = null;
-  private int milliseconds_since_last_step = 0;
+  private int play_size;
+  private int offset; //Movement from starting position.
+  private int milliseconds_since_last_step = MIN_MILLIS_FOR_STEP;
 
   public PlayAreaShield(Engine engine, int play_size, Side side,
                         int start_offset)
   {
     super("play_area_shield" + current_play_area_shield_id++, engine,
           R.drawable.play_area_shield);
+    this.play_size = play_size;
     this.side = side;
-    switch (side)
-    {
-      case LEFT:
-        starting_position = new Point(
-          -(play_size / 2) + INDICATOR_DISTANCE_FROM_EDGE, play_size / 2);
-        setPosition(starting_position.x, starting_position.y + start_offset);
-        break;
-      case TOP:
-        starting_position = new Point(
-          -(play_size / 2), -(play_size / 2) + INDICATOR_DISTANCE_FROM_EDGE);
-        setPosition(starting_position.x + start_offset, starting_position.y);
-        rotate(90.0f * (float) Math.PI / 180.0f);
-        break;
-      case RIGHT:
-        starting_position = new Point(
-          play_size / 2 - INDICATOR_DISTANCE_FROM_EDGE, -(play_size / 2));
-        setPosition(starting_position.x, starting_position.y - start_offset);
-        break;
-      case BOTTOM:
-        starting_position = new Point(
-          play_size / 2, play_size / 2 - INDICATOR_DISTANCE_FROM_EDGE);
-        setPosition(starting_position.x - start_offset, starting_position.y);
-        rotate(90.0f * (float) Math.PI / 180.0f);
-        break;
-    }
+    this.offset = start_offset;
+
+    if (side == Side.TOP || side == Side.BOTTOM)
+      rotate((float) (Math.PI / 2.0));
   }
 
   @Override
@@ -95,7 +77,7 @@ public class PlayAreaShield extends Actor
   @param play_size Width of play area.
   */
   public static void generateAll(Engine engine, World world,
-                                                 int play_size)
+                                 int play_size)
   {
     for (int i = 0; i < play_size; i += SHIELD_DISTANCE)
     {
@@ -114,30 +96,34 @@ public class PlayAreaShield extends Actor
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     milliseconds_since_last_step += millisecond_delta;
-    if (milliseconds_since_last_step / 200 > 0)
+    if (milliseconds_since_last_step / MIN_MILLIS_FOR_STEP > 0)
     {
-      int steps = milliseconds_since_last_step / 200;
-      milliseconds_since_last_step %= 200;
+      int steps = milliseconds_since_last_step / MIN_MILLIS_FOR_STEP;
+      milliseconds_since_last_step %= MIN_MILLIS_FOR_STEP;
+      offset += SHIELD_PART_DISTANCE * steps;
+      offset %= play_size;
 
       switch (side)
       {
         case LEFT:
-          move(0.0f, -SHIELD_PART_DISTANCE * steps);
+          setPosition(-(play_size / 2) + INDICATOR_DISTANCE_FROM_EDGE,
+                      (play_size / 2) - offset);
           break;
         case TOP:
-          move(SHIELD_PART_DISTANCE * steps, 0.0f);
+          setPosition(-(play_size / 2) + offset,
+                      -(play_size / 2) + INDICATOR_DISTANCE_FROM_EDGE);
           break;
         case RIGHT:
-          move(0.0f, SHIELD_PART_DISTANCE * steps);
+          setPosition(play_size / 2 - INDICATOR_DISTANCE_FROM_EDGE,
+                      -(play_size / 2) + offset);
           break;
         case BOTTOM:
-          move(-SHIELD_PART_DISTANCE * steps, 0.0f);
+          setPosition((play_size / 2) - offset,
+                      play_size / 2 - INDICATOR_DISTANCE_FROM_EDGE);
           break;
       }
     }
 
-    if (!getWorld().isInsidePlayArea(this, getSize().y))
-      setPosition(starting_position.x, starting_position.y);
     draw();
   }
 }
