@@ -333,8 +333,6 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
   private void doShapeRenderOperation(Canvas canvas,
                                       ShapeRenderOperation operation)
   {
-    canvas.save();
-    canvas.translate((float) operation.x, (float) operation.y);
     switch (operation.shape)
     {
       case RECTANGLE:
@@ -348,7 +346,6 @@ public class Graphics extends SurfaceView implements SurfaceHolder.Callback
           operation.colour);
         break;
     }
-    canvas.restore();
   }
 
   private void doTextRenderOperation(Canvas canvas,

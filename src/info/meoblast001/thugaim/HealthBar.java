@@ -55,7 +55,7 @@ public class HealthBar
     Paint container_fill = new Paint();
     container_fill.setColor(Color.BLACK);
     graphics.drawShapeHud(Graphics.Shape.RECTANGLE, Graphics.PaintType.FILL,
-                          health_icon.getWidth(), 0, MAX_HEALTH_BAR_WIDTH,
+                          health_icon.getWidth() + 2, 0, MAX_HEALTH_BAR_WIDTH,
                           health_icon.getHeight(), container_fill);
 
     //Bar.
@@ -64,7 +64,7 @@ public class HealthBar
     int health_bar_width = (int) (MAX_HEALTH_BAR_WIDTH *
       ((float) player.getHealth() / (float) Player.MAX_HEALTH));
     graphics.drawShapeHud(Graphics.Shape.RECTANGLE, Graphics.PaintType.FILL,
-                          health_icon.getWidth(), 0, health_bar_width,
+                          health_icon.getWidth() + 2, 0, health_bar_width,
                           health_icon.getHeight(), bar_fill);
 
     //Bar frame.
@@ -72,7 +72,7 @@ public class HealthBar
     container_line.setColor(Color.WHITE);
     container_line.setStrokeWidth(1);
     graphics.drawShapeHud(Graphics.Shape.RECTANGLE, Graphics.PaintType.STROKE,
-                          health_icon.getWidth(), 0, MAX_HEALTH_BAR_WIDTH,
+                          health_icon.getWidth() + 2, 0, MAX_HEALTH_BAR_WIDTH,
                           health_icon.getHeight(), container_line);
   }
 }
