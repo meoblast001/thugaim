@@ -80,8 +80,16 @@ public class ThugaimRuntime implements IGameRuntime
       Station use_station = stations[
         (int) Math.floor(Math.random() * stations.length)];
       PointF position = use_station.getPosition();
+
+      //Move away from the station in a random direction.
+      float angle_rad = (float) (Math.random() * 2.0 * Math.PI);
+      float greatest_dimension = Math.max(use_station.getSize().x,
+                                          use_station.getSize().y);
+      position.x += (float) Math.acos(angle_rad) * (greatest_dimension + 2.0f);
+      position.y += (float) Math.asin(angle_rad) * (greatest_dimension + 2.0f);
+
       world.insertActor(new HydrogenFighter(engine, position.x, position.y,
-                                            0.0f, station_graph));
+                                            angle_rad, station_graph));
     }
 
     health_bar = new HealthBar(engine.getGraphics(), player);

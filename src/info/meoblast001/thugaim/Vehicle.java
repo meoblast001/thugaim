@@ -122,7 +122,7 @@ public abstract class Vehicle extends Actor
   {
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
 
-    //If collides with a foreign projectile, take damage.
+    //If collides with a foreign projectile or station, take damage.
     for (Actor actor : getCollisions().toArray(new Actor[0]))
     {
       //Don't continue processing collisions if getWorld() returns null. If it
@@ -136,6 +136,10 @@ public abstract class Vehicle extends Actor
         getWorld().removeActor(actor.getId());
         reduceHealth(); //May be removed from world (getWorld() == null).
       }
+
+      //Collision with a station destroys vehicle.
+      if (actor instanceof Station)
+        reduceHealth(Integer.MAX_VALUE);
     }
 
     draw();
