@@ -17,7 +17,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.engine;
 
+import android.graphics.Point;
 import android.graphics.PointF;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -81,6 +83,25 @@ public class World
   public Actor[] getActors()
   {
     return actors.values().toArray(new Actor[0]);
+  }
+
+  /**
+  Is there an actor at the specified location?
+  @param position Location to check.
+  @param extra_space Additional distance around the edge of actors to include as
+    a hit.
+  @return True if actor found, else false.
+  */
+  public boolean hasActorAt(PointF position, float extra_space)
+  {
+    for (Actor actor : actors.values())
+    {
+      Point size = actor.getSize();
+      float avg_size = (size.x + size.y) / 2.0f;
+      if (actor.distance(position) < avg_size / 2.0f + extra_space)
+        return true;
+    }
+    return false;
   }
 
   /**

@@ -25,4 +25,4 @@
               android:screenOrientation="landscape"
               android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
   </application>
-</manifest> 
+</manifest>

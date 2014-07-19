@@ -73,24 +73,8 @@ public class ThugaimRuntime implements IGameRuntime
     world.insertActor(player);
     world.focusOnActor("player");
 
-    //Instantiate HydrogenFighters at random stations.
-    for (int i = 0; i < hydrogen_fighters; ++i)
-    {
-      Station[] stations = station_graph.getStations();
-      Station use_station = stations[
-        (int) Math.floor(Math.random() * stations.length)];
-      PointF position = use_station.getPosition();
-
-      //Move away from the station in a random direction.
-      float angle_rad = (float) (Math.random() * 2.0 * Math.PI);
-      float greatest_dimension = Math.max(use_station.getSize().x,
-                                          use_station.getSize().y);
-      position.x += (float) Math.acos(angle_rad) * (greatest_dimension + 2.0f);
-      position.y += (float) Math.asin(angle_rad) * (greatest_dimension + 2.0f);
-
-      world.insertActor(new HydrogenFighter(engine, position.x, position.y,
-                                            angle_rad, station_graph));
-    }
+    HydrogenFighter.generateAll(engine, world, play_size, station_graph,
+                                hydrogen_fighters);
 
     health_bar = new HealthBar(engine.getGraphics(), player);
     PlayAreaShield.generateAll(engine, world, play_size);

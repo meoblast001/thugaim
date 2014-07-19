@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim;
 
+import android.graphics.Point;
+
 import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.engine.World;
@@ -38,6 +40,8 @@ public class StationGraph
 
   private final int UPDATE_AFTER_FRAMES = 5;
   private int frames_since_update = UPDATE_AFTER_FRAMES;
+  //Amount of free space around stations at initialisation.
+  private final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
 
   public StationGraph(Engine engine, World world, int num_stations,
                       int play_size)
@@ -52,10 +56,21 @@ public class StationGraph
     //area.
     for (int i = 0; i < stations.length; ++i)
     {
-      stations[i] = new Station(engine, this,
-        (float) Math.random() * play_size - (play_size / 2),
-        (float) Math.random() * play_size - (play_size / 2));
-      world.insertActor(stations[i]);
+      inner_loop: while (true)
+      {
+        stations[i] = new Station(engine, this,
+          (float) Math.random() * play_size - (play_size / 2),
+          (float) Math.random() * play_size - (play_size / 2));
+        Point station_size = stations[i].getSize();
+        float avg_station_size = (station_size.x + station_size.y) / 2.0f;
+        if (!world.hasActorAt(stations[i].getPosition(),
+          avg_station_size / 2.0f + FREE_SURROUNDING_SPACE_AT_INIT))
+        {
+          world.insertActor(stations[i]);
+          break inner_loop;
+        }
+        else; //Continue trying.
+      }
     }
 
     //Randomly form edges between stations (80% chance of edge). Do not built

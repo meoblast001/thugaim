@@ -17,10 +17,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim.npc;
 
+import android.graphics.Point;
+
 import info.meoblast001.thugaim.Station;
 import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
+import info.meoblast001.thugaim.engine.World;
 import info.meoblast001.thugaim.R;
 
 /**
@@ -31,6 +34,7 @@ player's station, in which case it moves to that station.
 public class HydrogenFighter extends NPCVehicle
 {
   private static final int MAX_HEALTH = 5;
+  private static final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
 
   private StationGraph station_graph = null;
   private Station target_station = null;
@@ -42,6 +46,38 @@ public class HydrogenFighter extends NPCVehicle
           station_graph);
     this.station_graph = station_graph;
     setSpeed(0.8f);
+  }
+
+  /**
+  Generates all of the Hydrogen fighters in a level at randon positions.
+  @param engine The game engine.
+  @param world The current world.
+  @param play_size Size of play area.
+  @param station_graph The current station graph.
+  @param num_fighters The amount of fighters to create.
+  */
+  public static void generateAll(Engine engine, World world, int play_size,
+                                 StationGraph station_graph, int num_fighters)
+  {
+    for (int i = 0; i < num_fighters; ++i)
+    {
+      inner_loop: while (true)
+      {
+        HydrogenFighter fighter = new HydrogenFighter(engine,
+          (float) Math.random() * play_size - (play_size / 2),
+          (float) Math.random() * play_size - (play_size / 2),
+          (float) (Math.random() * Math.PI / 180.0), station_graph);
+        Point fighter_size = fighter.getSize();
+        float avg_fighter_size = (fighter_size.x + fighter_size.y) / 2.0f;
+        if (!world.hasActorAt(fighter.getPosition(), avg_fighter_size / 2.0f +
+                              FREE_SURROUNDING_SPACE_AT_INIT))
+        {
+          world.insertActor(fighter);
+          break inner_loop;
+        }
+        else; //Continue trying.
+      }
+    }
   }
 
   @Override
