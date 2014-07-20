@@ -99,7 +99,7 @@ public class HydrogenFighter extends NPCVehicle
     {
       Station[] adjacent_stations = station_graph.getAdjacentStations(
         target_station);
-      if (adjacent_stations != null)
+      if (adjacent_stations != null && adjacent_stations.length > 0)
         target_station = adjacent_stations[(int) Math.floor(Math.random() *
                                            adjacent_stations.length)];
       else
