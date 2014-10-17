@@ -11,6 +11,7 @@
     projectiles. Good luck!
   </string>
   <string name="continue_t">Continue</string>
+  <string name="level_number_indicator">Lvl. %d</string>
   <string name="level_complete">LEVEL COMPLETE</string>
   <string name="menu_quit">Quit</string>
   <string name="game_over_win">

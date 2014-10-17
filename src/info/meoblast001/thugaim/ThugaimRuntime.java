@@ -51,10 +51,11 @@ public class ThugaimRuntime implements IGameRuntime
   private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
 
   //Level information.
-  public boolean has_next_level = false;
-  public int stations;
-  public int hydrogen_fighters;
-  public int play_size;
+  private int current_level = 0;
+  private boolean has_next_level = false;
+  private int stations;
+  private int hydrogen_fighters;
+  private int play_size;
 
   public void init(Engine engine)
   {
@@ -85,6 +86,7 @@ public class ThugaimRuntime implements IGameRuntime
     station_graph.update();
     world.update(millisecond_delta, rotation, tapped);
     health_bar.update();
+    displayLevelNumber();
 
     //Player won if there are no stations remaining and the player didn't
     //already lose.
@@ -147,6 +149,7 @@ public class ThugaimRuntime implements IGameRuntime
                 play_size = Integer.parseInt(attr_value);
               //Else ignore this attribute.
 
+              this.current_level = current_level;
               successfully_loaded_cur_level = true;
             }
           }
@@ -178,6 +181,22 @@ public class ThugaimRuntime implements IGameRuntime
   public boolean hasNextLevel()
   {
     return has_next_level;
+  }
+
+  /**
+  Displays the current level at the bottom-left of the screen.
+  */
+  private void displayLevelNumber()
+  {
+    Paint fill = new Paint();
+    fill.setColor(Color.BLACK);
+    Paint stroke = new Paint();
+    stroke.setColor(Color.WHITE);
+    Graphics graphics = engine.getGraphics();
+    graphics.drawTextHud(context.getString(R.string.level_number_indicator,
+                                           current_level + 1),
+                         10, graphics.getHeight() - 10, 30.0f,
+                         Paint.Align.LEFT, fill, stroke);
   }
 
   /**
