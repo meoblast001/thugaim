@@ -26,7 +26,7 @@ import info.meoblast001.thugaim.engine.Actor;
 Abstract actor class for vehicles. Each class of vehicles must define specific
 behaviour.
 */
-public abstract class Vehicle extends Actor
+public abstract class Vehicle extends Actor implements IDamageable
 {
   private Engine engine = null;
   private float speed = 1.0f;
@@ -101,7 +101,8 @@ public abstract class Vehicle extends Actor
   /**
   Reduces health by 1 via {@link #reduceHealth(int) reduceHealth()}.
   */
-  protected void reduceHealth()
+  @Override
+  public void reduceHealth()
   {
     reduceHealth(1);
   }
@@ -129,13 +130,6 @@ public abstract class Vehicle extends Actor
       //does, the vehicle has already been removed from the world.
       if (getWorld() == null)
         break;
-
-      if (actor instanceof Projectile && ((Projectile) actor).getOrigin() !=
-          this)
-      {
-        getWorld().removeActor(actor.getId());
-        reduceHealth(); //May be removed from world (getWorld() == null).
-      }
 
       //Collision with a station destroys vehicle.
       if (actor instanceof Station)

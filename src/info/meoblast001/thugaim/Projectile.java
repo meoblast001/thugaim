@@ -67,12 +67,6 @@ public class Projectile extends Actor
     }
   }
 
-  @Override
-  protected boolean isCollisionDetectionOn()
-  {
-    return false;
-  }
-
   /**
   Get the actor from which this projectile was fired.
   @return Origin Actor.
@@ -86,6 +80,25 @@ public class Projectile extends Actor
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     moveLocal(0.0f, millisecond_delta * 0.5f);
+
+    //Check for collisions. Cause damage to objects that take damage.
+    for (Actor actor : getCollisions().toArray(new Actor[0]))
+    {
+      if (getWorld() == null || actor.getWorld() == null)
+        break;
+
+      //If collided with a damageable actor that did not produce the projectile,
+      //reduce its health.
+      if (actor instanceof IDamageable && getOrigin() != actor)
+      {
+        IDamageable damageable = (IDamageable) actor;
+        damageable.reduceHealth();
+        //Remove projectile from world.
+        getWorld().removeActor(getId());
+        break;
+      }
+    }
+
     draw();
   }
 }
