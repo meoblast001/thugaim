@@ -27,7 +27,7 @@ protected by NPCs and belong to a graph of other stations.
 */
 public class Station extends Actor implements IDamageable
 {
-  private static final int MAX_HEALTH = 75;
+  private static final int MAX_HEALTH = 15;
 
   private static int cur_station_id = 0;
 
@@ -56,7 +56,8 @@ public class Station extends Actor implements IDamageable
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     //No movement, therefore collision detection is not performed automatically.
-    updateCollisions();
+    clearCollisions();
+    detectCollisions();
     draw();
   }
 }

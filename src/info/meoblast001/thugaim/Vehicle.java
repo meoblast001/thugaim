@@ -121,6 +121,7 @@ public abstract class Vehicle extends Actor implements IDamageable
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    clearCollisions();
     moveLocal(0, speed * 0.12f * (float) millisecond_delta);
 
     //If collides with a foreign projectile or station, take damage.

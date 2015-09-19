@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.meoblast001.thugaim;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 
 import info.meoblast001.thugaim.engine.Actor;
@@ -79,7 +80,23 @@ public class Projectile extends Actor
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
-    moveLocal(0.0f, millisecond_delta * 0.5f);
+    clearCollisions();
+
+    //Make multiple movements per frame. Each movement should be maximally the
+    //size of a projectile. During each movement, collision detection will be
+    //performed. This prevents the projectiles from "passing through" objects.
+    float move_distance = millisecond_delta * 0.5f;
+    Point size = getSize();
+    float average_size = ((float) size.x + (float) size.y) / 2.0f;
+    while (true) {
+      if (move_distance >= average_size) {
+        moveLocal(0.0f, average_size);
+        move_distance -= average_size;
+      } else {
+        moveLocal(0.0f, move_distance);
+        break;
+      }
+    }
 
     //Check for collisions. Cause damage to objects that take damage.
     for (Actor actor : getCollisions().toArray(new Actor[0]))

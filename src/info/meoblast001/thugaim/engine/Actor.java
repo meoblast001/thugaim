@@ -127,7 +127,7 @@ public abstract class Actor
     this.y += y;
 
     if (isCollisionDetectionOn())
-      updateCollisions();
+      detectCollisions();
   }
 
   /**
@@ -144,7 +144,7 @@ public abstract class Actor
     this.y += Math.sin(rotation) * x;
 
     if (isCollisionDetectionOn())
-      updateCollisions();
+      detectCollisions();
   }
 
   /**
@@ -226,10 +226,19 @@ public abstract class Actor
   }
 
   /**
-  Update the list of actors with which this actor is colliding. Call after
-  movements.
+  Remove all detected collisions.
   */
-  protected void updateCollisions()
+  protected void clearCollisions()
+  {
+    collisions = new HashSet<Actor>();
+  }
+
+  /**
+  Find collisions and add them to the list of collisions that occurred. Perform
+  #{@see #clearCollisions() clearCollisions()} before each frame to remove these
+  collisions.
+  */
+  protected void detectCollisions()
   {
     if (world == null)
       return;
@@ -241,7 +250,6 @@ public abstract class Actor
 
     //Iterate through actors this actor may collide with and check for
     //radial collisions.
-    collisions = new HashSet<Actor>();
     for (Actor actor : possible_collision_actors)
     {
       //This actor doesn't collide with itself.
@@ -268,7 +276,7 @@ public abstract class Actor
   /**
   To simplify the calculation of collisions, periodically do a full scan of
   which actors this actor may collide with.
-  #{@link #updateCollisions() updateCollisions()} will only check those actors.
+  #{@link #detectCollisions() detectCollisions()} will only check those actors.
   */
   private void recalculatePossibleCollisionActors()
   {
