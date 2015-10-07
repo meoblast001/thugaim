@@ -30,6 +30,7 @@ import info.meoblast001.thugaim.engine.*;
 import info.meoblast001.thugaim.npc.*;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -51,34 +52,41 @@ public class ThugaimRuntime implements IGameRuntime
   private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
 
   //Level information.
-  private int current_level = 0;
-  private boolean has_next_level = false;
-  private int stations;
-  private int hydrogen_fighters;
-  private int play_size;
+  private static int current_level = 0;
+  private static Vector<LevelDescriptor> levels = null;
+
+  public ThugaimRuntime(Resources resources)
+  {
+    if (levels == null)
+      loadLevels(resources);
+  }
 
   public void init(Engine engine)
   {
     this.engine = engine;
     context = engine.getGraphics().getContext();
 
+    //Get the level descriptor for this level.
+    LevelDescriptor level = getCurrentLevelDescriptor();
+
     //Only show what's in the play area.
-    int half_play_size = play_size / 2;
+    int half_play_size = level.getPlaySize() / 2;
     engine.getGraphics().enableClip(-half_play_size, half_play_size,
                                     half_play_size, -half_play_size);
 
-    world = new World(engine, play_size);
-    station_graph = new StationGraph(engine, world, stations, play_size);
+    world = new World(engine, level.getPlaySize());
+    station_graph = new StationGraph(engine, world, level.getStations(),
+        level.getPlaySize());
 
     player = new Player(engine, station_graph);
     world.insertActor(player);
     world.focusOnActor("player");
 
-    HydrogenFighter.generateAll(engine, world, play_size, station_graph,
-                                hydrogen_fighters);
+    HydrogenFighter.generateAll(engine, world, level.getPlaySize(),
+                                station_graph, level.getHydrogenFighters());
 
     health_bar = new HealthBar(engine.getGraphics(), player);
-    PlayAreaShield.generateAll(engine, world, play_size);
+    PlayAreaShield.generateAll(engine, world, level.getPlaySize());
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
@@ -113,74 +121,91 @@ public class ThugaimRuntime implements IGameRuntime
   }
 
   /**
-  Load and use information about a level. Must be called before init().
-  @param current_level 0-based level number.
-  @param resources Activity's resources.
+  Does a level proceed the current level?
+  @return True if yes, false if no.
   */
-  public void setLevel(int current_level, Resources resources)
+  public boolean hasNextLevel()
+  {
+    return current_level + 1 < levels.size();
+  }
+
+  /**
+  Select level to use.
+  @param current_level 0-based level number.
+  @return True if level exists, else level does not exist.
+  */
+  public boolean setLevel(int current_level)
+  {
+    if (current_level < levels.size())
+    {
+      this.current_level = current_level;
+      return true;
+    }
+    else
+      return false;
+  }
+
+  /**
+  Return the current level descriptor.
+  @return Level descriptor
+  */
+  public LevelDescriptor getCurrentLevelDescriptor()
+  {
+    return levels.get(current_level);
+  }
+
+  /**
+  Load all of the level descriptions from the XML file.
+  @param resources Activity's resources.
+  @return True if successful, else false. If failed, the game must end.
+  */
+  private boolean loadLevels(Resources resources)
   {
     try
     {
+      levels = new Vector<LevelDescriptor>();
       XmlResourceParser xml_parser = resources.getXml(R.xml.levels);
-      int processing_level = -1;
-      boolean successfully_loaded_cur_level = false;
       int event_type = xml_parser.getEventType();
       while (event_type != XmlResourceParser.END_DOCUMENT)
       {
         if (event_type == XmlResourceParser.START_TAG &&
             xml_parser.getName().equals("level"))
         {
-          ++processing_level;
-          if (processing_level > current_level)
-            has_next_level = true;
+          LevelDescriptor level = new LevelDescriptor();
 
-          if (processing_level == current_level)
+          for (int i = 0; i < xml_parser.getAttributeCount(); ++i)
           {
-            for (int i = 0; i < xml_parser.getAttributeCount(); ++i)
-            {
-              String attr_name = xml_parser.getAttributeName(i);
-              String attr_value = xml_parser.getAttributeValue(i);
+            String attr_name = xml_parser.getAttributeName(i);
+            String attr_value = xml_parser.getAttributeValue(i);
 
-              if (attr_name.equals("stations"))
-                stations = Integer.parseInt(attr_value);
-              else if (attr_name.equals("hydrogen_fighters"))
-                hydrogen_fighters = Integer.parseInt(attr_value);
-              else if (attr_name.equals("play_size"))
-                play_size = Integer.parseInt(attr_value);
-              //Else ignore this attribute.
-
-              this.current_level = current_level;
-              successfully_loaded_cur_level = true;
-            }
+            if (attr_name.equals("stations"))
+              level.setStations( Integer.parseInt(attr_value));
+            else if (attr_name.equals("hydrogen_fighters"))
+              level.setHydrogenFighters(Integer.parseInt(attr_value));
+            else if (attr_name.equals("play_size"))
+              level.setPlaySize(Integer.parseInt(attr_value));
+            //Else ignore this attribute.
           }
+
+          levels.add(level);
         }
         event_type = xml_parser.next();
       }
+
+      return true;
     }
-    //Currently there's no way to recover from exceptions here.
-    //TODO: Raise something that could be handled to display a nice error screen
-    //  and cleanly shut down.
     catch (XmlPullParserException e)
     {
-      throw new RuntimeException(e.getMessage());
+      return false;
     }
     catch (IOException e)
     {
-      throw new RuntimeException(e.getMessage());
+      return false;
     }
     catch (NumberFormatException e)
     {
-      throw new RuntimeException(e.getMessage());
+      return false;
     }
-  }
-
-  /**
-  Does a level proceed the current level?
-  @return True if yes, false if no.
-  */
-  public boolean hasNextLevel()
-  {
-    return has_next_level;
   }
 
   /**

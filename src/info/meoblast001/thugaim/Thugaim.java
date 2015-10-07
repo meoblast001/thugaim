@@ -63,12 +63,12 @@ public class Thugaim extends ShutdownHandlingActivity
     graphics = (Graphics) findViewById(R.id.graphics);
     graphics.setOnTouchListener(this);
 
-    runtime = new ThugaimRuntime();
+    runtime = new ThugaimRuntime(getResources());
     Bundle extras = getIntent().getExtras();
     if (extras != null)
     {
       current_level = extras.getInt("current_level");
-      runtime.setLevel(current_level, getResources());
+      runtime.setLevel(current_level);
     }
 
     engine = new Engine(graphics, runtime, this);
