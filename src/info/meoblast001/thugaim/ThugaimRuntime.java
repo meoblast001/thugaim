@@ -99,6 +99,16 @@ public class ThugaimRuntime implements IGameRuntime
 
     health_bar = new HealthBar(engine.getGraphics(), player);
     PlayAreaShield.generateAll(engine, world, level.getPlaySize());
+
+    //Start music if it exists, else stop any currently playing music.
+    if (level.getMusic() != null)
+    {
+      int res_id = context.getResources().getIdentifier(level.getMusic(), "raw",
+        context.getPackageName());
+      engine.getAudio().startMusic(res_id);
+    }
+    else
+      engine.getAudio().stopMusic();
   }
 
   public void update(long millisecond_delta, float rotation, boolean tapped)
@@ -191,8 +201,10 @@ public class ThugaimRuntime implements IGameRuntime
             String attr_name = xml_parser.getAttributeName(i);
             String attr_value = xml_parser.getAttributeValue(i);
 
-            if (attr_name.equals("stations"))
-              level.setStations( Integer.parseInt(attr_value));
+            if (attr_name.equals("music"))
+              level.setMusic(attr_value);
+            else if (attr_name.equals("stations"))
+              level.setStations(Integer.parseInt(attr_value));
             else if (attr_name.equals("hydrogen_fighters"))
               level.setHydrogenFighters(Integer.parseInt(attr_value));
             else if (attr_name.equals("play_size"))

@@ -57,6 +57,7 @@ public class Engine extends Thread
   }
 
   private IGameRuntime runtime = null;
+  private Audio audio = null;
   private Graphics graphics = null;
   private ShutdownHandlingActivity shutdown_handler = null;
   private float rotation = 0.0f;
@@ -70,14 +71,16 @@ public class Engine extends Thread
   /**
   Construct engine but do not start.
   @param graphics Graphics instance to which the game will be drawn.
+  @param audio Audio manager instance.
   @param runtime Instance of IGameRuntime which will be initialised and contains
     game-specific code.
   */
-  public Engine(Graphics graphics, IGameRuntime runtime,
+  public Engine(Graphics graphics, Audio audio, IGameRuntime runtime,
                 ShutdownHandlingActivity shutdown_handler)
   {
     super();
     this.graphics = graphics;
+    this.audio = audio;
     this.runtime = runtime;
     this.shutdown_handler = shutdown_handler;
     runtime.init(this);
@@ -214,6 +217,15 @@ public class Engine extends Thread
   public Graphics getGraphics()
   {
     return graphics;
+  }
+
+  /**
+  Get a reference to the Audio manager instance this Engine is using.
+  @return Audio manager reference.
+  */
+  public Audio getAudio()
+  {
+    return audio;
   }
 
   /**

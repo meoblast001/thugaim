@@ -45,6 +45,7 @@ public class Thugaim extends ShutdownHandlingActivity
   private Sensor accelerometer = null;
   private Engine engine = null;
   private Graphics graphics = null;
+  private Audio audio = null;
   private int current_level = 0;
 
   /**
@@ -65,6 +66,8 @@ public class Thugaim extends ShutdownHandlingActivity
     graphics = (Graphics) findViewById(R.id.graphics);
     graphics.setOnTouchListener(this);
 
+    audio = new Audio(this);
+
     try
     {
       runtime = new ThugaimRuntime(getResources());
@@ -75,7 +78,7 @@ public class Thugaim extends ShutdownHandlingActivity
         runtime.setLevel(current_level);
       }
 
-      engine = new Engine(graphics, runtime, this);
+      engine = new Engine(graphics, audio, runtime, this);
       engine.start();
     }
     catch (ThugaimRuntime.LoadLevelsException e)
@@ -90,6 +93,8 @@ public class Thugaim extends ShutdownHandlingActivity
     super.onPause();
     if (engine != null)
       engine.pause();
+    if (audio != null)
+      audio.pauseMusic();
   }
 
   @Override
@@ -98,6 +103,8 @@ public class Thugaim extends ShutdownHandlingActivity
     super.onStop();
     if (engine != null)
       engine.pause();
+    if (audio != null)
+      audio.pauseMusic();
   }
 
   @Override
@@ -106,6 +113,8 @@ public class Thugaim extends ShutdownHandlingActivity
     super.onResume();
     if (engine != null)
       engine.unpause();
+    if (audio != null)
+      audio.unpauseMusic();
   }
 
   @Override
@@ -114,6 +123,8 @@ public class Thugaim extends ShutdownHandlingActivity
     super.onRestart();
     if (engine != null)
       engine.unpause();
+    if (audio != null)
+      audio.unpauseMusic();
   }
 
   @Override
@@ -122,6 +133,8 @@ public class Thugaim extends ShutdownHandlingActivity
     super.onDestroy();
     if (engine != null)
       engine.shutdown();
+    if (audio != null)
+      audio.stopMusic();
   }
 
   @Override

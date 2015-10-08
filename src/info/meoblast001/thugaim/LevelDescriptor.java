@@ -22,9 +22,28 @@ A description of a level loaded from the XML file.
 */
 public class LevelDescriptor
 {
+  private String music = null;
   private int stations = 0;
   private int hydrogen_fighters = 0;
   private int play_size = 0;
+
+  /**
+  Gets the name of the music to play.
+  @return The name of the raw resource.
+  */
+  public String getMusic()
+  {
+    return music;
+  }
+
+  /**
+  Sets the name of the music to play.
+  @param value The name of the raw resource.
+  */
+  public void setMusic(String value)
+  {
+    music = value;
+  }
 
   /**
   Gets the amount of stations in the level.
