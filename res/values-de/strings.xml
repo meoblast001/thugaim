@@ -2,13 +2,13 @@
 <resources>
   <string name="app_name">Thugaim</string>
   <string name="instructions">
-    Willkommen! Es scheint, dass deine Arbeit bei der Transportagentur für
-    Raumfahrtminerale von Raumfahrtpiraten gestört wird. Sie haben Stationen
-    eingerichtet, die sie einsetzen, um die Güter deines Teams einzufangen!
-    Deine neue Aufgabe ist diese Stationen zu zerstören, aber das wird nicht
-    ohne einen Kampf passieren.
+    Willkommen! Es scheint, als würde deine Arbeit bei der Transportagentur für
+    Raumfahrtminerale von Raumfahrtpiraten gestört werden. Sie haben Stationen
+    errichtet, die sie einsetzen, um die Güter deines Teams einzufangen! Deine
+    neue Aufgabe ist es, diese Stationen zu zerstören, aber das wird nicht ohne
+    einen Kampf passieren.
 
-    \n\nKipp dein Gerät, um dein Raumschiff zu steuern, und tipp deinen
+    \n\nKippe dein Gerät, um dein Raumschiff zu steuern, und tippe auf deinen
     Bildschirm, um deine Geschosse zu schießen. Viel Glück!
   </string>
   <string name="continue_t">Fortsetzen</string>
@@ -20,9 +20,9 @@
     erreichen. Danke für die gute Arbeit!
   </string>
   <string name="game_over_lose">
-    Autsch! Ich habe dir gesagt, dass es nicht einfach wäre.
+    Autsch! Ich habe dir gesagt, dass es nicht einfach werden würde.
   </string>
-  <string name="restart_t">Neustarten</string>
+  <string name="restart_t">Erneut versuchen</string>
   <string name="quit_t">Beenden</string>
   <string name="fatal_error">Schwerer Ausnahmefehler</string>
   <string name="load_levels_exception">
