@@ -23,4 +23,8 @@
   </string>
   <string name="restart_t">Restart</string>
   <string name="quit_t">Quit</string>
+  <string name="fatal_error">Fatal Error</string>
+  <string name="load_levels_exception">
+    Could not start because levels could not be loaded.
+  </string>
 </resources>

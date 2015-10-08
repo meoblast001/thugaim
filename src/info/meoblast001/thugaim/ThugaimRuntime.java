@@ -40,6 +40,14 @@ indirectly.
 */
 public class ThugaimRuntime implements IGameRuntime
 {
+  /**
+  Exception thrown if levels cannot be loaded.
+  */
+  public static class LoadLevelsException extends Exception
+  {
+    // No additional functionality.
+  }
+
   private Engine engine;
   private Context context;
 
@@ -55,7 +63,11 @@ public class ThugaimRuntime implements IGameRuntime
   private static int current_level = 0;
   private static Vector<LevelDescriptor> levels = null;
 
-  public ThugaimRuntime(Resources resources)
+  /**
+  Constructs game runtime. Failure is fatal.
+  @throws LoadLevelsException If levels cannot be loaded.
+  */
+  public ThugaimRuntime(Resources resources) throws LoadLevelsException
   {
     if (levels == null)
       loadLevels(resources);
@@ -157,9 +169,10 @@ public class ThugaimRuntime implements IGameRuntime
   /**
   Load all of the level descriptions from the XML file.
   @param resources Activity's resources.
-  @return True if successful, else false. If failed, the game must end.
+  @throws LoadLevelsException If levels file cannot be loaded.
   */
-  private boolean loadLevels(Resources resources)
+  private static boolean loadLevels(Resources resources) throws
+    LoadLevelsException
   {
     try
     {
@@ -196,15 +209,15 @@ public class ThugaimRuntime implements IGameRuntime
     }
     catch (XmlPullParserException e)
     {
-      return false;
+      throw new LoadLevelsException();
     }
     catch (IOException e)
     {
-      return false;
+      throw new LoadLevelsException();
     }
     catch (NumberFormatException e)
     {
-      return false;
+      throw new LoadLevelsException();
     }
   }
 

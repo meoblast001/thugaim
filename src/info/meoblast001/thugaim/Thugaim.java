@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.meoblast001.thugaim;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -63,51 +65,63 @@ public class Thugaim extends ShutdownHandlingActivity
     graphics = (Graphics) findViewById(R.id.graphics);
     graphics.setOnTouchListener(this);
 
-    runtime = new ThugaimRuntime(getResources());
-    Bundle extras = getIntent().getExtras();
-    if (extras != null)
+    try
     {
-      current_level = extras.getInt("current_level");
-      runtime.setLevel(current_level);
-    }
+      runtime = new ThugaimRuntime(getResources());
+      Bundle extras = getIntent().getExtras();
+      if (extras != null)
+      {
+        current_level = extras.getInt("current_level");
+        runtime.setLevel(current_level);
+      }
 
-    engine = new Engine(graphics, runtime, this);
-    engine.start();
+      engine = new Engine(graphics, runtime, this);
+      engine.start();
+    }
+    catch (ThugaimRuntime.LoadLevelsException e)
+    {
+      fail(getString(R.string.load_levels_exception));
+    }
   }
 
   @Override
   public void onPause()
   {
     super.onPause();
-    engine.pause();
+    if (engine != null)
+      engine.pause();
   }
 
   @Override
   public void onStop()
   {
     super.onStop();
-    engine.pause();
+    if (engine != null)
+      engine.pause();
   }
 
   @Override
   public void onResume()
   {
     super.onResume();
-    engine.unpause();
+    if (engine != null)
+      engine.unpause();
   }
 
   @Override
   public void onRestart()
   {
     super.onRestart();
-    engine.unpause();
+    if (engine != null)
+      engine.unpause();
   }
 
   @Override
   public void onDestroy()
   {
     super.onDestroy();
-    engine.shutdown();
+    if (engine != null)
+      engine.shutdown();
   }
 
   @Override
@@ -145,11 +159,15 @@ public class Thugaim extends ShutdownHandlingActivity
 
   public void onSensorChanged(SensorEvent event)
   {
-    engine.setRotation(event.values[1]);
+    if (engine != null)
+      engine.setRotation(event.values[1]);
   }
 
   public boolean onTouch(View view, MotionEvent event)
   {
+    if (engine == null)
+      return false;
+
     if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
     {
       engine.setTapped(true);
@@ -181,5 +199,26 @@ public class Thugaim extends ShutdownHandlingActivity
       startActivity(intent);
       finish();
     }
+  }
+
+  /**
+  Creates a fatal error dialog and ends the game.
+  @param message The message to display to the user.
+  */
+  private void fail(String message)
+  {
+    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    alert.setTitle(R.string.fatal_error);
+    alert.setMessage(message);
+    alert.setPositiveButton(android.R.string.ok,
+      new DialogInterface.OnClickListener()
+      {
+        public void onClick(DialogInterface dialog, int which)
+        {
+          Thugaim.this.finish();
+        }
+      });
+    alert.setIcon(android.R.drawable.ic_dialog_alert);
+    alert.show();
   }
 }
