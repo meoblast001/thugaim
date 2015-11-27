@@ -25,6 +25,7 @@ public class LevelDescriptor
   private String music = null;
   private int stations = 0;
   private int hydrogen_fighters = 0;
+  private int helium_fighters = 0;
   private int play_size = 0;
 
   /**
@@ -79,6 +80,24 @@ public class LevelDescriptor
   public void setHydrogenFighters(int value)
   {
     hydrogen_fighters = value;
+  }
+
+  /**
+  Gets the amount of helium fighter NPCs in the level.
+  @return The amount of helium fighters.
+  */
+  public int getHeliumFighters()
+  {
+    return helium_fighters;
+  }
+
+  /**
+  Sets the amount of helium fighter NPCs in the level.
+  @param value The amount of helium fighters.
+  */
+  public void setHeliumFighters(int value)
+  {
+    helium_fighters = value;
   }
 
   /**

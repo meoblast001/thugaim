@@ -96,6 +96,8 @@ public class ThugaimRuntime implements IGameRuntime
 
     HydrogenFighter.generateAll(engine, world, level.getPlaySize(),
                                 station_graph, level.getHydrogenFighters());
+    HeliumFighter.generateAll(engine, world, level.getPlaySize(), station_graph,
+                              level.getHeliumFighters());
 
     health_bar = new HealthBar(engine.getGraphics(), player);
     PlayAreaShield.generateAll(engine, world, level.getPlaySize());
@@ -207,6 +209,8 @@ public class ThugaimRuntime implements IGameRuntime
               level.setStations(Integer.parseInt(attr_value));
             else if (attr_name.equals("hydrogen_fighters"))
               level.setHydrogenFighters(Integer.parseInt(attr_value));
+            else if (attr_name.equals("helium_fighters"))
+              level.setHeliumFighters(Integer.parseInt(attr_value));
             else if (attr_name.equals("play_size"))
               level.setPlaySize(Integer.parseInt(attr_value));
             //Else ignore this attribute.
