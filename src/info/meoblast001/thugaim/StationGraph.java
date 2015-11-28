@@ -23,6 +23,8 @@ import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.engine.World;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -32,6 +34,16 @@ random locations. Edges between stations are built randomly.
 */
 public class StationGraph
 {
+  /**
+  Extra data needed for each station in StationGraph.approxShortestPath.
+  */
+  private class ApproxSearchExtra
+  {
+    public float estimated_cost = Float.POSITIVE_INFINITY;
+    public float cost = Float.POSITIVE_INFINITY;
+    public Station came_from = null;
+  }
+
   private Engine engine;
   private World world;
 
@@ -208,5 +220,108 @@ public class StationGraph
 
       vehicle.setClosestStation(closest_station);
     }
+  }
+
+  /**
+  Find an approximated shortest path between two stations. Uses A* algorithm to
+  find the result.
+  @param start Beginning station in path.
+  @param end Station to search.
+  @return Path of stations from start to end. Null if a best path could not be
+    found.
+  */
+  public Station[] approxShortestPath(Station start, Station end)
+  {
+    //Create a hash from station IDs to extra data needed for this algorithm.
+    HashMap<String, ApproxSearchExtra> station_extras =
+      new HashMap<String, ApproxSearchExtra>();
+    for (Station station : getStations())
+      station_extras.put(station.getId(), new ApproxSearchExtra());
+
+    HashSet<Station> closed = new HashSet<Station>();
+    HashSet<Station> open = new HashSet<Station>();
+    open.add(start);
+
+    while (open.size() > 0)
+    {
+      //Current is the item in the open set with the lowest estimated cost.
+      Station current = null;
+      ApproxSearchExtra current_extra = null;
+      for (Station element : open)
+      {
+        if (current == null && current_extra == null)
+          current = element;
+        else
+        {
+          ApproxSearchExtra extra = station_extras.get(element.getId());
+          if (extra.estimated_cost < current_extra.estimated_cost)
+          {
+            current = element;
+            current_extra = extra;
+          }
+        }
+      }
+
+      //If the current station is the end station, then we're done.
+      if (current == end)
+        return buildApproxShortestPathResult(end, station_extras);
+
+      //Station is no longer in the open set and is now in the closed set
+      //because it was traversed.
+      open.remove(current);
+      closed.add(current);
+
+      for (Station neighbour : getAdjacentStations(current))
+      {
+        //Do nothing if neighbour is already in the closed set.
+        if (closed.contains(neighbour))
+          continue;
+
+        ApproxSearchExtra neighbour_extra =
+          station_extras.get(neighbour.getId());
+
+        //Cost of movement to this neighbour.
+        float attempt_cost = current_extra.cost + current.distance(neighbour);
+
+        //If not in the open set, add the neighbour to the open set so that it
+        //will be traversed later.
+        if (!open.contains(neighbour))
+          open.add(neighbour);
+        //If this path is more costly than another path to this station, then
+        //this path cannot be optimal.
+        else if (attempt_cost >= neighbour_extra.cost)
+          continue;
+
+        //This is now the best path to this neighbour. Store this information.
+        neighbour_extra.came_from = current;
+        neighbour_extra.cost = attempt_cost;
+        neighbour_extra.estimated_cost = attempt_cost +
+                                         neighbour.distance(end);
+      }
+    }
+
+    return null;
+  }
+
+  /**
+  Build the result of the approximate shortest path algorithm once the shortest
+  path has been found.
+  @param current The goal station.
+  @param current_extra The extra algorithm-specific data of the goal station.
+  @return Path of stations from start to end.
+  */
+  private Station[] buildApproxShortestPathResult(Station current,
+    HashMap<String, ApproxSearchExtra> station_extras)
+  {
+    LinkedList<Station> path = new LinkedList<Station>();
+
+    ApproxSearchExtra extra = null;
+    do {
+      extra = station_extras.get(current.getId());
+      path.addFirst(current);
+      current = extra.came_from;
+    } while (current != null);
+
+    return path.toArray(new Station[] {});
   }
 }
