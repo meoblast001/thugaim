@@ -27,9 +27,12 @@ import info.meoblast001.thugaim.engine.World;
 import info.meoblast001.thugaim.R;
 
 /**
-Simple NPC which travels randomly through the StationGraph unless near the
-player, in which case it follows the player, or at an adjacent station to the
-player's station, in which case it moves to that station.
+Simple NPC which travels randomly through the StationGraph with the following
+behaviour.
+1. Travels slightly slower than the player.
+2. If the player is nearby, it follows the player directly.
+3. If the player is at an adjacent station, it goes to that station.
+4. Very cautious not to collide with or attack a station.
 */
 public class HydrogenFighter extends NPCVehicle
 {

@@ -26,8 +26,13 @@ import info.meoblast001.thugaim.engine.World;
 import info.meoblast001.thugaim.R;
 
 /**
-NPC which always follows the player in the StationGraph. It follows the player
-whenever it is close. It is also slightly faster than the player.
+Complex NPC which follows the player in the StationGraph with the following
+behaviour.
+1. Travels slightly faster than the player.
+2. If the player is nearby, it follows the player directly.
+3. Uses a graph search algorithm to always move toward the player's closest
+   station.
+4. Not very cautious about not colliding with or attacking a station.
 */
 public class HeliumFighter extends NPCVehicle
 {
