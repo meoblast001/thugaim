@@ -23,6 +23,7 @@ import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.engine.World;
 
+import java.util.Queue;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -230,7 +231,7 @@ public class StationGraph
   @return Path of stations from start to end. Null if a best path could not be
     found.
   */
-  public Station[] approxShortestPath(Station start, Station end)
+  public Queue<Station> approxShortestPath(Station start, Station end)
   {
     //Create a hash from station IDs to extra data needed for this algorithm.
     HashMap<String, ApproxSearchExtra> station_extras =
@@ -310,7 +311,7 @@ public class StationGraph
   @param current_extra The extra algorithm-specific data of the goal station.
   @return Path of stations from start to end.
   */
-  private Station[] buildApproxShortestPathResult(Station current,
+  private Queue<Station> buildApproxShortestPathResult(Station current,
     HashMap<String, ApproxSearchExtra> station_extras)
   {
     LinkedList<Station> path = new LinkedList<Station>();
@@ -322,6 +323,6 @@ public class StationGraph
       current = extra.came_from;
     } while (current != null);
 
-    return path.toArray(new Station[] {});
+    return path;
   }
 }

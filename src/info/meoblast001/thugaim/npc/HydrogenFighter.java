@@ -31,8 +31,7 @@ Simple NPC which travels randomly through the StationGraph with the following
 behaviour.
 1. Travels slightly slower than the player.
 2. If the player is nearby, it follows the player directly.
-3. If the player is at an adjacent station, it goes to that station.
-4. Very cautious not to collide with or attack a station.
+3. Very cautious not to collide with or attack a station.
 */
 public class HydrogenFighter extends NPCVehicle
 {

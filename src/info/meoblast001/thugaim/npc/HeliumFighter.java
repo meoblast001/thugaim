@@ -23,7 +23,10 @@ import info.meoblast001.thugaim.Station;
 import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.engine.Engine;
 import info.meoblast001.thugaim.engine.World;
+import info.meoblast001.thugaim.Vehicle;
 import info.meoblast001.thugaim.R;
+
+import java.util.Queue;
 
 /**
 Complex NPC which follows the player in the StationGraph with the following
@@ -40,7 +43,8 @@ public class HeliumFighter extends NPCVehicle
   private static final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
 
   private StationGraph station_graph = null;
-  private Station target_station = null;
+  private Queue<Station> remaining_path_to_player = null;
+  private Station player_station = null;
 
   public HeliumFighter(Engine engine, float x, float y, float rotation,
                        StationGraph station_graph)
@@ -85,6 +89,39 @@ public class HeliumFighter extends NPCVehicle
   @Override
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
+    if (getWorld() == null || getClosestStation() == null)
+      return;
+
+    Vehicle player = (Vehicle) getWorld().getActor("player");
+    if (player == null)
+      return;
+
+    //If the closest station to the player changes or the path to the player has
+    //not yet been determined, calculate it.
+    Station player_station = player.getClosestStation();
+    if (remaining_path_to_player == null ||
+        player_station != this.player_station)
+    {
+      remaining_path_to_player = station_graph.approxShortestPath(
+        getClosestStation(), player_station);
+      this.player_station = player_station;
+    }
+
+    //If there are stations to follow on the way to the player, follow them.
+    if (remaining_path_to_player != null && remaining_path_to_player.size() > 0)
+    {
+      //If close to target station, pop the current station off the path and
+      //seek the next.
+      if (distance(remaining_path_to_player.peek()) < 50.0f)
+        remaining_path_to_player.remove();
+    }
+    //Else if no stations left to follow or a path could not be found, directly
+    //pursue the player.
+    else
+      pursue(player.getPosition(), player.getRotation(), millisecond_delta);
+
+    //TODO: Fire.
+
     super.update(millisecond_delta, rotation, tapped);
   }
 }
