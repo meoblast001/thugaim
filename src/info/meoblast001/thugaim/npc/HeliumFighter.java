@@ -114,6 +114,8 @@ public class HeliumFighter extends NPCVehicle
       //seek the next.
       if (distance(remaining_path_to_player.peek()) < 50.0f)
         remaining_path_to_player.remove();
+      else
+        seek(remaining_path_to_player.peek().getPosition(), millisecond_delta);
     }
     //Else if no stations left to follow or a path could not be found, directly
     //pursue the player.

@@ -251,7 +251,10 @@ public class StationGraph
       for (Station element : open)
       {
         if (current == null && current_extra == null)
+        {
           current = element;
+          current_extra = station_extras.get(element.getId());
+        }
         else
         {
           ApproxSearchExtra extra = station_extras.get(element.getId());
