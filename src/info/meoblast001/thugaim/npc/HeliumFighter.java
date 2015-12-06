@@ -107,13 +107,19 @@ public class HeliumFighter extends NPCVehicle
       this.player_station = player_station;
     }
 
+    //If the fighter gets too close to another station during its path, it
+    //should prioritise not colliding with this station.
+    if (distance(getClosestStation()) < 125.0f)
+      flee(getClosestStation().getPosition(), millisecond_delta);
+
     //If there are stations to follow on the way to the player, follow them.
     if (remaining_path_to_player != null && remaining_path_to_player.size() > 0)
     {
       //If close to target station, pop the current station off the path and
       //seek the next.
-      if (distance(remaining_path_to_player.peek()) < 50.0f)
+      if (distance(remaining_path_to_player.peek()) < 150.0f)
         remaining_path_to_player.remove();
+      //Else seek the current station.
       else
         seek(remaining_path_to_player.peek().getPosition(), millisecond_delta);
     }
