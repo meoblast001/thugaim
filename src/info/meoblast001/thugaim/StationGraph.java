@@ -54,7 +54,7 @@ public class StationGraph
   private final int UPDATE_AFTER_FRAMES = 5;
   private int frames_since_update = UPDATE_AFTER_FRAMES;
   //Amount of free space around stations at initialisation.
-  private final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
+  private final float FREE_SURROUNDING_SPACE_AT_INIT = 125.0f;
 
   public StationGraph(Engine engine, World world, int num_stations,
                       int play_size)
