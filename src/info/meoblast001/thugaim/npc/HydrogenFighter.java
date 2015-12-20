@@ -19,6 +19,7 @@ package info.meoblast001.thugaim.npc;
 
 import android.graphics.Point;
 
+import info.meoblast001.thugaim.Projectile;
 import info.meoblast001.thugaim.Station;
 import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.engine.Actor;
@@ -37,6 +38,8 @@ public class HydrogenFighter extends NPCVehicle
 {
   private static final int MAX_HEALTH = 5;
   private static final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
+  private static final float FIRE_ANGLE_RADIANS = (float) (30.0f *
+                                                           Math.PI / 180.0f);
 
   private StationGraph station_graph = null;
   private Station target_station = null;
@@ -114,30 +117,46 @@ public class HydrogenFighter extends NPCVehicle
     //The amount the fighter would need to rotate to face the player.
     float rotation_to_player = crossProduct(getRotationUnitVector(),
       getUnitVectorToTarget(getPosition(), player.getPosition()));
-    final float FIRE_ANGLE_RADIANS = (float) (30.0f * Math.PI / 180.0f);
     //If target is within firing angle and is near, fire.
     if (rotation_to_player > -FIRE_ANGLE_RADIANS &&
         rotation_to_player < FIRE_ANGLE_RADIANS &&
         distance(player) < 200.0f)
       will_fire = true;
 
-    //If another NPC is within firing angle and is nearer than the player,
-    //cancel fire.
-    //TODO: Make this more efficient. Only iterate over a subset of nearby
-    //  actors.
+    //If the NPC plans on firing but another friendly actor may be at risk, stop
+    //firing.
     if (will_fire)
     {
-      for (Actor npc : getWorld().getActors())
+      for (Actor actor : getWorld().getActors())
       {
-        if (!(npc instanceof NPCVehicle) || npc == this)
-          continue;
-
-        float rotation_to_npc = crossProduct(getRotationUnitVector(),
-          getUnitVectorToTarget(getPosition(), npc.getPosition()));
-        if (rotation_to_npc > -FIRE_ANGLE_RADIANS &&
-            rotation_to_npc < FIRE_ANGLE_RADIANS &&
-            distance(npc) < distance(player))
-          will_fire = false;
+        //If another NPC is between this NPC and the player character, don't
+        //fire.
+        if (actor instanceof NPCVehicle && actor != this)
+        {
+          float rotation_to_actor = crossProduct(getRotationUnitVector(),
+            getUnitVectorToTarget(getPosition(), actor.getPosition()));
+          if (rotation_to_actor > -FIRE_ANGLE_RADIANS &&
+              rotation_to_actor < FIRE_ANGLE_RADIANS &&
+              distance(actor) < distance(player))
+          {
+            will_fire = false;
+            break;
+          }
+        }
+        //If a station is close within firing range and in the current
+        //direction, don't fire.
+        else if (actor instanceof Station)
+        {
+          float rotation_to_actor = crossProduct(getRotationUnitVector(),
+            getUnitVectorToTarget(getPosition(), actor.getPosition()));
+          if (rotation_to_actor > -FIRE_ANGLE_RADIANS &&
+              rotation_to_actor < FIRE_ANGLE_RADIANS &&
+              distance(actor) < Projectile.MAX_LENGTH  * 0.8f)
+          {
+            will_fire = false;
+            break;
+          }
+        }
       }
     }
 
