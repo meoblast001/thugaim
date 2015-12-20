@@ -31,6 +31,9 @@ objects to be instantiated.
 */
 public abstract class Actor
 {
+  private final int FRAMES_UNTIL_PCA_RECALCULATE = 20;
+  private final float PCA_DISTANCE = 50;
+
   private String id;
   private Engine engine;
   private Bitmap bitmap = null;
@@ -40,8 +43,6 @@ public abstract class Actor
   private HashSet<Actor> collisions = new HashSet<Actor>();
 
   private HashSet<Actor> possible_collision_actors = new HashSet<Actor>();
-  private final int FRAMES_UNTIL_PCA_RECALCULATE = 20;
-  private final float PCA_DISTANCE = 50;
   private int frames_since_pca_recalculate = FRAMES_UNTIL_PCA_RECALCULATE;
 
   private long idle_milliseconds = 0;

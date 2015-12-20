@@ -48,6 +48,8 @@ public class ThugaimRuntime implements IGameRuntime
     // No additional functionality.
   }
 
+  private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
+
   private Engine engine;
   private Context context;
 
@@ -57,7 +59,6 @@ public class ThugaimRuntime implements IGameRuntime
   private HealthBar health_bar;
   private boolean player_won = false, player_lost = false;
   private long started_level_complete_millis = Long.MAX_VALUE;
-  private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
 
   //Level information.
   private static int current_level = 0;

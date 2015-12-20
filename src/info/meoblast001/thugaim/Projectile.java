@@ -34,6 +34,7 @@ origin was traveling when fired.
 public class Projectile extends Actor
 {
   public final static float MAX_LENGTH = 300;
+
   private Actor origin;
   private PointF original_position = null;
   private static short current_projectile_id = 0;
