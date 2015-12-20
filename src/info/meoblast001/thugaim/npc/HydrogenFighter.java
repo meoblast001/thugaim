@@ -141,9 +141,20 @@ public class HydrogenFighter extends NPCVehicle
       }
     }
 
+    //If an NPC player gets too close, avoid it.
+    NPCVehicle avoiding_npc = getAvoidingNPC();
+    if (avoiding_npc != null)
+    {
+      evade(avoiding_npc.getPosition(), avoiding_npc.getRotation(),
+            millisecond_delta);
+      will_fire = false;
+    }
+
     if (will_fire)
       fire();
 
+    //If the player character is close, go directly toward the player, else go
+    //toward the target station.
     if (distance(player) < 225.0f)
       pursue(player.getPosition(), player.getRotation(), millisecond_delta);
     else

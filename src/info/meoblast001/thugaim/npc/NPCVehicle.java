@@ -21,6 +21,7 @@ import android.graphics.PointF;
 
 import info.meoblast001.thugaim.StationGraph;
 import info.meoblast001.thugaim.Vehicle;
+import info.meoblast001.thugaim.engine.Actor;
 import info.meoblast001.thugaim.engine.Engine;
 
 /**
@@ -30,6 +31,10 @@ provides helper methods.
 public abstract class NPCVehicle extends Vehicle
 {
   private static short current_fighter_id = 0;
+
+  private NPCVehicle avoiding_npc = null;
+  private static final int AVOID_NPC_TIME_MILLISECONDS = 2500;
+  private int remaining_avoiding_npc_milliseconds = 0;
 
   public NPCVehicle(Engine engine, int bitmap_resource, float x, float y,
                     float rotation, int health, StationGraph station_graph)
@@ -97,5 +102,46 @@ public abstract class NPCVehicle extends Vehicle
     target = new PointF(target.x + (float) Math.sin(rotation),
                         target.y + (float) -Math.cos(rotation));
     flee(target, millisecond_delta);
+  }
+
+  @Override
+  public void update(long millisecond_delta, float rotation, boolean tapped)
+  {
+    //If an NPC is being avoided, calculate how much time has passed and
+    //determine if this NPC should still be avoided.
+    if (avoiding_npc != null)
+    {
+      remaining_avoiding_npc_milliseconds -= millisecond_delta;
+      if (remaining_avoiding_npc_milliseconds <= 0)
+      {
+        avoiding_npc = null;
+        remaining_avoiding_npc_milliseconds = 0;
+      }
+    }
+
+    //If no NPC is being avoided, determine if this NPC is colliding with one
+    //that it should avoid.
+    if (avoiding_npc == null)
+    {
+      for (Actor collision : getCollisions())
+      {
+        if (collision instanceof NPCVehicle)
+        {
+          avoiding_npc = (NPCVehicle) collision;
+          remaining_avoiding_npc_milliseconds = AVOID_NPC_TIME_MILLISECONDS;
+        }
+      }
+    }
+
+    super.update(millisecond_delta, rotation, tapped);
+  }
+
+  /**
+  If this NPC is avoiding another NPC, that NPC is returned.
+  @return Foreign NPC if one is being returned, else null.
+  */
+  protected NPCVehicle getAvoidingNPC()
+  {
+    return avoiding_npc;
   }
 }

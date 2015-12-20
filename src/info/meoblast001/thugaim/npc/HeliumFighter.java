@@ -112,6 +112,14 @@ public class HeliumFighter extends NPCVehicle
     if (distance(getClosestStation()) < 125.0f)
       flee(getClosestStation().getPosition(), millisecond_delta);
 
+    //If an NPC player gets too close, avoid it.
+    NPCVehicle avoiding_npc = getAvoidingNPC();
+    if (avoiding_npc != null)
+    {
+      evade(avoiding_npc.getPosition(), avoiding_npc.getRotation(),
+            millisecond_delta);
+    }
+
     //If there are stations to follow on the way to the player, follow them.
     if (remaining_path_to_player != null && remaining_path_to_player.size() > 0)
     {
