@@ -33,7 +33,9 @@ origin was traveling when fired.
 */
 public class Projectile extends Actor
 {
+  public final static float MAX_LENGTH = 300;
   private Actor origin;
+  private PointF original_position = null;
   private static short current_projectile_id = 0;
   //Static list of all projectiles in the world.
   private static LinkedList<Projectile> cur_projectiles =
@@ -45,7 +47,7 @@ public class Projectile extends Actor
           R.drawable.projectile);
     this.origin = origin;
 
-    PointF original_position = origin.getPosition();
+    original_position = origin.getPosition();
     move(original_position.x, original_position.y);
     rotate(origin.getRotation());
   }
@@ -81,6 +83,13 @@ public class Projectile extends Actor
   public void update(long millisecond_delta, float rotation, boolean tapped)
   {
     clearCollisions();
+
+    //If the projectile has moved too far from its original location, delete it.
+    if (distance(original_position) > MAX_LENGTH)
+    {
+      getWorld().removeActor(getId());
+      return;
+    }
 
     //Make multiple movements per frame. Each movement should be maximally the
     //size of a projectile. During each movement, collision detection will be
