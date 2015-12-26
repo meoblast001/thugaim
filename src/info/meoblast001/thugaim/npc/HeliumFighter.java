@@ -41,6 +41,9 @@ public class HeliumFighter extends NPCVehicle
 {
   private static final int MAX_HEALTH = 5;
   private static final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
+  private static final float FIRE_ANGLE_RADIANS = (float) (20.0f *
+                                                           Math.PI / 180.0f);
+  private static final float FIRING_RANGE = 250.0f;
 
   private StationGraph station_graph = null;
   private Queue<Station> remaining_path_to_player = null;
@@ -136,7 +139,11 @@ public class HeliumFighter extends NPCVehicle
     else
       pursue(player.getPosition(), player.getRotation(), millisecond_delta);
 
-    //TODO: Fire.
+    //Is this fighter facing the player and at the appropriate distance?
+    boolean will_fire = willFireAt(player, FIRE_ANGLE_RADIANS, FIRING_RANGE);
+
+    if (will_fire)
+      fire();
 
     super.update(millisecond_delta, rotation, tapped);
   }

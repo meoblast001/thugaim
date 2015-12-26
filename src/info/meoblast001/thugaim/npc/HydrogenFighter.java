@@ -40,6 +40,7 @@ public class HydrogenFighter extends NPCVehicle
   private static final float FREE_SURROUNDING_SPACE_AT_INIT = 20.0f;
   private static final float FIRE_ANGLE_RADIANS = (float) (30.0f *
                                                            Math.PI / 180.0f);
+  private static final float FIRING_RANGE = 200.0f;
 
   private StationGraph station_graph = null;
   private Station target_station = null;
@@ -112,16 +113,8 @@ public class HydrogenFighter extends NPCVehicle
         target_station = station_graph.getClosestStation(this);
     }
 
-    boolean will_fire = false;
-
-    //The amount the fighter would need to rotate to face the player.
-    float rotation_to_player = crossProduct(getRotationUnitVector(),
-      getUnitVectorToTarget(getPosition(), player.getPosition()));
-    //If target is within firing angle and is near, fire.
-    if (rotation_to_player > -FIRE_ANGLE_RADIANS &&
-        rotation_to_player < FIRE_ANGLE_RADIANS &&
-        distance(player) < 200.0f)
-      will_fire = true;
+    //Is this fighter facing the player and at the appropriate distance?
+    boolean will_fire = willFireAt(player, FIRE_ANGLE_RADIANS, FIRING_RANGE);
 
     //If the NPC plans on firing but another friendly actor may be at risk, stop
     //firing.

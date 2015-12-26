@@ -144,4 +144,26 @@ public abstract class NPCVehicle extends Vehicle
   {
     return avoiding_npc;
   }
+
+  /**
+  Determines whether this NPC should fire at a particular vehicle.
+  @param desired_target Target at which the NPC wants to fire.
+  @param fire_angle Maximum angle in radians between the direction the NPC is
+    facing and the direction in which the target is. If the angle exceeds this
+    threshold, the NPC will not fire.
+  @param fire_range Maximum distance from the target. If the distance exceeds
+    this threshold, the NPC will not fire.
+  @return True if the NPC should fire, false if not.
+  */
+  protected boolean willFireAt(Actor desired_target, float fire_angle,
+                               float fire_range)
+  {
+    //The amount the fighter would need to rotate to face the target.
+    float rotation_to_target = crossProduct(getRotationUnitVector(),
+      getUnitVectorToTarget(getPosition(), desired_target.getPosition()));
+    //If target is within firing angle and is near, this NPC will fire.
+    return rotation_to_target > -fire_angle &&
+           rotation_to_target < fire_angle &&
+           distance(desired_target) < fire_range;
+  }
 }
