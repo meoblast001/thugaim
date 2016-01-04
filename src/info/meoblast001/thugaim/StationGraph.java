@@ -47,7 +47,10 @@ public class StationGraph
 
   private final int UPDATE_AFTER_FRAMES = 5;
   //Amount of free space around stations at initialisation.
-  private final float FREE_SURROUNDING_SPACE_AT_INIT = 125.0f;
+  private final float FREE_SURROUNDING_SPACE_AT_INIT = 100.0f;
+  //Maximum amount of normal station placement attempts before it is simply
+  //placed.
+  private final int MAX_PLACEMENT_ATTEMPTS = 5;
 
   private Engine engine;
   private World world;
@@ -66,25 +69,55 @@ public class StationGraph
     stations = new Station[num_stations];
     edges = new boolean[num_stations][num_stations];
 
+    //Create a station object so that the size of one is known.
+    Station unused_station = new Station(engine, this, 0, 0);
+    Point station_size = unused_station.getSize();
+    float avg_station_size = (station_size.x + station_size.y) / 2.0f;
+
+    //If world is too small to place stations, fail construction.
+    float init_min_distance = avg_station_size / 2.0f +
+                              FREE_SURROUNDING_SPACE_AT_INIT;
+    if (play_size / 2 < init_min_distance)
+    {
+      throw new RuntimeException("World is too small to construct a " +
+        "station graph.");
+    }
+
     //Place num_stations amount of stations at random locations in the play
     //area.
     for (int i = 0; i < stations.length; ++i)
     {
-      inner_loop: while (true)
+      int placement_attempts = MAX_PLACEMENT_ATTEMPTS;
+      do
       {
-        stations[i] = new Station(engine, this,
-          (float) Math.random() * play_size - (play_size / 2),
-          (float) Math.random() * play_size - (play_size / 2));
-        Point station_size = stations[i].getSize();
-        float avg_station_size = (station_size.x + station_size.y) / 2.0f;
-        if (!world.hasActorAt(stations[i].getPosition(),
-          avg_station_size / 2.0f + FREE_SURROUNDING_SPACE_AT_INIT))
-        {
-          world.insertActor(stations[i]);
-          break inner_loop;
-        }
-        else; //Continue trying.
-      }
+        //Generate random X and Y values relative to the area allowed for
+        //placing stations.
+        float rand_x = (float) ((Math.random() - 0.5) * 2.0) *
+                       (play_size / 2 - init_min_distance);
+        float rand_y = (float) ((Math.random() - 0.5) * 2.0) *
+                       (play_size / 2 - init_min_distance);
+
+        //Convert these relative values to absolute values.
+        if (rand_x >= 0)
+          rand_x += init_min_distance;
+        else
+          rand_x -= init_min_distance;
+        if (rand_y >= 0)
+          rand_y += init_min_distance;
+        else
+          rand_y -= init_min_distance;
+
+        //Create a station at this position.
+        stations[i] = new Station(engine, this, rand_x, rand_y);
+
+        //If the station overlays another actor in the world, try placing again.
+        //If too many attempts occur, stop attempting and simply place it.
+        --placement_attempts;
+      } while (world.hasActorAt(stations[i].getPosition(),
+        avg_station_size / 2.0f) && placement_attempts > 0);
+
+      //Place the station.
+      world.insertActor(stations[i]);
     }
 
     //Randomly form edges between stations (80% chance of edge). Do not built
