@@ -60,7 +60,7 @@ public class GameOver extends Activity
   public void restart(View view)
   {
     Intent intent = new Intent(view.getContext(), Thugaim.class);
-    intent.putExtra("current_level", 0);
+    intent.putExtra("current_level", ThugaimRuntime.getCheckpointLevel());
     startActivity(intent);
     finish();
   }

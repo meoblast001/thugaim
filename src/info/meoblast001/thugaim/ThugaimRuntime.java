@@ -49,6 +49,7 @@ public class ThugaimRuntime implements IGameRuntime
   }
 
   private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
+  private static final int CHECKPOINT_INTERVAL = 3;
 
   private Engine engine;
   private Context context;
@@ -63,6 +64,9 @@ public class ThugaimRuntime implements IGameRuntime
   //Level information.
   private static int current_level = 0;
   private static Vector<LevelDescriptor> levels = null;
+
+  //Checkpoint information.
+  private static int checkpoint_level = 0;
 
   /**
   Constructs game runtime. Failure is fatal.
@@ -164,6 +168,11 @@ public class ThugaimRuntime implements IGameRuntime
     if (current_level < levels.size())
     {
       this.current_level = current_level;
+      //If the level is higher than the last checkpoint and is a checkpoint
+      //itself, set this checkpoint as reached.
+      if (current_level > checkpoint_level &&
+          (current_level + 1) % CHECKPOINT_INTERVAL == 0)
+        checkpoint_level = current_level;
       return true;
     }
     else
@@ -177,6 +186,16 @@ public class ThugaimRuntime implements IGameRuntime
   public LevelDescriptor getCurrentLevelDescriptor()
   {
     return levels.get(current_level);
+  }
+
+  /**
+  Return the current checkpoint. This is the level to which the game returns
+  after game over.
+  @return The checkpoint.
+  */
+  public static int getCheckpointLevel()
+  {
+    return checkpoint_level;
   }
 
   /**
