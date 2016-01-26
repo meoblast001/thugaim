@@ -198,8 +198,14 @@ public class Thugaim extends ShutdownHandlingActivity
   {
     if (winner == true && runtime.hasNextLevel())
     {
-      //Go to next level.
-      Intent intent = new Intent(this, Thugaim.class);
+      Intent intent = null;
+      if (CheckpointReached.isLevelCheckpoint(current_level + 1))
+        //A checkpoint has been reached. Go to the checkpoint page.
+        intent = new Intent(this, CheckpointReached.class);
+      else
+        //Go to next level.
+        intent = new Intent(this, Thugaim.class);
+
       intent.putExtra("current_level", current_level + 1);
       startActivity(intent);
       finish();

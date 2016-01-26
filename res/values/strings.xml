@@ -14,6 +14,9 @@
   <string name="level_number_indicator">Lvl. %d</string>
   <string name="level_complete">LEVEL COMPLETE</string>
   <string name="menu_quit">Quit</string>
+  <string name="checkpoint_reached">
+    You reached a checkpoint. If you fail, you will return to the next level.
+  </string>
   <string name="game_over_win">
     You did it! Your cargo shouldn\'t have any problems reaching its destination
     now. Thanks for the good work.

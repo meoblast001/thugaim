@@ -15,6 +15,10 @@
   <string name="level_number_indicator">Lvl. %d</string>
   <string name="level_complete">LEVEL ABGESCHLOSSEN</string>
   <string name="menu_quit">Beenden</string>
+  <string name="checkpoint_reached">
+    Du hast einen Checkpoint erreicht. Wenn du versagst, kommst du zum nächsten
+    Level zurück.
+  </string>
   <string name="game_over_win">
     Du hast es geschafft! Deine Güter sollten jetzt problemlos ihr Ziel
     erreichen. Danke für die gute Arbeit!

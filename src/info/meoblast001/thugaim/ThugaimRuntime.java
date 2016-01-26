@@ -49,7 +49,7 @@ public class ThugaimRuntime implements IGameRuntime
   }
 
   private static final long SHOW_LEVEL_COMPLETE_BEFORE_END_MILIS = 3000;
-  private static final int CHECKPOINT_INTERVAL = 3;
+  public static final int CHECKPOINT_INTERVAL = 3;
 
   private Engine engine;
   private Context context;
