@@ -68,6 +68,9 @@ public class ThugaimRuntime implements IGameRuntime
   //Checkpoint information.
   private static int checkpoint_level = 0;
 
+  //Music enabled status.
+  private static boolean music_enabled = true;
+
   /**
   Constructs game runtime. Failure is fatal.
   @throws LoadLevelsException If levels cannot be loaded.
@@ -107,8 +110,9 @@ public class ThugaimRuntime implements IGameRuntime
     health_bar = new HealthBar(engine.getGraphics(), player);
     PlayAreaShield.generateAll(engine, world, level.getPlaySize());
 
-    //Start music if it exists, else stop any currently playing music.
-    if (level.getMusic() != null)
+    //Start music if it exists and the user selected music to be played, else
+    //stop any currently playing music.
+    if (level.getMusic() != null && music_enabled)
     {
       int res_id = context.getResources().getIdentifier(level.getMusic(), "raw",
         context.getPackageName());
@@ -255,6 +259,15 @@ public class ThugaimRuntime implements IGameRuntime
     {
       throw new LoadLevelsException();
     }
+  }
+
+  /**
+  Set whether music will be played in future initialised runtimes.
+  @param enabled True if music should be played, else false.
+  */
+  public static void setMusicEnabled(boolean enabled)
+  {
+    music_enabled = enabled;
   }
 
   /**

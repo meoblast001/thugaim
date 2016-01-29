@@ -76,6 +76,12 @@ public class Thugaim extends ShutdownHandlingActivity
       {
         current_level = extras.getInt("current_level");
         runtime.setLevel(current_level);
+
+        if (extras.keySet().contains("music_enabled"))
+        {
+          boolean music_enabled = extras.getBoolean("music_enabled");
+          ThugaimRuntime.setMusicEnabled(music_enabled);
+        }
       }
 
       engine = new Engine(graphics, audio, runtime, this);

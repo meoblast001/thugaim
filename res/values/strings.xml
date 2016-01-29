@@ -10,6 +10,7 @@
     \n\nTilt your device to steer your ship, and tap the screen to fire
     projectiles. Good luck!
   </string>
+  <string name="enable_music">Enable Music</string>
   <string name="continue_t">Continue</string>
   <string name="level_number_indicator">Lvl. %d</string>
   <string name="level_complete">LEVEL COMPLETE</string>

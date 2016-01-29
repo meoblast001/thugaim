@@ -21,12 +21,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 
 /**
 Activity giving the user instructions before the game begins.
 */
 public class Instructions extends Activity
 {
+  boolean music_enabled = true;
+
   /**
   Called when the activity is first created.
   */
@@ -47,7 +50,14 @@ public class Instructions extends Activity
   {
     Intent intent = new Intent(this, Thugaim.class);
     intent.putExtra("current_level", 0);
+    intent.putExtra("music_enabled", music_enabled);
     startActivity(intent);
     finish();
+  }
+
+  public void toggleMusic(View view)
+  {
+    CheckBox checkbox = (CheckBox) view;
+    music_enabled = checkbox.isChecked();
   }
 }

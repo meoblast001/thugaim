@@ -11,6 +11,7 @@
     \n\nKippe dein Gerät, um dein Raumschiff zu steuern, und tippe auf deinen
     Bildschirm, um deine Geschosse zu schießen. Viel Glück!
   </string>
+  <string name="enable_music">Musik aktivieren</string>
   <string name="continue_t">Fortsetzen</string>
   <string name="level_number_indicator">Lvl. %d</string>
   <string name="level_complete">LEVEL ABGESCHLOSSEN</string>
