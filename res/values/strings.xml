@@ -5,10 +5,13 @@
     Welcome! It appears that your work with the Space Minerals Transport Agency
     is being disrupted by space pirates. They\'ve set up stations which they\'re
     using to capture your team\'s cargo! Your new job is to destroy these
-    stations, but that won\'t happen without a fight.
-
-    \n\nTilt your device to steer your ship, and tap the screen to fire
-    projectiles. Good luck!
+    stations, but that won\'t happen without a fight. Good luck!
+  </string>
+  <string name="instructions_rotate">
+    Tilt your device to steer your ship.
+  </string>
+  <string name="instructions_fire">
+    Tap the screen to fire projectiles.
   </string>
   <string name="enable_music">Enable Music</string>
   <string name="continue_t">Continue</string>

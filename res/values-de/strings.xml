@@ -6,10 +6,13 @@
     Raumfahrtminerale von Raumfahrtpiraten gestört werden. Sie haben Stationen
     errichtet, die sie einsetzen, um die Güter deines Teams einzufangen! Deine
     neue Aufgabe ist es, diese Stationen zu zerstören, aber das wird nicht ohne
-    einen Kampf passieren.
-
-    \n\nKippe dein Gerät, um dein Raumschiff zu steuern, und tippe auf deinen
-    Bildschirm, um deine Geschosse zu schießen. Viel Glück!
+    einen Kampf passieren. Viel Glück!
+  </string>
+  <string name="instructions_rotate">
+    Kippe dein Gerät, um dein Raumschiff zu steuern.
+  </string>
+  <string name="instructions_fire">
+    Tippe auf deinen Bildschirm, um deine Gschosse zu schießen.
   </string>
   <string name="enable_music">Musik aktivieren</string>
   <string name="continue_t">Fortsetzen</string>
