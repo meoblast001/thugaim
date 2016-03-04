@@ -3,7 +3,8 @@
   <level play_size="600"
          hydrogen_fighters="4"
          helium_fighters="0"
-         stations="3" />
+         stations="3"
+         music="lavender" />
   <!-- Level 2 -->
   <level play_size="800"
          hydrogen_fighters="8"
