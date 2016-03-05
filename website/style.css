@@ -49,6 +49,23 @@ body {
   background-color: #092544;
 }
 
+.center {
+  text-align: center;
+}
+
+.button {
+  color: #ffffff;
+  background-color: #0f0f0f;
+  text-decoration: none;
+  display: inline-block;
+  padding: 15px;
+  border: 1px solid #ffffff;
+}
+
+.button:hover {
+  background-color: #1f1f1f;
+}
+
 #screenshots {
   text-align: center;
 }
