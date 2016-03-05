@@ -1,0 +1,59 @@
+body {
+  font-family: "Open Sans", sans-serif;
+  margin: 0px;
+  color: #ffffff;
+  background-color: #0e4079;
+}
+
+#big-station {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+@media screen and (max-width: 800px) {
+  #big-station { display: none }
+}
+
+#title {
+  padding: 10px 10px 0px 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#download-area {
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  font-size: 20px;
+  color: #000000;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  min-height: 175px;
+  padding: 25px 0px;
+  background-color: #91b0d2;
+  margin-top: 10px;
+}
+
+#download-area a {
+  text-decoration: none;
+}
+
+#download-area a img {
+  border: 0px;
+}
+
+#body {
+  padding: 10px 50px;
+  border-bottom: 1px solid #ffffff;
+  background-color: #092544;
+}
+
+#screenshots {
+  text-align: center;
+}
+
+#footer {
+  text-align: center;
+  font-size: 10px;
+}
