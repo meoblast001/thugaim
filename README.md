@@ -6,9 +6,9 @@ the project was expanded.
 
 #### Screenshots ####
 
-<img src="website/screenshot1.png" alt="Screenshot 1" height="100px" />
-<img src="website/screenshot2.png" alt="Screenshot 2" height="100px" />
-<img src="website/screenshot3.png" alt="Screenshot 3" height="100px" />
+<img src="website/screenshot1.png" alt="Screenshot 1" height="175px" />
+<img src="website/screenshot2.png" alt="Screenshot 2" height="175px" />
+<img src="website/screenshot3.png" alt="Screenshot 3" height="175px" />
 
 #### Build Instructions ####
 
