@@ -17,36 +17,53 @@
       android:text="@string/instructions" />
 
     <View android:layout_width="fill_parent" android:layout_height="1dip"
-      android:background="#ffffff" android:paddingBottom="10dp" />
+      android:background="#ffffff" android:layout_marginBottom="10dp" />
 
     <ImageView android:layout_width="135dp"
       android:layout_height="50dp" android:src="@drawable/instructions_rotate"
-      android:layout_gravity="center_horizontal" android:paddingBottom="10dp" />
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="10dp" />
 
     <TextView android:id="@+id/instructions_rotate"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content" android:paddingBottom="10dp"
+      android:layout_height="wrap_content" android:layout_marginBottom="10dp"
       android:text="@string/instructions_rotate"
       android:gravity="center" android:layout_gravity="center_horizontal" />
 
     <View android:layout_width="fill_parent" android:layout_height="1dip"
-      android:background="#ffffff" android:paddingBottom="10dp" />
+      android:background="#ffffff" android:layout_marginBottom="10dp" />
 
     <ImageView android:layout_width="135dp"
       android:layout_height="50dp" android:src="@drawable/instructions_fire"
-      android:layout_gravity="center_horizontal" android:paddingBottom="10dp" />
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="10dp" />
 
     <TextView android:id="@+id/instructions_fire"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content" android:paddingBottom="10dp"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="10dp"
       android:text="@string/instructions_fire"
       android:gravity="center" android:layout_gravity="center_horizontal" />
 
     <View android:layout_width="fill_parent" android:layout_height="1dip"
-      android:background="#ffffff" android:paddingBottom="10dp" />
+      android:background="#ffffff" android:layout_marginBottom="10dp" />
+
+    <ImageView android:layout_width="80dp"
+      android:layout_height="3dp" android:src="@drawable/play_area_shield"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="10dp" />
+
+    <TextView android:id="@+id/instructions_playarea"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" android:paddingBottom="10dp"
+      android:text="@string/instructions_playarea"
+      android:gravity="center" android:layout_gravity="center_horizontal" />
+
+    <View android:layout_width="fill_parent" android:layout_height="1dip"
+      android:background="#ffffff" android:layout_marginBottom="10dp" />
 
     <CheckBox android:id="@+id/enable_music" android:layout_width="wrap_content"
-      android:layout_height="wrap_content" android:paddingBottom="10dp"
+      android:layout_height="wrap_content" android:layout_marginBottom="10dp"
       android:text="@string/enable_music" android:onClick="toggleMusic"
       android:checked="true" android:layout_gravity="center_horizontal" />
 
