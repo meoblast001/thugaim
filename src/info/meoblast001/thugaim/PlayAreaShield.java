@@ -38,7 +38,7 @@ public class PlayAreaShield extends Actor
     LEFT, TOP, RIGHT, BOTTOM
   }
 
-  private static final int SHIELD_DISTANCE = 200;
+  private static final int SHIELD_DISTANCE = 80;
   private static final float SHIELD_PART_DISTANCE = 8.0f;
   private static final int MIN_MILLIS_FOR_STEP = 200;
   private static final int INDICATOR_DISTANCE_FROM_EDGE = 2;
@@ -59,7 +59,7 @@ public class PlayAreaShield extends Actor
     this.side = side;
     this.offset = start_offset;
 
-    if (side == Side.TOP || side == Side.BOTTOM)
+    if (side == Side.LEFT || side == Side.RIGHT)
       rotate((float) (Math.PI / 2.0));
   }
 
