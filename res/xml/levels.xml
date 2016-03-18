@@ -1,53 +1,96 @@
 <levels>
   <!-- Level 1 -->
-  <level play_size="600"
+  <level play_size="750"
+         hydrogen_fighters="2"
+         helium_fighters="0"
+         stations="1"
+         music="lavender" />
+  <!-- Level 2 -->
+  <level play_size="750"
          hydrogen_fighters="4"
+         helium_fighters="0"
+         stations="2"
+         music="lavender" />
+  <!-- Level 3 -->
+  <level play_size="1200"
+         hydrogen_fighters="5"
          helium_fighters="0"
          stations="3"
          music="lavender" />
-  <!-- Level 2 -->
-  <level play_size="800"
+  <!-- Level 4 -->
+  <level play_size="1500"
+         hydrogen_fighters="3"
+         helium_fighters="0"
+         stations="4"
+         music="lavender" />
+  <!-- Level 5 -->
+  <level play_size="1000"
          hydrogen_fighters="8"
          helium_fighters="0"
          stations="5" />
-  <!-- Level 3 -->
-  <level play_size="1000"
-         hydrogen_fighters="15"
+  <!-- Level 6 -->
+  <level play_size="1200"
+         hydrogen_fighters="12"
          helium_fighters="0"
          stations="8" />
-  <!-- Level 4 -->
+  <!-- Level 7 -->
   <level play_size="1000"
-         hydrogen_fighters="25"
+         hydrogen_fighters="20"
          helium_fighters="0"
          stations="5" />
-  <!-- Level 5 -->
+  <!-- Level 8 -->
   <level play_size="2500"
-         hydrogen_fighters="60"
+         hydrogen_fighters="30"
          helium_fighters="0"
          stations="4" />
-  <!-- Level 6 -->
-  <level play_size="1250"
+  <!-- Level 9 -->
+  <level play_size="2250"
          hydrogen_fighters="25"
          helium_fighters="0"
-         stations="12" />
-  <!-- Level 7 -->
+         stations="10" />
+  <!-- Level 10 -->
   <level play_size="3500"
          hydrogen_fighters="60"
          helium_fighters="0"
-         stations="18" />
-  <!-- Level 8 -->
-  <level play_size="1250"
+         stations="15" />
+  <!-- Level 11 -->
+  <level play_size="1750"
          hydrogen_fighters="60"
          helium_fighters="0"
-         stations="9" />
-  <!-- Level 9 -->
+         stations="12" />
+  <!-- Level 12 -->
   <level play_size="2500"
          hydrogen_fighters="40"
          helium_fighters="3"
          stations="15" />
-  <!-- Level 10 -->
+  <!-- Level 13 -->
   <level play_size="1500"
          hydrogen_fighters="10"
          helium_fighters="8"
          stations="10" />
+  <!-- Level 14 -->
+  <level play_size="5000"
+         hydrogen_fighters="30"
+         helium_fighters="10"
+         stations="15" />
+  <!-- Level 15 -->
+  <level play_size="5000"
+         hydrogen_fighters="35"
+         helium_fighters="15"
+         stations="18" />
+  <!-- Level 16 -->
+  <level play_size="6000"
+         hydrogen_fighters="20"
+         helium_fighters="25"
+         stations="20" />
+  <!-- Level 17 -->
+  <level play_size="4500"
+         hydrogen_fighters="20"
+         helium_fighters="25"
+         stations="18" />
+  <!-- Level 18 -->
+  <level play_size="7000"
+         hydrogen_fighters="28"
+         helium_fighters="18"
+         stations="22" />
 </levels>
