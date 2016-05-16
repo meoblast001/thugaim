@@ -21,6 +21,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
 Activity informing the user that a checkpoint has been reached.
@@ -37,10 +39,19 @@ public class CheckpointReached extends Activity
   {
     super.onCreate(saved_instance_state);
     setContentView(R.layout.checkpoint_reached);
+
     //Store the current level locally.
     Bundle extras = getIntent().getExtras();
     if (extras != null)
       current_level = extras.getInt("current_level");
+
+    //Render advertisement if one exists in the activity.
+    AdView ad_view = (AdView) findViewById(R.id.checkpoint_ad);
+    if (ad_view != null)
+    {
+      AdRequest ad_request = new AdRequest.Builder().build();
+      ad_view.loadAd(ad_request);
+    }
   }
 
   /**
