@@ -10,7 +10,7 @@
          hydrogen_fighters="4"
          helium_fighters="0"
          stations="2"
-         music="lavender" />
+         music="firefly" />
   <!-- Level 3 -->
   <level play_size="1200"
          hydrogen_fighters="5"
@@ -22,75 +22,89 @@
          hydrogen_fighters="3"
          helium_fighters="0"
          stations="4"
-         music="lavender" />
+         music="firefly" />
   <!-- Level 5 -->
   <level play_size="1000"
          hydrogen_fighters="8"
          helium_fighters="0"
-         stations="5" />
+         stations="5"
+         music="lavender" />
   <!-- Level 6 -->
   <level play_size="1200"
          hydrogen_fighters="12"
          helium_fighters="0"
-         stations="8" />
+         stations="8"
+         music="firefly" />
   <!-- Level 7 -->
   <level play_size="1000"
          hydrogen_fighters="20"
          helium_fighters="0"
-         stations="5" />
+         stations="5"
+         music="lavender" />
   <!-- Level 8 -->
   <level play_size="2500"
          hydrogen_fighters="30"
          helium_fighters="0"
-         stations="4" />
+         stations="4"
+         music="firefly" />
   <!-- Level 9 -->
   <level play_size="2250"
          hydrogen_fighters="25"
          helium_fighters="0"
-         stations="10" />
+         stations="10"
+         music="lavender" />
   <!-- Level 10 -->
   <level play_size="3500"
          hydrogen_fighters="60"
          helium_fighters="0"
-         stations="15" />
+         stations="15"
+         music="firefly" />
   <!-- Level 11 -->
   <level play_size="1750"
          hydrogen_fighters="60"
          helium_fighters="0"
-         stations="12" />
+         stations="12"
+         music="lavender" />
   <!-- Level 12 -->
   <level play_size="2500"
          hydrogen_fighters="40"
          helium_fighters="3"
-         stations="15" />
+         stations="15"
+         music="firefly" />
   <!-- Level 13 -->
   <level play_size="1500"
          hydrogen_fighters="10"
          helium_fighters="8"
-         stations="10" />
+         stations="10"
+         music="lavender" />
   <!-- Level 14 -->
   <level play_size="5000"
          hydrogen_fighters="30"
          helium_fighters="10"
-         stations="15" />
+         stations="15"
+         music="firefly" />
   <!-- Level 15 -->
   <level play_size="5000"
          hydrogen_fighters="35"
          helium_fighters="15"
-         stations="18" />
+         stations="18"
+         music="lavender" />
   <!-- Level 16 -->
   <level play_size="6000"
          hydrogen_fighters="20"
          helium_fighters="25"
-         stations="20" />
+         stations="20"
+         music="firefly" />
   <!-- Level 17 -->
   <level play_size="4500"
          hydrogen_fighters="20"
          helium_fighters="25"
-         stations="18" />
+         stations="18"
+         music="lavender" />
   <!-- Level 18 -->
   <level play_size="7000"
          hydrogen_fighters="28"
          helium_fighters="18"
-         stations="22" />
+         stations="22"
+         music="firefly" />
 </levels>
