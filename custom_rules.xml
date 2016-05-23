@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <target name="-pre-compile">
+    <property environment="env"/>
+    <condition property="BANNER_AD_UNIT_ID" value="${env.BANNER_AD_UNIT_ID}"
+               else="">
+      <isset property="env.BANNER_AD_UNIT_ID" />
+    </condition>
+    <!-- Process the strings.xml file. -->
+    <echo message="Generating res/values/strings.dist.xml" />
+    <exec executable="./replace.py">
+      <arg value="res/values/strings.dist.xml" />
+      <arg value="res/values/strings.xml" />
+      <!-- Insert ad unit ID. -->
+      <arg value="{{{BANNER_AD_UNIT_ID}}}" />
+      <arg value="${BANNER_AD_UNIT_ID}" />
+    </exec>
+  </target>
+</project>

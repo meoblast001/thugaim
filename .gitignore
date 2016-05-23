@@ -3,3 +3,4 @@ proguard-project.txt
 bin/
 gen/
 docs/
+res/values/strings.xml
