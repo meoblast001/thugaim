@@ -21,9 +21,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdView;
+import android.widget.Button;
 
 /**
 Activity informing the user that a checkpoint has been reached.
@@ -46,31 +44,10 @@ public class CheckpointReached extends Activity
     if (extras != null)
       current_level = extras.getInt("current_level");
 
-    //Render advertisement if one exists in the activity.
-    AdView ad_view = (AdView) findViewById(R.id.checkpoint_ad);
-    if (ad_view != null)
-    {
-      //First disable the continue button until the ad is displayed.
-      final View continue_button = findViewById(R.id.continue_button);
-      continue_button.setEnabled(false);
-      //Then load and render ad. When loaded, enable the continue button again.
-      AdRequest ad_request = new AdRequest.Builder().build();
-      ad_view.setAdListener(new AdListener()
-        {
-          public void onAdFailedToLoad(int error_code)
-          {
-            super.onAdFailedToLoad(error_code);
-            continue_button.setEnabled(true);
-          }
-
-          public void onAdLoaded()
-          {
-            super.onAdLoaded();
-            continue_button.setEnabled(true);
-          }
-        });
-      ad_view.loadAd(ad_request);
-    }
+    //Render advertisement if one exists in the activity and if ads are enabled.
+    Button continue_button = (Button) findViewById(R.id.continue_button);
+    AdManager.load(AdManager.UNIT_CHECKPOINT, this,
+        new Button[] { continue_button });
   }
 
   /**

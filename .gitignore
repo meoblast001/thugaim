@@ -4,3 +4,4 @@ bin/
 gen/
 docs/
 res/values/strings.xml
+src/info/meoblast001/thugaim/AdManager.java

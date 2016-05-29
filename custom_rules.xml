@@ -15,5 +15,23 @@
       <arg value="{{{BANNER_AD_UNIT_ID}}}" />
       <arg value="${BANNER_AD_UNIT_ID}" />
     </exec>
+
+    <!-- If not all of the ad unit IDs are set, then disable AdManager. -->
+    <condition property="COMMENT_START_WHEN_ADS_OFF" value="/*" else="">
+      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
+    </condition>
+    <condition property="COMMENT_END_WHEN_ADS_OFF" value="*/" else="">
+      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
+    </condition>
+    <!-- Process the AdManager.java file. -->
+    <echo message="Generating src/info/meoblast001/thugaim/AdManager.java" />
+    <exec executable="./replace.py">
+      <arg value="src-dist/info/meoblast001/thugaim/AdManager.dist.java" />
+      <arg value="src/info/meoblast001/thugaim/AdManager.java" />
+      <arg value="//{{{COMMENT_START_WHEN_ADS_OFF}}}" />
+      <arg value="${COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="//{{{COMMENT_END_WHEN_ADS_OFF}}}" />
+      <arg value="${COMMENT_END_WHEN_ADS_OFF}" />
+    </exec>
   </target>
 </project>
