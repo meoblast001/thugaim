@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 
 /**
@@ -49,7 +50,25 @@ public class CheckpointReached extends Activity
     AdView ad_view = (AdView) findViewById(R.id.checkpoint_ad);
     if (ad_view != null)
     {
+      //First disable the continue button until the ad is displayed.
+      final View continue_button = findViewById(R.id.continue_button);
+      continue_button.setEnabled(false);
+      //Then load and render ad. When loaded, enable the continue button again.
       AdRequest ad_request = new AdRequest.Builder().build();
+      ad_view.setAdListener(new AdListener()
+        {
+          public void onAdFailedToLoad(int error_code)
+          {
+            super.onAdFailedToLoad(error_code);
+            continue_button.setEnabled(true);
+          }
+
+          public void onAdLoaded()
+          {
+            super.onAdLoaded();
+            continue_button.setEnabled(true);
+          }
+        });
       ad_view.loadAd(ad_request);
     }
   }
