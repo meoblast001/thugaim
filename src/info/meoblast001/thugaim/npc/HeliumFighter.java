@@ -102,8 +102,11 @@ public class HeliumFighter extends NPCVehicle
 
     //If the fighter gets too close to another station during its path, it
     //should prioritise not colliding with this station.
-    if (distance(getClosestStation()) < 125.0f)
-      flee(getClosestStation().getPosition(), millisecond_delta);
+    Station closest_station = getClosestStation();
+    Point station_size = closest_station.getSize();
+    float station_avg_size = (station_size.x + station_size.y) / 2;
+    if (distance(closest_station) < station_avg_size * 1.75f)
+      flee(closest_station.getPosition(), millisecond_delta);
 
     //If an NPC player gets too close, avoid it.
     NPCVehicle avoiding_npc = getAvoidingNPC();

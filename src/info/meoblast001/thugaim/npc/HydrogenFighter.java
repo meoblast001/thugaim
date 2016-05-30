@@ -91,7 +91,9 @@ public class HydrogenFighter extends NPCVehicle
       target_station = getClosestStation();
 
     //If close to target station, change target to a random adjacent station.
-    if (distance(target_station) < 150.0f)
+    Point station_size = target_station.getSize();
+    float station_avg_size = (station_size.x + station_size.y) / 2;
+    if (distance(target_station) < station_avg_size * 1.75f)
     {
       Station[] adjacent_stations = station_graph.getAdjacentStations(
         target_station);
