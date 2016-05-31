@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <target name="-pre-compile">
-    <property environment="env"/>
-    <condition property="BANNER_AD_UNIT_ID" value="${env.BANNER_AD_UNIT_ID}"
+  <target name="debug">
+    <antcall target="-generate-from-dist-files">
+      <param name="BANNER_AD_UNIT_ID" value="" />
+    </antcall>
+    <antcall target="android_rules.debug" />
+  </target>
+
+  <target name="debug-ads">
+    <antcall target="-generate-from-dist-files">
+      <param name="BANNER_AD_UNIT_ID" value="${BANNER_AD_UNIT_ID}" />
+    </antcall>
+    <antcall target="android_rules.debug" />
+  </target>
+
+  <target name="-generate-from-dist-files">
+    <!-- If not all of the ad unit IDs are set, then disable ad support. -->
+    <condition property="XML_COMMENT_START_WHEN_ADS_OFF" value="&lt;!--"
                else="">
-      <isset property="env.BANNER_AD_UNIT_ID" />
+      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
     </condition>
+    <condition property="XML_COMMENT_END_WHEN_ADS_OFF" value="--&gt;" else="">
+      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
+    </condition>
+    <!-- Process te AndroidManifest.xml file. -->
+    <echo message="Generating AndroidManifest.xml" />
+    <exec executable="./replace.py">
+      <arg value="AndroidManifest.dist.xml" />
+      <arg value="AndroidManifest.xml" />
+      <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_END_WHEN_ADS_OFF}" />
+    </exec>
+
     <!-- Process the strings.xml file. -->
     <echo message="Generating res/values/strings.dist.xml" />
     <exec executable="./replace.py">
@@ -17,10 +45,10 @@
     </exec>
 
     <!-- If not all of the ad unit IDs are set, then disable AdManager. -->
-    <condition property="COMMENT_START_WHEN_ADS_OFF" value="/*" else="">
+    <condition property="JAVA_COMMENT_START_WHEN_ADS_OFF" value="/*" else="">
       <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
     </condition>
-    <condition property="COMMENT_END_WHEN_ADS_OFF" value="*/" else="">
+    <condition property="JAVA_COMMENT_END_WHEN_ADS_OFF" value="*/" else="">
       <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
     </condition>
     <!-- Process the AdManager.java file. -->
@@ -29,9 +57,9 @@
       <arg value="src-dist/info/meoblast001/thugaim/AdManager.dist.java" />
       <arg value="src/info/meoblast001/thugaim/AdManager.java" />
       <arg value="//{{{COMMENT_START_WHEN_ADS_OFF}}}" />
-      <arg value="${COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="${JAVA_COMMENT_START_WHEN_ADS_OFF}" />
       <arg value="//{{{COMMENT_END_WHEN_ADS_OFF}}}" />
-      <arg value="${COMMENT_END_WHEN_ADS_OFF}" />
+      <arg value="${JAVA_COMMENT_END_WHEN_ADS_OFF}" />
     </exec>
   </target>
 </project>
