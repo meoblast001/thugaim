@@ -14,6 +14,8 @@
     <antcall target="android_rules.debug" />
   </target>
 
+  <!-- Several files contain place holders so that advertisements can be
+       completely compiled out of the project. This generates those files. -->
   <target name="-generate-from-dist-files">
     <!-- If not all of the ad unit IDs are set, then disable ad support. -->
     <condition property="XML_COMMENT_START_WHEN_ADS_OFF" value="&lt;!--"
@@ -23,7 +25,7 @@
     <condition property="XML_COMMENT_END_WHEN_ADS_OFF" value="--&gt;" else="">
       <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
     </condition>
-    <!-- Process te AndroidManifest.xml file. -->
+    <!-- Process the AndroidManifest.xml file. -->
     <echo message="Generating AndroidManifest.xml" />
     <exec executable="./replace.py">
       <arg value="AndroidManifest.dist.xml" />
@@ -35,7 +37,7 @@
     </exec>
 
     <!-- Process the strings.xml file. -->
-    <echo message="Generating res/values/strings.dist.xml" />
+    <echo message="Generating res/values/strings.xml" />
     <exec executable="./replace.py">
       <arg value="res/values/strings.dist.xml" />
       <arg value="res/values/strings.xml" />
@@ -61,5 +63,13 @@
       <arg value="//{{{COMMENT_END_WHEN_ADS_OFF}}}" />
       <arg value="${JAVA_COMMENT_END_WHEN_ADS_OFF}" />
     </exec>
+  </target>
+
+  <!-- Perform Android clean target and then delete auto-generated files. -->
+  <target name="clean">
+    <antcall target="android_rules.clean" />
+    <delete file="AndroidManifest.xml" />
+    <delete file="res/values/strings.xml" />
+    <delete file="src/info/meoblast001/thugaim/AdManager.java" />
   </target>
 </project>
