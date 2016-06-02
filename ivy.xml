@@ -1,0 +1,7 @@
+<ivy-module version="2.0">
+  <info organisation="info.meoblast001" module="thugaim"/>
+
+  <dependencies>
+    <dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" />
+  </dependencies>
+</ivy-module>

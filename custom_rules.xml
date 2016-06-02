@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns:ivy="antlib:org.apache.ivy.ant">
+  <!-- Resolve dependencies through Ivy. -->
+  <target name="resolve" description="retrieve dependencies with ivy">
+    <ivy:retrieve pattern="lib/[artifact](-[classifier]).[ext]"/>
+  </target>
+
+  <!-- Include ant-contrib tasks. -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath>
+      <pathelement location="lib/ant-contrib.jar"/>
+    </classpath>
+  </taskdef>
+
+  <!-- Debug target with pre-processing for NO advertisements. -->
   <target name="debug">
     <antcall target="-generate-from-dist-files">
       <param name="BANNER_AD_UNIT_ID" value="" />
@@ -7,6 +20,7 @@
     <antcall target="android_rules.debug" />
   </target>
 
+  <!-- Debug target with pre-processing for advertisements. -->
   <target name="debug-ads">
     <antcall target="-generate-from-dist-files">
       <param name="BANNER_AD_UNIT_ID" value="${BANNER_AD_UNIT_ID}" />
@@ -17,14 +31,23 @@
   <!-- Several files contain place holders so that advertisements can be
        completely compiled out of the project. This generates those files. -->
   <target name="-generate-from-dist-files">
-    <!-- If not all of the ad unit IDs are set, then disable ad support. -->
-    <condition property="XML_COMMENT_START_WHEN_ADS_OFF" value="&lt;!--"
-               else="">
-      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
-    </condition>
-    <condition property="XML_COMMENT_END_WHEN_ADS_OFF" value="--&gt;" else="">
-      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
-    </condition>
+    <!-- Set properties based on the USE_ADS property -->
+    <if>
+      <equals arg1="${USE_ADS}" arg2="TRUE" />
+      <then>
+        <property name="XML_COMMENT_START_WHEN_ADS_OFF" value="" />
+        <property name="XML_COMMENT_END_WHEN_ADS_OFF" value="" />
+        <property name="JAVA_COMMENT_START_WHEN_ADS_OFF" value="" />
+        <property name="JAVA_COMMENT_END_WHEN_ADS_OFF" value="" />
+      </then>
+      <else>
+        <property name="XML_COMMENT_START_WHEN_ADS_OFF" value="&lt;!--" />
+        <property name="XML_COMMENT_END_WHEN_ADS_OFF" value="--&gt;" />
+        <property name="JAVA_COMMENT_START_WHEN_ADS_OFF" value="/*" />
+        <property name="JAVA_COMMENT_END_WHEN_ADS_OFF" value="*/" />
+      </else>
+    </if>
+
     <!-- Process the AndroidManifest.xml file. -->
     <echo message="Generating AndroidManifest.xml" />
     <exec executable="./replace.py">
@@ -46,13 +69,6 @@
       <arg value="${BANNER_AD_UNIT_ID}" />
     </exec>
 
-    <!-- If not all of the ad unit IDs are set, then disable AdManager. -->
-    <condition property="JAVA_COMMENT_START_WHEN_ADS_OFF" value="/*" else="">
-      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
-    </condition>
-    <condition property="JAVA_COMMENT_END_WHEN_ADS_OFF" value="*/" else="">
-      <equals arg1="${BANNER_AD_UNIT_ID}" arg2="" />
-    </condition>
     <!-- Process the AdManager.java file. -->
     <echo message="Generating src/info/meoblast001/thugaim/AdManager.java" />
     <exec executable="./replace.py">
