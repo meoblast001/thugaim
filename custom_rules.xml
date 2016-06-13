@@ -57,14 +57,7 @@
 
     <!-- Process the AndroidManifest.xml file. -->
     <echo message="Generating AndroidManifest.xml" />
-    <exec executable="./replace.py">
-      <arg value="AndroidManifest.dist.xml" />
-      <arg value="AndroidManifest.xml" />
-      <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
-      <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
-      <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
-      <arg value="${XML_COMMENT_END_WHEN_ADS_OFF}" />
-    </exec>
+    <antcall target="-generate-android-manifest" />
 
     <!-- Process the strings.xml file. -->
     <echo message="Generating res/values/strings.xml" />
@@ -99,8 +92,26 @@
     </exec>
   </target>
 
+  <!-- Separate target for generating the AndroidManifest.xml file because
+       both build and clean targets use it. -->
+  <target name="-generate-android-manifest">
+    <exec executable="./replace.py">
+      <arg value="AndroidManifest.dist.xml" />
+      <arg value="AndroidManifest.xml" />
+      <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_END_WHEN_ADS_OFF}" />
+    </exec>
+  </target>
+
   <!-- Perform Android clean target and then delete auto-generated files. -->
   <target name="clean">
+    <!-- Ironically, generate AndroidManifest.xml so that the delete Android
+         clean process works, but then delete AndroidManifest.xml immediately
+         after that. -->
+    <antcall target="-generate-android-manifest" />
+
     <antcall target="android_rules.clean" />
     <delete file="AndroidManifest.xml" />
     <delete file="res/values/strings.xml" />
