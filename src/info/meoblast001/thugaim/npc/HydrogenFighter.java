@@ -101,8 +101,14 @@ public class HydrogenFighter extends NPCVehicle
         target_station = adjacent_stations[(int) Math.floor(Math.random() *
                                            adjacent_stations.length)];
       else
+      {
         //Target station removed from graph.
         target_station = station_graph.getClosestStation(this);
+        //If null, then there are no remaining stations. No AI decisions can be
+        //made but the game is over anyway.
+        if (target_station == null)
+          return;
+      }
     }
 
     //Is this fighter facing the player and at the appropriate distance?
