@@ -14,6 +14,9 @@
     </classpath>
   </taskdef>
 
+  <!-- Ignore dist files in res/ directory. -->
+  <property name="aapt.ignore.assets" value="*.dist.xml:" />
+
   <!-- Debug target with pre-processing for NO advertisements. -->
   <target name="debug">
     <antcall target="-generate-from-dist-files">
@@ -83,6 +86,17 @@
       <arg value="//{{{COMMENT_END_WHEN_ADS_OFF}}}" />
       <arg value="${JAVA_COMMENT_END_WHEN_ADS_OFF}" />
     </exec>
+
+    <!-- Process the checkpoint_reached.xml layout file. -->
+    <echo message="Generating res/layout/checkpoint_reached.xml" />
+    <exec executable="./replace.py">
+      <arg value="res/layout/checkpoint_reached.dist.xml" />
+      <arg value="res/layout/checkpoint_reached.xml" />
+      <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_END_WHEN_ADS_OFF}" />
+    </exec>
   </target>
 
   <!-- Perform Android clean target and then delete auto-generated files. -->
@@ -91,5 +105,6 @@
     <delete file="AndroidManifest.xml" />
     <delete file="res/values/strings.xml" />
     <delete file="src/info/meoblast001/thugaim/AdManager.java" />
+    <delete file="res/layout/checkpoint_reached.xml" />
   </target>
 </project>
