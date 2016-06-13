@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:ivy="antlib:org.apache.ivy.ant">
+<project xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:ac="antlib:net.sf.antcontrib">
   <!-- Resolve dependencies through Ivy. -->
   <target name="resolve" description="retrieve dependencies with ivy">
     <ivy:retrieve pattern="lib/[artifact](-[classifier]).[ext]"/>
   </target>
 
   <!-- Include ant-contrib tasks. -->
-  <taskdef resource="net/sf/antcontrib/antlib.xml">
+  <taskdef uri="antlib:net.sf.antcontrib"
+           resource="net/sf/antcontrib/antlib.xml">
     <classpath>
       <pathelement location="lib/ant-contrib.jar"/>
     </classpath>
@@ -15,6 +17,7 @@
   <!-- Debug target with pre-processing for NO advertisements. -->
   <target name="debug">
     <antcall target="-generate-from-dist-files">
+      <param name="USE_ADS" value="FALSE" />
       <param name="BANNER_AD_UNIT_ID" value="" />
     </antcall>
     <antcall target="android_rules.debug" />
@@ -23,6 +26,7 @@
   <!-- Debug target with pre-processing for advertisements. -->
   <target name="debug-ads">
     <antcall target="-generate-from-dist-files">
+      <param name="USE_ADS" value="TRUE" />
       <param name="BANNER_AD_UNIT_ID" value="${BANNER_AD_UNIT_ID}" />
     </antcall>
     <antcall target="android_rules.debug" />
@@ -32,21 +36,21 @@
        completely compiled out of the project. This generates those files. -->
   <target name="-generate-from-dist-files">
     <!-- Set properties based on the USE_ADS property -->
-    <if>
+    <ac:if>
       <equals arg1="${USE_ADS}" arg2="TRUE" />
-      <then>
+      <ac:then>
         <property name="XML_COMMENT_START_WHEN_ADS_OFF" value="" />
         <property name="XML_COMMENT_END_WHEN_ADS_OFF" value="" />
         <property name="JAVA_COMMENT_START_WHEN_ADS_OFF" value="" />
         <property name="JAVA_COMMENT_END_WHEN_ADS_OFF" value="" />
-      </then>
-      <else>
+      </ac:then>
+      <ac:else>
         <property name="XML_COMMENT_START_WHEN_ADS_OFF" value="&lt;!--" />
         <property name="XML_COMMENT_END_WHEN_ADS_OFF" value="--&gt;" />
         <property name="JAVA_COMMENT_START_WHEN_ADS_OFF" value="/*" />
         <property name="JAVA_COMMENT_END_WHEN_ADS_OFF" value="*/" />
-      </else>
-    </if>
+      </ac:else>
+    </ac:if>
 
     <!-- Process the AndroidManifest.xml file. -->
     <echo message="Generating AndroidManifest.xml" />
