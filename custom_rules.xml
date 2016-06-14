@@ -21,7 +21,7 @@
   <target name="debug">
     <antcall target="-generate-from-dist-files">
       <param name="USE_ADS" value="FALSE" />
-      <param name="BANNER_AD_UNIT_ID" value="" />
+      <param name="CHECKPOINT_AD_UNIT_ID" value="" />
     </antcall>
     <antcall target="android_rules.debug" />
   </target>
@@ -30,7 +30,8 @@
   <target name="debug-ads">
     <antcall target="-generate-from-dist-files">
       <param name="USE_ADS" value="TRUE" />
-      <param name="BANNER_AD_UNIT_ID" value="${BANNER_AD_UNIT_ID}" />
+      <param name="CHECKPOINT_AD_UNIT_ID" value="${CHECKPOINT_AD_UNIT_ID}" />
+      <param name="GAMEOVER_AD_UNIT_ID" value="{GAMEOVER_AD_UNIT_ID}" />
     </antcall>
     <antcall target="android_rules.debug" />
   </target>
@@ -64,9 +65,12 @@
     <exec executable="./replace.py">
       <arg value="res/values/strings.dist.xml" />
       <arg value="res/values/strings.xml" />
-      <!-- Insert ad unit ID. -->
-      <arg value="{{{BANNER_AD_UNIT_ID}}}" />
-      <arg value="${BANNER_AD_UNIT_ID}" />
+      <!-- Insert checkpoint ad unit ID. -->
+      <arg value="{{{CHECKPOINT_AD_UNIT_ID}}}" />
+      <arg value="${CHECKPOINT_AD_UNIT_ID}" />
+      <!-- Insert gameover ad unit ID. -->
+      <arg value="{{{GAMEOVER_AD_UNIT_ID}}}" />
+      <arg value="${GAMEOVER_AD_UNIT_ID}" />
     </exec>
 
     <!-- Process the AdManager.java file. -->
@@ -85,6 +89,17 @@
     <exec executable="./replace.py">
       <arg value="res/layout/checkpoint_reached.dist.xml" />
       <arg value="res/layout/checkpoint_reached.xml" />
+      <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_END_WHEN_ADS_OFF}" />
+    </exec>
+
+    <!-- Process the game_over.xml layout file. -->
+    <echo message="Generating res/layout/game_over.xml" />
+    <exec executable="./replace.py">
+      <arg value="res/layout/game_over.dist.xml" />
+      <arg value="res/layout/game_over.xml" />
       <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
       <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
       <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
@@ -117,5 +132,6 @@
     <delete file="res/values/strings.xml" />
     <delete file="src/info/meoblast001/thugaim/AdManager.java" />
     <delete file="res/layout/checkpoint_reached.xml" />
+    <delete file="res/layout/game_over.xml" />
   </target>
 </project>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ads="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
@@ -11,7 +12,7 @@
     android:paddingBottom="10dp" />
 
   <LinearLayout android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal">
 
@@ -24,4 +25,15 @@
       android:text="@string/quit_t" android:onClick="quit"  />
 
   </LinearLayout>
+
+  <COMMENT_WHEN_ADS_OFF>
+    <com.google.android.gms.ads.AdView android:id="@+id/gameover_ad"
+      android:layout_width="wrap_content" android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_gravity="center_horizontal"
+      android:layout_alignParentBottom="true" ads:adSize="BANNER"
+      android:layout_marginTop="20dp"
+      ads:adUnitId="@string/gameover_ad_unit_id" />
+  </COMMENT_WHEN_ADS_OFF>
+
 </LinearLayout>

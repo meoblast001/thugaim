@@ -37,7 +37,7 @@ public class CheckpointReached extends Activity
     //Render advertisement if one exists in the activity and if ads are enabled.
     Button continue_button = (Button) findViewById(R.id.continue_button);
     AdManager.load(AdManager.UNIT_CHECKPOINT, this,
-        new Button[] { continue_button });
+      new Button[] { continue_button });
   }
 
   /**

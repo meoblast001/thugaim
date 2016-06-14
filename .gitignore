@@ -8,3 +8,4 @@ AndroidManifest.xml
 res/values/strings.xml
 src/info/meoblast001/thugaim/AdManager.java
 res/layout/checkpoint_reached.xml
+res/layout/game_over.xml

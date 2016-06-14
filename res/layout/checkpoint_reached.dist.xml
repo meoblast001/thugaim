@@ -29,7 +29,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true" ads:adSize="BANNER"
         android:layout_marginTop="20dp"
-        ads:adUnitId="@string/banner_ad_unit_id" />
+        ads:adUnitId="@string/checkpoint_ad_unit_id" />
     </COMMENT_WHEN_ADS_OFF>
 
   </LinearLayout>

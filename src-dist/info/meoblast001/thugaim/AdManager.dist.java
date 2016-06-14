@@ -23,6 +23,8 @@ public class AdManager
 {
   // Represents the ad unit on the checkpoint activity.
   public static final int UNIT_CHECKPOINT = 1;
+  // Represents the ad unit on the gameover activity.
+  public static final int UNIT_GAMEOVER = 2;
 
   /**
   Load an advertisement.
@@ -42,6 +44,9 @@ public class AdManager
     {
       case UNIT_CHECKPOINT:
         ad_resource = R.id.checkpoint_ad;
+        break;
+      case UNIT_GAMEOVER:
+        ad_resource = R.id.gameover_ad;
         break;
       default:
         return;
