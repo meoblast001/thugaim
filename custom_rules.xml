@@ -21,7 +21,9 @@
   <target name="debug">
     <antcall target="-generate-from-dist-files">
       <param name="USE_ADS" value="FALSE" />
+      <param name="INSTRUCTIONS_AD_UNIT_ID" value="" />
       <param name="CHECKPOINT_AD_UNIT_ID" value="" />
+      <param name="GAMEOVER_AD_UNIT_ID" value="" />
     </antcall>
     <antcall target="android_rules.debug" />
   </target>
@@ -30,6 +32,8 @@
   <target name="debug-ads">
     <antcall target="-generate-from-dist-files">
       <param name="USE_ADS" value="TRUE" />
+      <param name="INSTRUCTIONS_AD_UNIT_ID"
+             value="${INSTRUCTIONS_AD_UNIT_ID}" />
       <param name="CHECKPOINT_AD_UNIT_ID" value="${CHECKPOINT_AD_UNIT_ID}" />
       <param name="GAMEOVER_AD_UNIT_ID" value="{GAMEOVER_AD_UNIT_ID}" />
     </antcall>
@@ -65,6 +69,9 @@
     <exec executable="./replace.py">
       <arg value="res/values/strings.dist.xml" />
       <arg value="res/values/strings.xml" />
+      <!-- Insert instructions ad unit ID. -->
+      <arg value="{{{INSTRUCTIONS_AD_UNIT_ID}}}" />
+      <arg value="${INSTRUCTIONS_AD_UNIT_ID}" />
       <!-- Insert checkpoint ad unit ID. -->
       <arg value="{{{CHECKPOINT_AD_UNIT_ID}}}" />
       <arg value="${CHECKPOINT_AD_UNIT_ID}" />
@@ -82,6 +89,17 @@
       <arg value="${JAVA_COMMENT_START_WHEN_ADS_OFF}" />
       <arg value="//{{{COMMENT_END_WHEN_ADS_OFF}}}" />
       <arg value="${JAVA_COMMENT_END_WHEN_ADS_OFF}" />
+    </exec>
+
+    <!-- Process the instructions.xml layout file. -->
+    <echo message="Generating res/layout/instructions.xml" />
+    <exec executable="./replace.py">
+      <arg value="res/layout/instructions.dist.xml" />
+      <arg value="res/layout/instructions.xml" />
+      <arg value="&lt;COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_START_WHEN_ADS_OFF}" />
+      <arg value="&lt;/COMMENT_WHEN_ADS_OFF&gt;" />
+      <arg value="${XML_COMMENT_END_WHEN_ADS_OFF}" />
     </exec>
 
     <!-- Process the checkpoint_reached.xml layout file. -->
@@ -131,6 +149,7 @@
     <delete file="AndroidManifest.xml" />
     <delete file="res/values/strings.xml" />
     <delete file="src/info/meoblast001/thugaim/AdManager.java" />
+    <delete file="res/layout/instructions.xml" />
     <delete file="res/layout/checkpoint_reached.xml" />
     <delete file="res/layout/game_over.xml" />
   </target>
