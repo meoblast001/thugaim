@@ -29,11 +29,6 @@ public class Instructions extends Activity
   {
     super.onCreate(saved_instance_state);
     setContentView(R.layout.instructions);
-
-    //Render advertisement if one exists in the activity and if ads are enabled.
-    Button continue_button = (Button) findViewById(R.id.continue_button);
-    AdManager.load(AdManager.UNIT_INSTRUCTIONS, this,
-      new Button[] { continue_button });
   }
 
   @Override

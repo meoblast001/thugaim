@@ -33,11 +33,6 @@ public class CheckpointReached extends Activity
     Bundle extras = getIntent().getExtras();
     if (extras != null)
       current_level = extras.getInt("current_level");
-
-    //Render advertisement if one exists in the activity and if ads are enabled.
-    Button continue_button = (Button) findViewById(R.id.continue_button);
-    AdManager.load(AdManager.UNIT_CHECKPOINT, this,
-      new Button[] { continue_button });
   }
 
   /**

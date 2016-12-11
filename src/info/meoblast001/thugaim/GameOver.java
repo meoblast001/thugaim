@@ -40,11 +40,6 @@ public class GameOver extends Activity
       else
         notice.setText(R.string.game_over_lose);
     }
-
-    //Render advertisement if one exists in the activity and if ads are enabled.
-    Button restart_button = (Button) findViewById(R.id.restart_button);
-    AdManager.load(AdManager.UNIT_GAMEOVER, this,
-      new Button[] { restart_button });
   }
 
   @Override

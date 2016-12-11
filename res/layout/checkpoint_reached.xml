@@ -21,16 +21,5 @@
       android:layout_width="wrap_content" android:layout_height="wrap_content"
       android:text="@string/continue_t" android:onClick="goToNextLevel"
       android:layout_gravity="center_horizontal" />
-
-    <COMMENT_WHEN_ADS_OFF>
-      <com.google.android.gms.ads.AdView android:id="@+id/checkpoint_ad"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true" ads:adSize="BANNER"
-        android:layout_marginTop="20dp"
-        ads:adUnitId="@string/checkpoint_ad_unit_id" />
-    </COMMENT_WHEN_ADS_OFF>
-
   </LinearLayout>
 </ScrollView>

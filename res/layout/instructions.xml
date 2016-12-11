@@ -63,19 +63,6 @@
     <View android:layout_width="fill_parent" android:layout_height="1dip"
       android:background="#ffffff" android:layout_marginBottom="10dp" />
 
-    <COMMENT_WHEN_ADS_OFF>
-      <com.google.android.gms.ads.AdView android:id="@+id/instructions_ad"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true" ads:adSize="BANNER"
-        android:layout_marginBottom="10dp"
-        ads:adUnitId="@string/instructions_ad_unit_id" />
-
-      <View android:layout_width="fill_parent" android:layout_height="1dip"
-        android:background="#ffffff" android:layout_marginBottom="10dp" />
-    </COMMENT_WHEN_ADS_OFF>
-
     <CheckBox android:id="@+id/enable_music" android:layout_width="wrap_content"
       android:layout_height="wrap_content" android:layout_marginBottom="10dp"
       android:text="@string/enable_music" android:onClick="toggleMusic"

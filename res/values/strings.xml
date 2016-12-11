@@ -38,7 +38,4 @@
   <string name="load_levels_exception">
     Could not start because levels could not be loaded.
   </string>
-  <string name="instructions_ad_unit_id">{{{INSTRUCTIONS_AD_UNIT_ID}}}</string>
-  <string name="checkpoint_ad_unit_id">{{{CHECKPOINT_AD_UNIT_ID}}}</string>
-  <string name="gameover_ad_unit_id">{{{GAMEOVER_AD_UNIT_ID}}}</string>
 </resources>
