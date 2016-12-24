@@ -15,7 +15,8 @@
 
     <TextView android:id="@+id/checkpoint_reached" android:layout_width="wrap_content"
       android:layout_height="wrap_content" android:paddingBottom="10dp"
-      android:text="@string/checkpoint_reached" />
+      android:text="@string/checkpoint_reached"
+      android:gravity="center" android:layout_gravity="center_horizontal" />
 
     <Button android:id="@+id/continue_button"
       android:layout_width="wrap_content" android:layout_height="wrap_content"
