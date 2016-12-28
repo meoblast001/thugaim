@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Thugaim</string>
+  <string name="instructions">
+    Bienvenue! Il semble que vos échanges avec l\'Agence de Transport des Minéraux Spaciaux
+    soient mis à mal par les pirates de l\'espace. Ils ont déployé des stations qu\'ils utilisent pour 
+    capturer vos vaisseaux-cargos! Votre nouveau travail est de détruire ces stations,
+    mais vous n\'y arriverez pas sans vous battre. Bonne chance! Plus d\'informations plus bas.
+  </string>
+  <string name="instructions_rotate">
+    Inclinez votre appareil pour diriger votre vaisseau.
+  </string>
+  <string name="instructions_fire">
+    Tapez sur l\'écran pour faire feu.
+  </string>
+  <string name="instructions_playarea">
+    La zone de jeu est limitée. Ne dépassez pas les lignes qui ressemblent à ceci.
+  </string>
+  <string name="enable_music">Activer la musique</string>
+  <string name="continue_t">Continuer</string>
+  <string name="level_number_indicator">Lvl. %d</string>
+  <string name="level_complete">NIVEAU TERMINÉ</string>
+  <string name="menu_quit">Quitter</string>
+  <string name="checkpoint_reached">
+    Vous avez atteint un point de contrôle. Si vous échouez dans votre mission, vous retournerez au niveau suivant ce point de contrôle.
+  </string>
+  <string name="game_over_win">
+    Bien joué! Vos cargos ne devraient plus avoir de mal pour rejoindre leurs destinations à présent.
+    Merci pour ce très bon travail!
+  </string>
+  <string name="game_over_lose">
+    Ouch! Je vous avais dit que ce ne serait pas facile.
+  </string>
+  <string name="restart_t">Recommencer</string>
+  <string name="quit_t">Quitter</string>
+  <string name="fatal_error">Erreur fatale</string>
+  <string name="load_levels_exception">
+    Le jeu ne peut pas démarrer car les niveaux n\'ont pas pu être chargés.
+  </string>
+</resources>
