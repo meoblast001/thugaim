@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Thugaim</string>
+  <string name="instructions">
+    ようこそ!  宇宙鉱物運輸庁 (SMTA) の仕事が、宇宙海賊によって混乱しているようです。
+    彼らは、あなたのチームの貨物を捕獲するために使用するステーションを準備しました!
+    あなたの新しい仕事はこれらのステーションを破壊するために、戦うことです。
+    グッドラック! 詳細は、下にスクロールしてください。
+  </string>
+  <string name="instructions_rotate">
+    お使いのデバイスを傾けて船を操縦します。
+  </string>
+  <string name="instructions_fire">
+    画面をタップして発射します。
+  </string>
+  <string name="instructions_playarea">
+    プレイするエリアは限られています。 このような壁を通らないでください。
+  </string>
+  <string name="enable_music">音楽を有効にする</string>
+  <string name="continue_t">続ける</string>
+  <string name="level_number_indicator">ﾚﾍﾞﾙ %d</string>
+  <string name="level_complete">レベル完了</string>
+  <string name="menu_quit">終了</string>
+  <string name="checkpoint_reached">
+    チェックポイントに達しました。 失敗すると、次のレベルに戻ります。
+  </string>
+  <string name="game_over_win">
+    やりました! 貨物は何の問題もなく目的地に到達するはずです。
+    すばらしい仕事のおかげです。
+  </string>
+  <string name="game_over_lose">
+    残念! 簡単ではないと言ったはずです。
+  </string>
+  <string name="restart_t">リスタート</string>
+  <string name="quit_t">終了</string>
+  <string name="fatal_error">致命的なエラー</string>
+  <string name="load_levels_exception">
+    レベルをロードできなかったため、スタートできませんでした。
+  </string>
+</resources>
