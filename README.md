@@ -4,6 +4,11 @@ A simple space shooter for Android API 13 (Android 3.2+) created for an
 artificial intelligence and game design course. After the course was completed,
 the project was expanded.
 
+<a href="https://f-droid.org/repository/browse/?fdfilter=thugaim&fdid=info.meoblast001.thugaim" target="_blank"><img src="https://f-droid.org/badge/get-it-on.png" height="90"/></a>
+<a href="https://play.google.com/store/apps/details?id=info.meoblast001.thugaim" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="90"/></a>
+
+
 #### Screenshots ####
 
 <img src="website/screenshot1.png" alt="Screenshot 1" height="175px" />
